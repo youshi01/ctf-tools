@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<APKEasyTool xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SelectedPathMain>D:\android\decompile\com.futuremind.iotapp_3.1.1_3018.apk</SelectedPathMain>
+  <SelectedDexOdexOat />
+  <SelectedSmali />
+  <PathDec>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\1-Decompiled APKs</PathDec>
+  <PathCom>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\2-Recompiled APKs</PathCom>
+  <PathExt>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\3-Extracted APKs</PathExt>
+  <PathZip>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\4-Zipped APKs</PathZip>
+  <PathBaksmali>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\5-Baksmali</PathBaksmali>
+  <PathSmali>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\6-Smali</PathSmali>
+  <PathPem>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\Resources\apkeasytool.pem</PathPem>
+  <PathPk8>D:\android\decompile\APK+Easy+Tool+v1.60+Portable\Resources\apkeasytool.pk8</PathPk8>
+  <PathJksFile />
+  <PathTempDec />
+  <PathTempFw />
+  <PathTempFw2 />
+  <PathFw />
+  <PathJava />
+  <FileNameDec>com.futuremind.iotapp_3.1.1_3018</FileNameDec>
+  <FileNameCom>com.futuremind.iotapp_3.1.1_3018</FileNameCom>
+  <FileNameDexOdexOat />
+  <FileNameSmali />
+  <DropDownApkTool>apktool_2.6.1.jar</DropDownApkTool>
+  <DwordX>1998</DwordX>
+  <DwordY>78</DwordY>
+  <DwordXmx>1024</DwordXmx>
+  <CheckBoxDecB>false</CheckBoxDecB>
+  <CheckBoxDecF>true</CheckBoxDecF>
+  <CheckBoxDecK>false</CheckBoxDecK>
+  <CheckBoxDecM>false</CheckBoxDecM>
+  <CheckBoxDecR>false</CheckBoxDecR>
+  <CheckBoxDecS>false</CheckBoxDecS>
+  <CheckBoxDecNC>false</CheckBoxDecNC>
+  <CheckBoxDecOMC>true</CheckBoxDecOMC>
+  <CheckBoxComC>false</CheckBoxComC>
+  <CheckBoxComD>false</CheckBoxComD>
+  <CheckBoxComF>true</CheckBoxComF>
+  <CheckBoxComNC>false</CheckBoxComNC>
+  <CheckBoxComAapt2>true</CheckBoxComAapt2>
+  <CheckBoxZipF>false</CheckBoxZipF>
+  <CheckBoxZipP>true</CheckBoxZipP>
+  <CheckBoxZipZ>false</CheckBoxZipZ>
+  <CheckBoxZipV>false</CheckBoxZipV>
+  <CheckBoxShellExt>false</CheckBoxShellExt>
+  <CheckBoxEnaLog>false</CheckBoxEnaLog>
+  <CheckBoxUseJks>false</CheckBoxUseJks>
+  <CheckBoxSignApk>true</CheckBoxSignApk>
+  <CheckBoxInstallApk>false</CheckBoxInstallApk>
+  <CheckBoxOverApk>false</CheckBoxOverApk>
+  <CheckBoxZipAfterSign>true</CheckBoxZipAfterSign>
+  <CheckBoxToolTips>false</CheckBoxToolTips>
+  <CheckBoxChkUpdate>false</CheckBoxChkUpdate>
+  <CheckBoxWinPos>false</CheckBoxWinPos>
+  <CheckBoxRememberPass>false</CheckBoxRememberPass>
+  <CheckBoxDisHistory>false</CheckBoxDisHistory>
+  <CheckBoxDisComMsgBox>false</CheckBoxDisComMsgBox>
+  <CheckBoxUseExtJava>false</CheckBoxUseExtJava>
+  <CheckBoxReadApk>false</CheckBoxReadApk>
+  <CheckBoxReplaceSpace>false</CheckBoxReplaceSpace>
+  <AskToSetupDir>false</AskToSetupDir>
+  <IsSidedLogOpened>true</IsSidedLogOpened>
+  <IsReset>false</IsReset>
+  <PassJks />
+  <DecApiLvl />
+  <ComApiLvl />
+  <ReplaceWithSpace>false</ReplaceWithSpace>
+  <CheckBoxTaskBar>true</CheckBoxTaskBar>
+  <v2SigningEnabled>Default</v2SigningEnabled>
+  <v3SigningEnabled>Default</v3SigningEnabled>
+  <v4SigningEnabled>False</v4SigningEnabled>
+  <Language>English (Default)</Language>
+  <CheckBoxCodePage>false</CheckBoxCodePage>
+  <CodePage>0</CodePage>
+  <CheckBoxAapt>false</CheckBoxAapt>
+  <CheckBoxUseJavaXmx>false</CheckBoxUseJavaXmx>
+  <TextBoxAapt />
+  <CheckBoxForceManifest>false</CheckBoxForceManifest>
+</APKEasyTool>
