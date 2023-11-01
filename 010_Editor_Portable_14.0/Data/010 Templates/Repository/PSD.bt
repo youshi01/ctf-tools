@@ -1,0 +1,419 @@
+//------------------------------------------------
+//--- 010 Editor v13.0 Binary Template
+//
+//      File: PSD.bt 
+//   Authors: Aurora
+//   Version: 1.0
+//   Purpose: Photoshop PSD image format.
+//  Category: Image
+// File Mask: *.psd 
+//  ID Bytes: 38 42 50 53 //8BPS
+//   History:
+//   1.0   2022-09-16 Aurora: Initial release.
+//
+// https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/ 
+//------------------------------------------------
+RequiresVersion( 12 );
+
+// Color modes
+enum <ushort> COLORMODE { 
+    COLORMODE_BITMAP=0, 
+    COLORMODE_GRAYSCALE=1,
+    COLORMODE_INDEXED=2,
+    COLORMODE_RGB=3,
+    COLORMODE_CMYK=4,
+    COLORMODE_MULTICHANNEL=7,
+    COLORMODE_DUOTONE=8,
+    COLORMODE_LAB=9 
+};
+
+// Convert an id to a string
+string IDToString( ushort id )
+{
+    if( id == 1000 )
+        return "(Obsolete--Photoshop 2.0 only ) Contains five 2-byte values: number of channels, rows, columns, depth, and mode";
+    else if( id == 1001 )
+        return "Macintosh print manager print info record";
+    else if( id == 1002 )
+        return "Macintosh page format information. No longer read by Photoshop. (Obsolete)";
+    else if( id == 1003 )
+        return "(Obsolete--Photoshop 2.0 only ) Indexed color table";
+    else if( id == 1005 )
+        return "ResolutionInfo structure. See Appendix A in Photoshop API Guide.pdf.";
+    else if( id == 1006 )
+        return "Names of the alpha channels as a series of Pascal strings.";
+    else if( id == 1007 )
+        return "(Obsolete) See ID 1077DisplayInfo structure. See Appendix A in Photoshop API Guide.pdf.";
+    else if( id == 1008 )
+        return "The caption as a Pascal string.";
+    else if( id == 1009 )
+        return "Border information. Contains a fixed number (2 bytes real, 2 bytes fraction) for the border width, and 2 bytes for border units (1 = inches, 2 = cm, 3 = points, 4 = picas, 5 = columns).";
+    else if( id == 1010 )
+        return "Background color. See See Color structure.";
+    else if( id == 1011 )
+        return "Print flags. A series of one-byte boolean values (see Page Setup dialog): labels, crop marks, color bars, registration marks, negative, flip, interpolate, caption, print flags.";
+    else if( id == 1012 )
+        return "Grayscale and multichannel halftoning information";
+    else if( id == 1013 )
+        return "Color halftoning information";
+    else if( id == 1014 )
+        return "Duotone halftoning information";
+    else if( id == 1015 )
+        return "Grayscale and multichannel transfer function";
+    else if( id == 1016 )
+        return "Color transfer functions";
+    else if( id == 1017 )
+        return "Duotone transfer functions";
+    else if( id == 1018 )
+        return "Duotone image information";
+    else if( id == 1019 )
+        return "Two bytes for the effective black and white values for the dot range";
+    else if( id == 1020 )
+        return "(Obsolete)";
+    else if( id == 1021 )
+        return "EPS options";
+    else if( id == 1022 )
+        return "Quick Mask information. 2 bytes containing Quick Mask channel ID; 1- byte boolean indicating whether the mask was initially empty.";
+    else if( id == 1023 )
+        return "(Obsolete)";
+    else if( id == 1024 )
+        return "Layer state information. 2 bytes containing the index of target layer (0 = bottom layer).";
+    else if( id == 1025 )
+        return "Working path (not saved). See See Path resource format.";
+    else if( id == 1026 )
+        return "Layers group information. 2 bytes per layer containing a group ID for the dragging groups. Layers in a group have the same group ID.";
+    else if( id == 1027 )
+        return "(Obsolete)";
+    else if( id == 1028 )
+        return "IPTC-NAA record. Contains the File Info... information. See the documentation in the IPTC folder of the Documentation folder.";
+    else if( id == 1029 )
+        return "Image mode for raw format files";
+    else if( id == 1030 )
+        return "JPEG quality. Private.";
+    else if( id == 1032 )
+        return "(Photoshop 4.0) Grid and guides information. See See Grid and guides resource format.";
+    else if( id == 1033 )
+        return "(Photoshop 4.0) Thumbnail resource for Photoshop 4.0 only. See See Thumbnail resource format.";
+    else if( id == 1034 )
+        return "(Photoshop 4.0) Copyright flag. Boolean indicating whether image is copyrighted. Can be set via Property suite or by user in File Info...";
+    else if( id == 1035 )
+        return "(Photoshop 4.0) URL. Handle of a text string with uniform resource locator. Can be set via Property suite or by user in File Info...";
+    else if( id == 1036 )
+        return "(Photoshop 5.0) Thumbnail resource (supersedes resource 1033). See See Thumbnail resource format.";
+    else if( id == 1037 )
+        return "(Photoshop 5.0) Global Angle. 4 bytes that contain an integer between 0 and 359, which is the global lighting angle for effects layer. If not present, assumed to be 30.";
+    else if( id == 1038 )
+        return "(Obsolete) See ID 1073 below. (Photoshop 5.0) Color samplers resource. See See Color samplers resource format.";
+    else if( id == 1039 )
+        return "(Photoshop 5.0) ICC Profile. The raw bytes of an ICC (International Color Consortium) format profile. See ICC1v42_2006-05.pdf in the Documentation folder and icProfileHeader.h in Sample Code\Common\Includes .";
+    else if( id == 1040 )
+        return "(Photoshop 5.0) Watermark. One byte.";
+    else if( id == 1041 )
+        return "(Photoshop 5.0) ICC Untagged Profile. 1 byte that disables any assumed profile handling when opening the file. 1 = intentionally untagged.";
+    else if( id == 1042 )
+        return "(Photoshop 5.0) Effects visible. 1-byte global flag to show/hide all the effects layer. Only present when they are hidden.";
+    else if( id == 1043 )
+        return "(Photoshop 5.0) Spot Halftone. 4 bytes for version, 4 bytes for length, and the variable length data.";
+    else if( id == 1044 )
+        return "(Photoshop 5.0) Document-specific IDs seed number. 4 bytes: Base value, starting at which layer IDs will be generated (or a greater value if existing IDs already exceed it). Its purpose is to avoid the case where we add layers, flatten, save, open, and then add more layers that end up with the same IDs as the first set.";
+    else if( id == 1045 )
+        return "(Photoshop 5.0) Unicode Alpha Names. Unicode string";
+    else if( id == 1046 )
+        return "(Photoshop 6.0) Indexed Color Table Count. 2 bytes for the number of colors in table that are actually defined";
+    else if( id == 1047 )
+        return "(Photoshop 6.0) Transparency Index. 2 bytes for the index of transparent color, if any.";
+    else if( id == 1049 )
+        return "(Photoshop 6.0) Global Altitude. 4 byte entry for altitude";
+    else if( id == 1050 )
+        return "(Photoshop 6.0) Slices. See See Slices resource format.";
+    else if( id == 1051 )
+        return "(Photoshop 6.0) Workflow URL. Unicode string";
+    else if( id == 1052 )
+        return "(Photoshop 6.0) Jump To XPEP. 2 bytes major version, 2 bytes minor version, 4 bytes count. Following is repeated for count: 4 bytes block size, 4 bytes key, if key = 'jtDd' , then next is a Boolean for the dirty flag; otherwise it's a 4 byte entry for the mod date.";
+    else if( id == 1053 )
+        return "(Photoshop 6.0) Alpha Identifiers. 4 bytes of length, followed by 4 bytes each for every alpha identifier.";
+    else if( id == 1054 )
+        return "(Photoshop 6.0) URL List. 4 byte count of URLs, followed by 4 byte long, 4 byte ID, and Unicode string for each count.";
+    else if( id == 1057 )
+        return "(Photoshop 6.0) Version Info. 4 bytes version, 1 byte hasRealMergedData , Unicode string: writer name, Unicode string: reader name, 4 bytes file version.";
+    else if( id == 1058 )
+        return "(Photoshop 7.0) EXIF data 1. See http://www.kodak.com/global/plugins/acrobat/en/service/digCam/exifStandard2.pdf";
+    else if( id == 1059 )
+        return "(Photoshop 7.0) EXIF data 3. See http://www.kodak.com/global/plugins/acrobat/en/service/digCam/exifStandard2.pdf";
+    else if( id == 1060 )
+        return "(Photoshop 7.0) XMP metadata. File info as XML description. See http://www.adobe.com/devnet/xmp/";
+    else if( id == 1061 )
+        return "(Photoshop 7.0) Caption digest. 16 bytes: RSA Data Security, MD5 message-digest algorithm";
+    else if( id == 1062 )
+        return "(Photoshop 7.0) Print scale. 2 bytes style (0 = centered, 1 = size to fit, 2 = user defined). 4 bytes x location (floating point). 4 bytes y location (floating point). 4 bytes scale (floating point)";
+    else if( id == 1064 )
+        return "(Photoshop CS) Pixel Aspect Ratio. 4 bytes (version = 1 or 2), 8 bytes double, x / y of a pixel. Version 2, attempting to correct values for NTSC and PAL, previously off by a factor of approx. 5%.";
+    else if( id == 1065 )
+        return "(Photoshop CS) Layer Comps. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure)";
+    else if( id == 1066 )
+        return "(Photoshop CS) Alternate Duotone Colors. 2 bytes (version = 1), 2 bytes count, following is repeated for each count: [ Color: 2 bytes for space followed by 4 * 2 byte color component ], following this is another 2 byte count, usually 256, followed by Lab colors one byte each for L, a, b. This resource is not read or used by Photoshop.";
+    else if( id == 1067 )
+        return "(Photoshop CS)Alternate Spot Colors. 2 bytes (version = 1), 2 bytes channel count, following is repeated for each count: 4 bytes channel ID, Color: 2 bytes for space followed by 4 * 2 byte color component. This resource is not read or used by Photoshop.";
+    else if( id == 1069 )
+        return "(Photoshop CS2) Layer Selection ID(s). 2 bytes count, following is repeated for each count: 4 bytes layer ID";
+    else if( id == 1070 )
+        return "(Photoshop CS2) HDR Toning information";
+    else if( id == 1071 )
+        return "(Photoshop CS2) Print info";
+    else if( id == 1072 )
+        return "(Photoshop CS2) Layer Group(s) Enabled ID. 1 byte for each layer in the document, repeated by length of the resource. NOTE: Layer groups have start and end markers";
+    else if( id == 1073 )
+        return "(Photoshop CS3) Color samplers resource. Also see ID 1038 for old format. See See Color samplers resource format.";
+    else if( id == 1074 )
+        return "(Photoshop CS3) Measurement Scale. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure)";
+    else if( id == 1075 )
+        return "(Photoshop CS3) Timeline Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure)";
+    else if( id == 1076 )
+        return "(Photoshop CS3) Sheet Disclosure. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure)";
+    else if( id == 1077 )
+        return "(Photoshop CS3) DisplayInfo structure to support floating point clors. Also see ID 1007. See Appendix A in Photoshop API Guide.pdf .";
+    else if( id == 1078 )
+        return "(Photoshop CS3) Onion Skins. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure)";
+    else if( id == 1080 )
+        return "(Photoshop CS4) Count Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the count in the document. See the Count Tool.";
+    else if( id == 1082 )
+        return "(Photoshop CS5) Print Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print settings in the document. The color management options.";
+    else if( id == 1083 )
+        return "(Photoshop CS5) Print Style. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print style in the document. The printing marks, labels, ornaments, etc.";
+    else if( id == 1084 )
+        return "(Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommened that you do not interpret or use this data.";
+    else if( id == 1085 )
+        return "(Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommened that you do not interpret or use this data.";
+    else if( id == 1086 )
+        return "(Photoshop CS6) Auto Save File Path. Unicode string. It is recommened that you do not interpret or use this data.";
+    else if( id == 1087 )
+        return "(Photoshop CS6) Auto Save Format. Unicode string. It is recommened that you do not interpret or use this data.";
+    else if( id == 1088 )
+        return "(Photoshop CC) Path Selection State. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current path selection state.";
+    else if( id >= 2000 && id < 3000 )
+        return "Path Information (saved paths). See See Path resource format.";
+    else if( id == 2999 )
+        return "Name of clipping path. See See Path resource format.";
+    else if( id == 3000 )
+        return "(Photoshop CC) Origin Path Info. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the origin path data.";
+    else if( id >= 4000 && id < 5000 )
+        return "Plug-In resource(s). Resources added by a plug-in. See the plug-in API found in the SDK documentation";
+    else if( id == 7000 )
+        return "Image Ready variables. XML representation of variables definition";
+    else if( id == 7001 )
+        return "Image Ready data sets";
+    else if( id == 7002 )
+        return "Image Ready default selected state";
+    else if( id == 7003 )
+        return "Image Ready 7 rollover expanded state";
+    else if( id == 7004 )
+        return "Image Ready rollover expanded state";
+    else if( id == 7005 )
+        return "Image Ready save layer settings";
+    else if( id == 7006 )
+        return "Image Ready version";
+    else if( id == 8000 )
+        return "(Photoshop CS3) Lightroom workflow, if present the document is in the middle of a Lightroom workflow.";
+    else if( id == 10000 )
+        return "Print flags information. 2 bytes version ( = 1), 1 byte center crop marks, 1 byte ( = 0), 4 bytes bleed width value, 2 bytes bleed width scale.";
+    else
+        return "";
+}
+
+// Header
+typedef struct {
+    char        signature[4];   //8BPS
+    ushort      version;        //should be 1
+    uchar       reserved[6];    //always zero
+    ushort      numChannels;    //num channels including alpha channels (1..56)
+    int         height;         //height of the image in pixels
+    int         width;          //width of the image in pixels
+    ushort      bitDepth;       //bits per channel (1, 8, 16 or 32)
+    COLORMODE   colormode;      
+} HEADER <bgcolor=cLtGreen, read=Str("%dx%d - %s", width, height, EnumToString(colormode))>;
+
+// Color Mode data section
+typedef struct {
+    int         length;     
+    if( length > 0 )
+        uchar   data[length];
+} COLORMODE_DATA <bgcolor=cLtPurple>;
+
+// Pascal Strings
+typedef struct {
+    uchar       length;
+    if( length > 0 )
+        char  str[length];
+    if( (length + 1) & 0x1 )
+        uchar       padding;
+} PASCAL_STRING <read=(length > 0 ? str : "")>;
+
+// Pascal Strings - padded to 4 bytes
+typedef struct {
+    uchar       length;
+    if( length > 0 )
+        char  str[length];
+    if( (length + 1) & 0x3 )
+        uchar       padding[ 4 - ((length+1)%4) ] ;
+} PASCAL_STRING4 <read=(length > 0 ? str : "")>;
+
+// Image resource block
+typedef struct {
+    char          signature[4] <bgcolor=cYellow>;
+    ushort        resourceID;
+    PASCAL_STRING name;
+    int           dataSize;
+    uchar         data[ dataSize ];
+    if( dataSize & 0x1 )
+        uchar     padding;
+} IMAGE_RESOURCE_BLOCK <read=IDToString(resourceID)>;
+
+// Image resources
+typedef struct {
+    local int pos = FTell();
+    int length;   
+    while( FTell() - pos < length )
+          IMAGE_RESOURCE_BLOCK block;
+} IMAGE_RESOURCES <bgcolor=0x00d0d0>;
+
+// Layer mask
+typedef struct {
+    int length;
+    if( length > 0 )
+        uchar   data[length]; //TODO: could parse this
+} LAYER_MASK;
+
+// Layer blending ranges
+typedef struct (int numChannels) {
+    int     length;
+    local int pos = FTell();
+    int     grayBlendSource;
+    int     grayBlendDest;
+    local int i;
+    for( i = 0; i < numChannels; i++ )
+    {
+        int channelSourceRange;
+        int channelDestRange;
+    }
+    FSeek( pos + length );
+} LAYER_BLENDING_RANGES;
+
+// Extra layer information
+typedef struct
+{
+    char    signature[4];
+    char    key[4];
+    int     length;
+    if( length > 0 )
+        uchar   data[length];
+    if( length & 0x3 )
+        uchar padding[4 - (length%4)];
+} LAYER_EXTRA_INFO <read=key>;
+
+// Global mask
+typedef struct 
+{
+    int length;
+    if( length > 0 )
+        uchar data[length]; //TODO: could parse this
+} GLOBAL_MASK;
+
+// Rectangle
+typedef struct
+{
+    int     top;
+    int     left;
+    int     bottom;
+    int     right;
+} RECT <read=Str("%d,%d %d,%d (%dx%d)", left, top, right, bottom, right-left, bottom-top)>;
+
+// Single image in a channel
+typedef struct (int width, int height, int length)
+{
+    enum <ushort> COMPRESSION { COMP_RAW, COMP_RLE, COMP_ZIP_NO_PREDICTION, COMP_ZIP_PREDICTION } compression;
+    if( compression == COMP_RAW )
+    {
+        if( length > 2 )
+            uchar rawData[length-2];
+    }
+    else if( compression == COMP_RLE )
+    {
+        local int i, total = 0;
+        ushort rleLengths[height];
+        uchar rleData[length-height*2-2];
+    }
+    else
+    {
+        uchar zipData[length-2];
+    }
+} IMAGE;
+
+// Layer images - separate image for each channel
+struct LAYER_RECORD;
+typedef struct (LAYER_RECORD &layer)
+{
+    local int i;
+    local int width  = layer.rect.right - layer.rect.left;
+    local int height = layer.rect.bottom - layer.rect.top;
+    for( i = 0; i < layer.numChannels; i++ )
+        IMAGE channel( width, height, layer.channels[i].length );
+} LAYER_IMAGE;
+
+// Layer record
+typedef struct {
+    local int start = FTell();
+    RECT    rect;
+    ushort  numChannels;
+    struct CHANNEL_INFO {
+        short channelID;
+        int   length;
+    } channels[numChannels];
+    char    signature[4]; // 8BIM
+    char    blendMode[4];
+    uchar   opacity;
+    uchar   clipping;
+    uchar   flags;
+    uchar   filler;
+    int     extraLength;
+    local int pos = FTell();
+
+    LAYER_MASK            layerMask;
+    LAYER_BLENDING_RANGES blendingRanges( numChannels );
+    PASCAL_STRING4        layerName;
+
+    while( pos + extraLength > FTell() )
+        LAYER_EXTRA_INFO      layerExtraInfo;
+} LAYER_RECORD <read=layerName.str>;
+
+// Layer info
+typedef struct {
+    local int i, j, count, pos = FTell();
+    
+    int     length;
+    int     layerInfoLength;
+    short   numLayers;
+
+    count = (numLayers < 0) ? -numLayers : numLayers;
+    LAYER_RECORD layers[count] <optimize=false>;
+
+    for( i = 0; i < count; i++ )
+        LAYER_IMAGE layerImages( layers[i] );
+
+    FSeek( pos + layerInfoLength + 8 );
+
+    GLOBAL_MASK globalMask;
+
+    while( pos + length > FTell() )
+        LAYER_EXTRA_INFO      layerExtraInfo;
+
+    FSeek( pos + length + 4 );
+
+} LAYER_INFO <bgcolor=cRed, read=Str("%d layers", (numLayers < 0) ? -numLayers : numLayers )>;
+
+// Define the sections of the file
+BigEndian();
+HEADER          header;
+COLORMODE_DATA  colorModeData;
+IMAGE_RESOURCES imageResources;
+LAYER_INFO      layerInfo;
+IMAGE           image( header.width, header.height*header.numChannels, FileSize()-FTell() );

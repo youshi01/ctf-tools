@@ -1,0 +1,13 @@
+『D盾_WEB查杀』导出记录 (2018-03-12 11:19)
+
+级别 说明                            文件
+--------------------------------------------------------------------------------
+5    已知后门                        D:\10、网安工作\20180312\ynmlpweb\Global.asax
+5    eval后门                        D:\10、网安工作\20180312\ynmlpweb\API\sds.asp
+5    mysql_udf后门                   D:\10、网安工作\20180312\ynmlpweb\API\t00ls.php
+4    Eval后门 {参数:{request.item..  D:\10、网安工作\20180312\ynmlpweb\IAA\98SBKP.aspx
+5    Execute后门                     D:\10、网安工作\20180312\ynmlpweb\JS\1.js
+5    eval后门                        D:\10、网安工作\20180312\ynmlpweb\JS\12.aspx
+5    已知后门                        D:\10、网安工作\20180312\ynmlpweb\MailSubscribe\conn.aspx
+5    已知后门                        D:\10、网安工作\20180312\ynmlpweb\MailSubscribe\show.aspx
+4    Eval {参数:request(12-2-2-1-..  D:\10、网安工作\20180312\ynmlpweb\Admin\Contents\huan.asp

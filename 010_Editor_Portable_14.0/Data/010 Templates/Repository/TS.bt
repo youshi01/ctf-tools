@@ -1,0 +1,609 @@
+//------------------------------------------------
+//--- 010 Editor v2.0 Binary Template
+//
+//   File: TS.bt
+//   Author: zhoubo
+//   Version: 0.2
+//   Purpose: Parse Transport Stream. Support parse TS,PAT,PMT and parts of PES.
+//   Category: Video
+//   File Mask: *.ts
+//   ID Bytes: 47
+//   History:
+//   0.2     2022-12-01 zhoubo: Modify PMT stream_type comment. Remove useless local, still slow...
+//   0.1     2022-11-30 zhoubo: Init release. 
+//
+//------------------------------------------------
+
+// More information available at:
+//  https://blog.csdn.net/qq_31213433/article/details/50571499
+//  https://blog.csdn.net/cai742925624/article/details/124465195
+
+// #define LOG(fmt,...)    Printf(fmt,...) not support??
+
+#define SLOW_MODE   // parse all : TS,PAT,PMT,PES. 7MB costs 40sec
+
+BigEndian();
+
+// Forward declarations:
+
+struct TS_HEADER;
+struct TS_FRAME;
+
+// Constants:
+
+local int   local_pos = 0;
+
+local int   local_payload_unit_start_indicator = 0;
+
+//local int   local_network_PID = 0;
+local int   local_program_map_PID[43] = {0}; // MAX : (188-4-8-4)/4
+local int   local_programId_Index = 0;
+
+local int   local_elementary_PID[43] = {0}; // MAX : (188-4-8-4)/4
+local int   local_elementaryPID_Index = 0;
+
+local int64 LOCAL_FRAME_LENGTH = 188;
+local int64 local_last_frame_length = 0;
+
+local int local_i = 0;
+
+// Enums:
+
+// Funtions:
+
+//----------------TS Header-----------------------------------------------------------
+string GetTransport_error_indicatorComment(UINT &transport_error_indicator)
+{
+    local string comment = "";
+    switch (transport_error_indicator)
+    {
+    case 0:        comment = ""; break;
+    case 1:        comment = "Transport Error will continue 1 until error fixed"; break;
+    }
+    return comment;
+}
+
+string GetPayload_unit_start_indicatorComment(UINT &payload_unit_start_indicator)
+{
+    local string comment = "";
+    switch (payload_unit_start_indicator)
+    {
+    case 0:        comment = ""; break;
+    case 1:        comment = "PES/PSI has pointer_field, need shit 1 byte"; break;
+    }
+    return comment;
+}
+
+string GetPIDComment(UINT &PID)
+{
+    local string comment = "";
+    if (0x0000 == PID)
+    {
+        comment = "PAT PID";
+    } else if (0x0001 == PID)
+    {
+        comment = "CAT PID";
+    } else if (0x0002 == PID)
+    {
+        comment = "TSDT PID";
+    } else if (0x0003 == PID)
+    {
+        comment = "IPMP PID";
+    }  else if ((PID >= 0x0004) && (PID <= 0x000F))
+    {
+        comment = "reserved PID";
+    } else if (0x0012 == PID)
+    {
+        comment = "EIT,ST PID";
+    } else if (0x0013 == PID)
+    {
+        comment = "RST,ST PID";
+    } else if (0x0014 == PID)
+    {
+        comment = "TDT,TOT,ST PID";
+    } else if (0x1FFF == PID)
+    {
+        comment = "null PID";
+    } else
+    {
+        SPrintf(comment, "Normal PID : %d", PID);
+    }
+    return comment;
+}
+
+string GetTransport_scrambling_controlComment(UINT &transport_scrambling_control)
+{
+    local string comment = "";
+    switch (transport_scrambling_control)
+    {
+    case 0x00:        comment = "0x00 : No Security"; break;
+    case 0x01:        comment = "0x01 : UserDefine Security"; break;
+    case 0x10:        comment = "0x10 : UserDefine Security"; break;
+    case 0x11:        comment = "0x11 : UserDefine Security"; break;
+    }
+    return comment;
+}
+
+string GetAdaptation_field_controlComment(UINT &adaptation_field_controlComment)
+{
+    local string comment = "";
+    switch (adaptation_field_controlComment)
+    {
+    case 0x00:        comment = "0x00 : Reserved for ISO/IEC"; break;
+    case 0x01:        comment = "0x01 : No adaptation_field, Only Payload"; break;
+    case 0x10:        comment = "0x10 : Only adaptation_field, No Payload"; break;
+    case 0x11:        comment = "0x11 : Adaptation_field then Payload"; break;
+    }
+    return comment;
+}
+
+typedef struct 
+{
+    SetBackColor( cAqua );
+
+    UBYTE adaptation_field_length : 8;  // 自适应域长度，后面的字节数（从flag开始）
+    UBYTE flag                    : 8;  // 0x50 包含PCR; 0x40 不包含PCR
+    if(0x50 == flag)
+    {
+        UBYTE PCR[5]                 ;  // Program Clock Reference,节目时钟参考,用于恢复出与编码端一致的系统时序时钟STC(System Time Clock)
+
+        if(adaptation_field_length < 6)
+        {
+            // error
+        }
+        else if(adaptation_field_length == 6)
+        {
+            // nothing
+        }
+        else
+        {
+            UBYTE stuffing_bytes[adaptation_field_length - 6]   ; // 填充字节，取值0xFF
+        }
+    }
+    else if(0x40 == flag)
+    {
+        // no PCR
+    }
+    else
+    {
+        // ...
+    }
+
+    local_pos = local_pos + 1 + adaptation_field_length;
+    //Printf( "[TS] local_pos adaptation_field : %d\n", local_pos );
+    FSeek(local_last_frame_length + local_pos); // shit to TS_HEADER(4 + 1 + adaptation_field_length)
+}TS_ADAPTATION_FIELD;
+
+//-----------------------------------
+// Define structures used in TS
+// More information available at:
+//  https://www.jianshu.com/p/2b812a4e3315
+//  https://blog.csdn.net/qingdao666666/article/details/113587536
+//
+// [1.TS Header]
+// sync_byte:                    8bits, 同步字节
+//     固定的8比特，值为'0100 0111'(0x47)。在对于其他正式出现字段,诸如PID的赋值选择中，应避免sync_byte仿真
+// transport_error_indicator:    1bit, 错误指示信息
+//     置1时，指示在相关传输流包中至少存在1个不可校正比特错。
+//     此比特可以由传输层以外的实体设置为‘1’。设置为‘1’时，此比特应不重新设置为‘0’，除非误差比特值已经校正。
+// payload_unit_start_indicator: 1bit, 负载单元开始标志
+//    当传输流包有效载荷包含PES包数据时：‘1’指示此传输流包的有效载荷应随着PES包的首字节开始(一个且仅有一个PES包在此传输流包中起始)，‘0’指示此传输流包中无任何PES包将开始。这也适用于stream_type 6的专用流;
+//    当传输流包有效载荷包含PSI(PAT,PMT)数据时：‘1’指示此传输流包承载PSI分段的首字节，首字节承载pointer_field,（PSI/SI表中，表示这张表没有传完，本包继续传输，续帧）。‘0’指示此传输流包不承载PSI分段的首字节，有效载荷中不存在pointer_field。参阅2.4.4.1 和2.4.4.2。这也适用于stream_type 5的专用流;
+//    对空包而言，必须设置为‘0’。
+// transport_priority:           1bit, 传输优先级标志
+//    置1时，指示该相关包比具有相同PID,但不具有该比特设置为1的其他包有更大的优先级。
+//    传输机制可以使用该字段优先考虑基本流内的该包数据。取决于应用，transport_priority 字段可以不管PID 或者此字段仅在一个PID 范围内编码。此字段可以由信道特定编码器或解码器来改变。
+// PID:                          13bits, Packet ID号码，唯一的号码对应不同的包.
+//    0x0000 PAT
+//    0x0001 CAT
+//    0x0002 TSDT
+//    0x0003 IPMP
+//    0x0004~0x000F reserved。
+//    0x0010~0x1FFE Normal
+//    0x1FFF 空包
+// transport_scrambling_control: 2bits, 加密标志
+//    比特字段指示传输流包有效载荷的加扰方式。
+//    传输流包头以及自适应字段若存在，应不加扰。
+//    空包时，应设置为“00”
+// adaptation_field_control:     2bits, 附加区域控制
+//    ‘00’ 保留,为ISO/IEC未来使用；
+//    ‘01’ 仅含有效载荷，无adaptation_field；
+//    ‘10’ 无有效载荷，仅含adaptation_field；
+//    ‘11’ adaptation_field后为有效载荷，调整字段中的前一个字节表示调整字段的长度length，有效载荷开始的位置应再偏移[length]个字节。空包应为‘10’。)
+// continuity_counter:           4bits, 包递增计数器
+//    随着具有相同PID的每个传输流包而增加，当它达到最大值后又回复到0。范围为0~15。
+//    当包的adaptation_field_control 为‘00’或‘10’时，
+//    continuity_counter 不增加。
+//
+// adaptation_field:             8bits, 自适应字段
+//    
+
+typedef struct 
+{
+    SetBackColor( cRed );
+    local_pos = 0;
+
+    // TS Header : 4, or 5 bytes
+    UINT sync_byte                    : 8   <comment = "always 0x47">;
+    UINT transport_error_indicator    : 1   <comment = GetTransport_error_indicatorComment>;
+    UINT payload_unit_start_indicator : 1   <comment = GetPayload_unit_start_indicatorComment>;
+    UINT transport_priority           : 1;  //
+    UINT PID                          : 13  <comment = GetPIDComment>;
+    UINT transport_scrambling_control : 2   <comment = GetTransport_scrambling_controlComment>;
+    UINT adaptation_field_control     : 2   <comment = GetAdaptation_field_controlComment>;
+    UINT continuity_counter           : 4   <comment = "counter++">;
+
+    local_payload_unit_start_indicator = payload_unit_start_indicator;
+    local_pos = 4;
+    FSeek(local_last_frame_length + local_pos); // shit to TS_HEADER(4 bytes)
+
+    //Printf( "[TS] local_pos first : %d\n", local_pos );
+
+    // VARIABLE Header
+    if ((adaptation_field_control == 0x02) || (adaptation_field_control == 0x03 )) // 10b, 11b
+    {
+        TS_ADAPTATION_FIELD adaptation_field;
+    } else {
+         // BYTE null
+    }
+}TS_HEADER;
+
+
+//----------------PAT(Program Association Table)-----------------------------------------------------------
+string GetSection_lengthComment(USHORT &section_length)
+{
+    local string comment = "";
+    SPrintf(comment, "section_length : %02d", section_length);
+    return comment;
+}
+
+string GetCurrent_next_indicatorComment(UBYTE &current_next_indicator)
+{
+    local string comment = "";
+    switch (current_next_indicator)
+    {
+    case 0:        comment = "PAT next is valid : 0"; break;
+    case 1:        comment = "PAT current is valid : 1"; break;
+    }
+    return comment;
+}
+
+typedef struct 
+{
+//loop: (section_length - 5 -4) / 4
+    USHORT program_number             : 16; //节目号
+    USHORT reserved_3                 : 3;  //保留位
+
+    if(0 == program_number)
+    {
+        USHORT network_PID            : 13; //program_number为0时,PID为网络信息表（NIT）的PID(network_PID);
+        //local_network_PID = network_PID;    // only one
+    }
+    else
+    {
+        USHORT program_map_PID        : 13; //program_number为0时大于0时,PID为每个节目对应一个节目映射表的PID(program_map_PID)
+        local_program_map_PID[local_programId_Index] = program_map_PID;  // store in array[43]
+        local_programId_Index++;
+    }
+
+    local_pos += 4;
+    //Printf( "[PAT]PROGRAM local_pos : %d\n", local_pos );
+}PAT_PROGRAM;
+
+typedef struct 
+{
+    SetBackColor( cDkGreen );
+
+    // PAT Header : 8(first head) + n*4(program) + 4(CRC32) bytes
+    // https://blog.csdn.net/u013354805/article/details/51578457
+    UBYTE  table_id                   : 8   <comment = "always 0x00">; //固定为0x00 ，标志是该表是PAT
+    USHORT section_syntax_indicator   : 1   <comment = "should 1">; //段语法标志位，应设置为‘1’
+    USHORT zero                       : 1   <comment = "always 0">; //0
+    USHORT reserved_1                 : 2;  //保留位
+    USHORT section_length             : 12  <comment = GetSection_lengthComment>; //表示该段后面有用的字节数，从transport_stream_id到CRC32
+    USHORT transport_stream_id        : 16  <comment = "transport stream id">; //该传输流的ID，区别于一个网络中其它多路复用的流
+    UBYTE  reserved_2                 : 2;  //保留位
+    UBYTE  version_number             : 5   <comment = "PAT Version(0~31)">; //范围0-31，表示PAT的版本号
+    UBYTE  current_next_indicator     : 1   <comment = GetCurrent_next_indicatorComment>; //发送的PAT是当前有效还是下一个PAT有效
+    UBYTE  section_number             : 8   <comment = "PAT section number">; //分段的号码。PAT可能分为多段传输，第一段为00，以后每个分段加1，最多可能有256个分段
+    UBYTE  last_section_number        : 8   <comment = "PAT last section number">; //最后一个分段的号码
+
+    local_pos += 8;
+    //FSeek(local_last_frame_length + local_pos);
+    //Printf( "[PAT] local_pos first : %d\n", local_pos );
+
+////loop: (section_length - (8-3) - 4) / 4
+    local int local_n = 0;
+    for(local_n = 0; local_n < (section_length - 9); local_n += 4)
+    {
+        PAT_PROGRAM patProgram;
+    }
+
+    SetBackColor( cLtGreen );
+    UINT   CRC_32                     : 32; //CRC32校验码
+
+    local_pos += 4;
+    FSeek(local_last_frame_length + local_pos);
+    //Printf( "[PAT] local_pos CRC32 : %d\n", local_pos );
+}PAT;
+
+
+//----------------PMT(Program Map Table)-----------------------------------------------------------
+string GetStream_typeComment(UBYTE &stream_type)
+{
+    local string comment = "";
+    // https://blog.csdn.net/u012459550/article/details/119993999
+    // https://blog.csdn.net/u013898698/article/details/78530143
+    // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/mstv/mpeg2streamtype
+    switch (stream_type)
+    {
+    // Todo : comment may be incorrect
+    case 0x00:        comment = "Reserved : ITU-T | ISO/IEC"; break;
+    case 0x01:        comment = "Video : MPEG-1 Video, ISO_IEC_11172_2_VIDEO"; break;
+    case 0x02:        comment = "Video : MPEG-2 Video, ISO_IEC_13818_2_VIDEO"; break;
+    case 0x03:        comment = "Audio : MPEG-1 Audio, ISO_IEC_11172_3_AUDIO"; break;
+    case 0x04:        comment = "Audio : MPEG-2 Audio, ISO_IEC_13818_3_AUDIO"; break;
+    case 0x05:        comment = "Private : ISO_IEC_13818_1_PRIVATE_SECTION"; break;
+    case 0x06:        comment = "Audio : MPEG-2 PES, ISO_IEC_13818_1_PES"; break;
+    case 0x07:        comment = "Audio : MHEG-5 Audio, ISO_IEC_13522_MHEG"; break;
+    case 0x08:        comment = "Control : ANNEX_A_DSM_CC"; break;
+    case 0x09:        comment = "Audio : Satellite Audio, ITU_T_REC_H_222_1"; break;
+    case 0x0A:        comment = "Video : MPEG-2 Video, ISO_IEC_13818_6_TYPE_A"; break;
+    case 0x0B:        comment = "Video : MPEG-2 Video, ISO_IEC_13818_6_TYPE_B"; break;
+    case 0x0C:        comment = "Video : MPEG-2 Video, ISO_IEC_13818_6_TYPE_C"; break;
+    case 0x0D:        comment = "Video : MPEG-2 Video, ISO_IEC_13818_6_TYPE_D"; break;
+    case 0x0E:        comment = "Audio : MPEG-2 Auxiliary, ISO_IEC_13818_1_AUXILIARY"; break;
+    case 0x0F:        comment = "Audio : MPEG-2 AAC(ADTS)"; break;
+    case 0x10:        comment = "Private : USER_PRIVATE"; break;
+    case 0x11:        comment = "Audio : MPEG-4 AAC"; break;
+    case 0x1B:        comment = "Video : AVC(H264)"; break;
+    case 0x80:        comment = "Audio : LPCM"; break;
+    case 0x81:        comment = "Audio : Dolby AC3"; break;
+    case 0x82:        comment = "Audio : Dolby DTS"; break;
+    case 0x83:        comment = "Audio : Dolby TrueHD"; break;
+    case 0x84:        comment = "Audio : Dolby AC3-Plus"; break;
+    case 0x85:        comment = "Audio : Dolby DTS_HD"; break;
+    case 0x86:        comment = "Audio : Dolby DTS-MA"; break;
+    case 0x90:        comment = "Title : PGS"; break;
+    case 0x91:        comment = "Title : IGS"; break;
+    case 0x92:        comment = "Title : Text Subtitle"; break;
+    case 0xA1:        comment = "Audio : Dolby AC3-Plus_SEC"; break;
+    case 0xA2:        comment = "Audio : Dolby DTS_HD_SEC"; break;
+    case 0xEA:        comment = "Video : VC-1"; break;
+    }
+    return comment;
+}
+
+typedef struct
+{
+//loop: (section_length - 13) / 5
+    UBYTE  stream_type              : 8   <comment = GetStream_typeComment>; //指示特定PID的节目元素包的类型。该处PID由elementary PID指定
+    USHORT reserved_5               : 3;  //0x07
+    USHORT elementary_PID           : 13; //该域指示TS包的PID值。这些TS包含有相关的节目元素
+    local_elementary_PID[local_elementaryPID_Index] = elementary_PID;  // store in array[43]
+    local_elementaryPID_Index++;
+    USHORT reserved_6               : 4;  //0x0F
+    USHORT ES_info_length           : 12; //前两位bit为00。该域指示跟随其后的描述相关节目元素的byte数
+
+    local_pos += (5+ES_info_length);
+    //Printf( "[PMT]ELEMENTARY local_pos : %d\n", local_pos );
+
+    if (ES_info_length > 0)
+    {
+        UBYTE  descriptor[ES_info_length];
+    }
+
+}PMT_ELEMENTARY;
+
+typedef struct 
+{
+    SetBackColor( cDkBlue );
+
+    // PMT Header :  12(first head) + n*5(elementary) + n*1(descriptor) + 4(CRC32) bytes
+    // https://blog.csdn.net/u013354805/article/details/51586086
+    UBYTE  table_id                 : 8;  //固定为0x02, 表示PMT表
+    USHORT section_syntax_indicator : 1;  //固定为0x01
+    USHORT zero                     : 1;  //0x01
+    USHORT reserved_1               : 2;  //0x03
+    USHORT section_length           : 12; //首先两位bit置为00，它指示段的byte数，由段长度域开始，包含CRC
+    USHORT program_number           : 16; // 指出该节目对应于可应用的Program map PID
+    UBYTE  reserved_2               : 2;  //0x03
+    UBYTE  version_number           : 5;  //指出TS流中Program map section的版本号
+    UBYTE  current_next_indicator   : 1;  //当该位置1时，当前传送的Program map section可用. 当该位置0时，指示当前传送的Program map section不可用，下一个TS流的Program map section有效
+    UBYTE  section_number           : 8;  //固定为0x00
+    UBYTE  last_section_number      : 8;  //固定为0x00
+    USHORT reserved_3               : 3;  //0x07
+    USHORT PCR_PID                  : 13; //指明TS包的PID值，该TS包含有PCR域，该PCR值对应于由节目号指定的对应节目，如果对于私有数据流的节目定义与PCR无关，这个域的值将为0x1FFF。
+    USHORT reserved_4               : 4;  //预留为0x0F
+    USHORT program_info_length      : 12; //前两位bit为00。该域指出跟随其后对节目信息的描述的byte数。
+
+    local_pos += 12;
+    //FSeek(local_last_frame_length + local_pos);
+    //Printf( "[PMT] local_pos first : %d\n", local_pos );
+
+////loop: (section_length - (12-3) - 4) / 5
+    for(local_i = 0; local_i < (section_length - 13 - 1); local_i)
+    {
+        PMT_ELEMENTARY pmtElementary;
+        local_i += (5 + pmtElementary.ES_info_length);
+    }
+
+    SetBackColor( cLtBlue );
+    UINT   CRC_32                   : 32;
+
+    local_pos += 4;
+    FSeek(local_last_frame_length + local_pos);
+    //Printf( "[PMT] local_pos CRC32 : %d\n", local_pos );
+}PMT;
+
+
+//----------------PES-----------------------------------------------------------
+
+string GetStream_idComment(UINT &stream_id)
+{
+    local string comment = "";
+    // https://blog.csdn.net/cabbage2008/article/details/49848971
+    if(stream_id >= 0xC0 && stream_id <= 0xDF)
+    {
+        comment = "Audio";
+    }
+    else if(stream_id >= 0xE0 && stream_id <= 0xEF)
+    {
+        comment = "Video";
+    }
+    else
+    {
+        comment = "unknown";
+    }
+    return comment;
+}
+
+typedef struct 
+{
+    SetBackColor( cDkYellow );
+    // PES Header :  9(first head) + ???
+    // https://blog.csdn.net/u013354805/article/details/51591229
+    UINT packet_start_code_prefix   : 24; // 0x000001
+    UINT stream_id                  : 8   <comment = GetStream_idComment>; // 流ID. 音频取值(0xc0-0xdf),通常为0xc0;视频取值(0xe0-0xef),通常为0xe0
+    USHORT PES_packet_length        : 16; // PES包长度, 0表示长度不限制,只有视频数据长度会超过0xffff
+    UBYTE onezero                   : 2;
+    UBYTE PES_scrambling_control    : 2;
+    UBYTE PES_priority              : 1;
+    UBYTE Data_alignment_indicator  : 1;
+    UBYTE copyright                 : 1;
+    UBYTE Original_or_copy          : 1;
+    UBYTE PTS_DTS_flags             : 2;
+    UBYTE ESCR_flag                 : 1;
+    UBYTE ES_rate_flag              : 1;
+    UBYTE DSM_trick_mode_flag       : 1;
+    UBYTE Additional_copy_info_flag : 1;
+    UBYTE PES_CRC_flag              : 1;
+    UBYTE PES_extension_flag        : 1;
+    UBYTE PES_header_data_length    : 8;
+
+    // Todo : according to losts of flags......
+
+    if(PES_header_data_length > 0)
+    {
+        UBYTE PES_HeadData[PES_header_data_length];
+    }
+
+    local_pos += (9 + PES_header_data_length);
+    //FSeek(local_last_frame_length + local_pos);
+    //Printf( "[PMT] local_pos CRC32 : %d\n", local_pos );
+}PES_Header;
+
+
+//----------------Header + Data-----------------------------------------------------------
+typedef struct 
+{
+    // TS
+    TS_HEADER tsHeader;
+
+#ifdef SLOW_MODE
+    // PAT
+    if(0x0000 == tsHeader.PID)
+    {
+        // when receive PAT, reset local_program_map_PID
+        for(local_i = 0; local_i < local_programId_Index; local_i++)  // !!! for is very slow
+        {
+            local_program_map_PID[local_i] = 0; // reset
+        }
+        local_programId_Index = 0;              // reset
+
+
+        if (1 == local_payload_unit_start_indicator) // start_indicator 1 when PSI, has pointer_field
+        {
+            SetBackColor( cGray );
+            UBYTE   pointer_field; // pointer_field
+            local_pos++;
+            //Printf( "[PAT] local_pos pointer_field : %d\n", local_pos );
+            //FSeek(local_last_frame_length + local_pos);
+        }
+
+        SetBackColor( cGreen );
+        PAT pat;
+        FSeek(local_last_frame_length + local_pos); // shit to PAT_HEADER(TS_HEADER + 8 + section_length)
+    }
+
+    // PMT
+    for(local_i = 0; local_i < local_programId_Index; local_i++)
+    {
+        if(0 != local_program_map_PID[local_i] && local_program_map_PID[local_i] == tsHeader.PID) // find program_map_PID in PAT. it's PMT
+        {
+    
+            // when receive PMT, reset local_elementaryPID_Index
+            for(local_i = 0; local_i < local_elementaryPID_Index; local_i++)
+            {
+                local_elementary_PID[local_i] = 0;  // reset
+            }
+            local_elementaryPID_Index = 0;          // reset
+
+            //Printf( "[PMT] local_program_map_PID[%d] : %d\n", local_i, local_program_map_PID[local_i] );
+
+            if (1 == local_payload_unit_start_indicator) // start_indicator 1 when PSI, has pointer_field
+            {
+                SetBackColor( cGray );
+                UBYTE   pointer_field; // pointer_field
+                local_pos++;
+                //Printf( "[PMT] local_pos pointer_field : %d\n", local_pos );
+                //FSeek(local_last_frame_length + local_pos);
+            }
+
+            PMT pmt;
+            FSeek(local_last_frame_length + local_pos);
+        }
+    }
+
+    // PES
+    for(local_i = 0; local_i < local_elementaryPID_Index; local_i++)
+    {
+        if(0 != local_elementary_PID[local_i] && local_elementary_PID[local_i] == tsHeader.PID) // find program_map_PID in PAT. it's PMT
+        {
+            //Printf( "[PES] local_elementary_PID[%d] : %d\n", local_i, local_elementary_PID[local_i] );
+
+            if (1 == local_payload_unit_start_indicator) // start_indicator 1 when PES, has PES Header
+            {
+                SetBackColor( cDkPurple );
+                PES_Header pesHeader;
+                FSeek(local_last_frame_length + local_pos);
+            }
+            else
+            {
+                SetBackColor( cLtPurple );
+                BYTE PES_Data[LOCAL_FRAME_LENGTH - local_pos];
+                return;
+            }
+        }
+    }
+#endif
+
+    // check if has data
+    if((LOCAL_FRAME_LENGTH - local_pos) > 0)
+    {
+        //Printf( "[data] local_pos : %d\n", local_pos );
+        SetBackColor( cLtYellow );
+        BYTE Data[LOCAL_FRAME_LENGTH - local_pos];
+    }
+}TS_FRAME;
+
+
+//----------------loop-----------------------------------------------------------
+while (!FEof())
+{
+    // init/reset
+    local_pos = 0;
+    local_payload_unit_start_indicator = 0;
+    //local_network_PID = 0;
+
+
+    TS_FRAME tsFrame <name = "TS Frame">;
+    if(tsFrame.tsHeader.sync_byte != 0x47)
+    {
+        Warning( "File is not a valid Transport Stream. stop!!!" );
+        return -1;
+    }
+
+    local_last_frame_length = local_last_frame_length + LOCAL_FRAME_LENGTH;
+    FSeek(local_last_frame_length);
+}

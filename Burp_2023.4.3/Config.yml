@@ -1,0 +1,10 @@
+!!burp.yaml.RulesConfig
+rules:
+- rule:
+  - color: yellow
+    engine: nfa
+    loaded: true
+    name: Email
+    regex: (([a-zA-Z0-9][_|\.])*[a-zA-Z0-9]+@([a-zA-Z0-9][-|_|\.])*[a-zA-Z0-9]+\.((?!js|css|jpg|jpeg|png|ico)[a-zA-Z]{2,}))
+    scope: response
+  type: Basic Information

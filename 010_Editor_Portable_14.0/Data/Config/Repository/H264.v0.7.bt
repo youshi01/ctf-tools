@@ -1,0 +1,179 @@
+//------------------------------------------------
+//--- 010 Editor v9.0 Binary Template
+//
+//      File: H264.bt 
+//   Authors: ZJX, Radu Arjocu
+//   Version: 0.7
+//   Purpose: Identify NAL units of an AVC/H264 video stream, which uses start codes.
+//  Category: Video
+// File Mask: 
+//  ID Bytes: 
+//   History:
+//   0.7     2021-05-31 Radu Arjocu: Reorganized template into sections, using name, suppress opening.
+//   0.6     2021-04-29 Radu Arjocu: Exit template if first NAL unit is not found, treat last NAL unit size,
+//                                   rename constant and functions.
+//   0.5     2021-04-27 Radu Arjocu: Faster parsing, complete NAL unit type, add comments to NAL units.
+//   0.1     2021-03-23 ZJX: Initial release.
+//------------------------------------------------
+
+BigEndian();
+
+// Forward declarations:
+
+struct NAL_UNIT_HEADER;
+struct NAL_UNIT;
+
+// Constants:
+
+local int64 k_fSize = FileSize();
+
+// Enums:
+
+typedef enum <UBYTE> {
+    unspecified_unit_0 = 0,
+    slice_non_idr_pic = 1,
+    slice_data_partion_A = 2,
+    slice_data_partion_B = 3,
+    slice_data_partion_C = 4,
+    slice_idr_pic = 5,
+    sei = 6,
+    sps = 7,
+    pps = 8,
+    access_unit_delimiter = 9,
+    end_of_sequence = 10,
+    end_of_stream = 11,
+    filler_data = 12,
+    spse = 13,
+    prefix_unit = 14,
+    ssps = 15,
+    dps = 16,
+    reserved_unit_17 = 17,
+    reserved_unit_18 = 18,
+    slice_aux_pic = 19,
+    slice_ext = 20,
+    slice_ext_view_component = 21,
+    reserved_unit_22 = 22,
+    reserved_unit_23 = 23,
+    unspecified_unit_24 = 24,
+    unspecified_unit_25 = 25,
+    unspecified_unit_26 = 26,
+    unspecified_unit_27 = 27,
+    unspecified_unit_28 = 28,
+    unspecified_unit_29 = 29,
+    unspecified_unit_30 = 30,
+    unspecified_unit_31 = 31,
+} NAL_UNIT_TYPE;
+
+// Funtions:
+
+int64 FindNalUnitStart(int64 pos)
+{
+    while (pos + 2 < k_fSize)
+    {
+        switch (ReadUByte(pos + 2))
+        {
+        case 0x00:
+            if (pos + 3 < k_fSize          && 
+                ReadUByte(pos + 1) == 0x00 &&
+                ReadUByte(pos + 3) == 0x01)
+                return pos+1;
+            pos += 2;
+            break;
+
+        case 0x01:
+            if (ReadUByte(pos)     == 0x00 &&
+                ReadUByte(pos + 1) == 0x00)
+                return pos;
+            // Fall-through
+
+        default:
+            pos	+= 3;
+            break;
+        }
+    }
+    return k_fSize;
+}
+
+string GetNalUnitComment(NAL_UNIT &nalUnit)
+{
+    local string comment = "";
+    if (sizeof(nalUnit) <= 3)
+        return comment;
+    switch (nalUnit.header.nal_unit_type)
+    {
+    case unspecified_unit_0:        comment = "<unspecified unit 0>"; break;
+    case slice_non_idr_pic:         comment = "Slice of non-IDR picture"; break;
+    case slice_data_partion_A:      comment = "Slice data partion A"; break;
+    case slice_data_partion_B:      comment = "Slice data partion B"; break;
+    case slice_data_partion_C:      comment = "Slice data partion C"; break;
+    case slice_idr_pic:             comment = "Slice of IDR picture"; break;
+    case sei:                       comment = "SEI"; break;
+    case sps:                       comment = "SPS"; break;
+    case pps:                       comment = "PPS"; break;
+    case access_unit_delimiter:     comment = "Access unit delimiter"; break;
+    case end_of_sequence:           comment = "End of sequence"; break;
+    case end_of_stream:             comment = "End of stream"; break;
+    case filler_data:               comment = "Filler data"; break;
+    case spse:                      comment = "SPSE"; break;
+    case prefix_unit:               comment = "Prefix unit"; break;
+    case ssps:                      comment = "SSPS"; break;
+    case dps:                       comment = "DPS"; break;
+    case reserved_unit_17:          comment = "<reserved unit 17>"; break;
+    case reserved_unit_18:          comment = "<reserved unit 18>"; break;
+    case slice_aux_pic:             comment = "Slice of auxiliary picture"; break;
+    case slice_ext:                 comment = "Slice extension"; break;
+    case slice_ext_view_component:  comment = "Slice extension for view component"; break;
+    case reserved_unit_22:          comment = "<reserved unit 22>"; break;
+    case reserved_unit_23:          comment = "<reserved unit 23>"; break;
+    case unspecified_unit_24:       comment = "<unspecified unit 24>"; break;
+    case unspecified_unit_25:       comment = "<unspecified unit 25>"; break;
+    case unspecified_unit_26:       comment = "<unspecified unit 26>"; break;
+    case unspecified_unit_27:       comment = "<unspecified unit 27>"; break;
+    case unspecified_unit_28:       comment = "<unspecified unit 28>"; break;
+    case unspecified_unit_29:       comment = "<unspecified unit 29>"; break;
+    case unspecified_unit_30:       comment = "<unspecified unit 30>"; break;
+    case unspecified_unit_31:       comment = "<unspecified unit 31>"; break;
+    }
+    return comment;
+}
+
+// Structs:
+
+typedef struct  {
+	UBYTE forbidden_zero_bit : 1;
+	UBYTE nal_ref_idc : 2;
+	NAL_UNIT_TYPE nal_unit_type : 5;
+} NAL_UNIT_HEADER;
+
+typedef struct {
+    local int64 pos = FTell();
+    local int64 nextPos = k_fSize;
+    if (pos < k_fSize)
+    {
+        pos += 3;
+        FSeek(pos);
+        nextPos = FindNalUnitStart(pos + 1);
+    }
+    local int64 len   = nextPos - pos;
+
+    //NOTE: The start code bytes {0x00, 0x00, 0x01} are not declared/saved
+    if (len > 0)
+		NAL_UNIT_HEADER header <name = "NAL Unit Header">;
+    if (len > 1)
+        UBYTE data[len - 1] <open = suppress>;
+} NAL_UNIT <comment = GetNalUnitComment>;
+
+// Main:
+
+local int64 firstPos = FindNalUnitStart(0);
+if (firstPos >= k_fSize)
+{
+    Printf("Couldn't find any AVC/H264 video NAL unit!\n");
+    Exit(-1);
+}
+FSeek(firstPos);
+
+while (!FEof())
+{
+    NAL_UNIT nalUnit <name = "NAL Unit">;
+}

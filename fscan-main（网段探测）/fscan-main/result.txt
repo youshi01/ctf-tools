@@ -1,0 +1,29 @@
+192.168.249.66:135 open
+192.168.249.96:80 open
+192.168.249.66:80 open
+192.168.249.66:8088 open
+192.168.249.96:22 open
+192.168.249.66:1433 open
+192.168.249.66:139 open
+192.168.249.66:8089 open
+192.168.249.66:7680 open
+192.168.249.66:8834 open
+192.168.249.66:443 open
+192.168.249.66:445 open
+[*] 192.168.249.66  (Windows 10 Home China 22621)
+[*] WebTitle:http://192.168.249.66:8088 code:400 len:334    title:Bad Request
+[*] WebTitle:http://192.168.249.66:8834 code:400 len:349    title:400 Bad Request
+NetInfo:
+[*]192.168.249.66
+   [->]DESKTOP-0HA10TJ
+   [->]192.168.153.1
+   [->]192.168.109.1
+   [->]192.168.249.66
+   [->]2408:846c:170:724c:eb35:b2f2:c3d5:5233
+   [->]2408:846c:170:724c:8c61:62c5:6647:9351
+[*] WebTitle:http://192.168.249.66:8089 code:400 len:334    title:Bad Request
+[*] WebTitle:https://192.168.249.66    code:403 len:0      title:None
+[*] WebTitle:https://192.168.249.66:8834 code:200 len:6      title:Nessus
+[*] WebTitle:http://192.168.249.66     code:404 len:0      title:None
+[*] WebTitle:http://192.168.249.96     code:200 len:28     title:老渔翁垂钓网 - 首 页
+[+] SSH:192.168.249.96:22:root 123456

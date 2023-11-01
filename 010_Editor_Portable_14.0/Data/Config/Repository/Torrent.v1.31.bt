@@ -1,0 +1,328 @@
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+//
+//      File: Torrent.bt
+//   Authors: Bartosz Dziewonski
+//   Version: 1.31
+//   Purpose: Parse torrent files.
+//  Category: Internet
+// File Mask: *.torrent
+//  ID Bytes: 
+//   History:
+//   1.31  2022-11-04 qiuqiu: Can parse BitTorrent v2 torrent file "piece layers" field.
+//   1.30  2022-03-09 qiuqiu: Can parse BitTorrent v2 torrent file.
+//   1.20  2022-03-01 qiuqiu: Some fix, Suitable for version 8 and above.
+//   1.11  2021-09-27 qiuqiu: Reorganization
+//   1.1   2021-09-10 qiuqiu: Minor Update
+//   1.0   2018-01-31 Bartosz Dziewonski: Initial version.
+//------------------------------------------------
+
+// color
+// LIST  = 0xF092B3
+// DICT  = 0x70ABFF
+// BINT  = 0x79C398
+// BSTR  = 0xFFB879
+// NUM1  = 0x70ABFF
+// NUM2  = 0xFFB879
+// COLON = 0x00D7FF
+//
+typedef unsigned int BOOL;
+
+enum <ubyte> beType {Empty, String, Integer, List, Dictionary};
+
+int64 find_next(char terminator) {
+    local int64 pos = FTell(), len = 0;
+    while(ReadByte(pos + len) != terminator)
+        len++;
+    return len;
+}
+
+int valid_utf8(uchar data[], int size) {
+    local int i = 0, x = 0, cnt = 0;
+    for (i = 0; i < size; i++) {
+        x = (ubyte)data[i];
+        if (!cnt) {
+            if ((x >> 5) == 0b110) {
+                cnt = 1;
+            } else if ((x >> 4) == 0b1110) {
+                cnt = 2;
+            } else if ((x >> 3) == 0b11110) {
+                cnt = 3;
+            } else if ((x >> 7) != 0) return false;
+        } else {
+            if ((x >> 6) != 0b10) return false;
+        cnt--;
+        }
+    }
+    return cnt == 0;
+}
+
+char[] bin2hex (uchar buf_in[]) {
+    local const char hex_asc[] = "0123456789ABCDEF";
+    local char result[sizeof(buf_in) * 2] = {0};
+    local int i;
+    for (i = 0; i < sizeof(buf_in); i++) {
+        result[i * 2 + 0] = hex_asc[(buf_in[i] >> 4) & 0x0F];
+        result[i * 2 + 1] = hex_asc[(buf_in[i]     ) & 0x0F];
+    }
+    return result;
+}
+
+string UnixToDateTime(int64 v) {
+    return TimeTToString(v, "yyyy/MM/dd hh:mm:ss UTC");
+}
+
+int64 Atoi64(const char s[])
+{
+    local int64 n;
+    SScanf(s, "%Ld", n);
+    return n;
+}
+
+string FormatBytes(uint64 bytes)
+{
+	local const char units[6] = {' ', 'K', 'M', 'G', 'T', 'P'};
+	local char length = sizeof(units) / sizeof(units[0]);
+    local string suffix = "", fmt = "%.00lf %s";
+	local int i = 0;
+	local double dblBytes = bytes;
+    
+	if (bytes >= 1024) {
+        fmt = "%.02lf %s";
+		for (i = 0; (bytes / 1024) > 0 && i< length - 1; i++, bytes /= 1024)
+			dblBytes = bytes / 1024.0;
+
+        suffix += units[i];
+        suffix += "B";
+	} else suffix = "Bytes";
+
+	local char output[200];
+	SPrintf(output, fmt, dblBytes, suffix);
+	return output;
+}
+
+string fmt_piece(struct Piece &v) {
+    return bin2hex(v.rawdata);
+}
+
+typedef struct (int size){
+    uchar rawdata[size];
+} Piece <read=fmt_piece>;
+
+string fmt_pieces(struct Pieces &v){
+    local string str;
+    SPrintf(str, "(piece: %d)", v.count);
+    return str;
+}
+typedef struct (int size){
+    local char c  <hidden=true> = ReadByte();
+    local beType type<name="type"> = 1;
+    char length[find_next(':')]    <comment="length", fgcolor=cGreen>;
+    local int count <hidden=true> = Atoi64(length) / size;
+    char delimiter                 <comment="delimiter", fgcolor=cRed>;
+    while (count--) {
+        struct Piece piece(size)         <name="piece data", comment="SHA1 hash value", fgcolor=0x87d700>;
+    }
+    count = Atoi64(length) / size;
+} Pieces <read=fmt_pieces>;
+
+typedef struct Layers{
+    local beType type<name="type"> = 4;
+    local int count             <hidden=true> = 0;
+    char initial                <name="dict initial", comment="Initial", fgcolor=0x00afff>;
+    while (ReadByte() != 'e') {
+        count++;
+        struct BDecode Key       <name="dict key", read=get_hex,    comment=get_type>; 
+        struct Pieces  value(32) <name="dict value">;
+        }
+    char trailing               <name="dict trailing", comment="Trailing", fgcolor=0x00afff>;
+};
+
+typedef struct {
+    
+    local char c  <hidden=true> = ReadByte();
+    switch (c) {
+        // byte strings
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9': {
+            local beType type<name="type"> = 1;
+            char length[find_next(':')]   <comment="string length",    fgcolor=cGreen>;
+            char delimiter                <comment="delimiter",        fgcolor=cRed>;
+            if (Atoi64(length))
+                char rawdata[Atoi64(length)]  <comment="raw data">;
+            else
+                local char rawdata[1] = 0;
+            local wstring value <hidden=true> = StringToWString(rawdata, CHARSET_UTF8);
+            break;
+        }
+        // integer
+        case 'i': {
+            local beType type<name="type"> = 2;
+            char initial                 <name="int64 initial",  comment="Initial", fgcolor=cDkAqua>;
+            char rawdata[find_next('e')] <name="raw data",       comment="int64 string", fgcolor=cAqua>;
+            char trailing                <name="int64 trailing", comment="Trailing", fgcolor=cDkAqua>;
+            local int64 value <hidden=true> = Atoi64(rawdata);
+            break;
+        }
+        // lists
+        case 'l': {
+            local beType type<name="type"> = 3;
+            local int count            <hidden=true> = 0;
+            char initial               <name="list initial", comment="Initial", fgcolor=cPurple>;
+            while (ReadByte() != 'e') {
+                count++;
+                struct BDecode item    <name="list item", read=get_string, comment=get_type>;
+            }
+            char trailing              <name="list trailing", comment="Trailing", fgcolor=cPurple>;
+            break;
+        }
+        // dictionary
+        case 'd': {
+            local beType type<name="type"> = 4;
+            local int count             <hidden=true> = 0;
+            char initial                <name="dict initial", comment="Initial", fgcolor=0x00afff>;
+            while (ReadByte() != 'e') {
+                count++;
+                struct BDecode key      <name="dict key", read=get_string, comment=get_type>;
+                //struct BDecode value    <name="dict_value", read=get_string, comment=get_type>;
+                switch ( key.value ) {
+                    case "ed2k"          : 
+                    case "md5sum"        :
+                    case "filehash"      : 
+                    case "pieces root"   : struct BDecode value    <name="dict value", read=get_hex,    comment=get_type>; break;
+                    case "pieces"        : struct Pieces  value(20)<name="dict value",                  comment="SHA1"  >; break;
+                    case "creation date" : struct BDecode value    <name="dict value", read=get_date,   comment=get_type>; break;
+                    case "piece length"  : 
+                    case "length"        : struct BDecode value    <name="dict value", read=get_size,   comment=get_type>; break;
+                    case "piece layers"  : struct Layers  value    <name="dict value", read=get_string1>;                  break;
+                    default              : struct BDecode value    <name="dict value", read=get_string, comment=get_type>;
+                }
+            }
+            char trailing               <name="dict trailing", comment="Trailing", fgcolor=0x00afff>;
+            break;
+        }
+        default: Printf("%s\n", "error");
+    }
+
+} BDecode;
+
+wstring get_string1(struct Layers &v) {
+    local string str;
+    SPrintf(str, "(dict: %d)", v.count );
+    return str;
+}
+
+wstring get_string(const struct BDecode &v) {
+    local string str;
+    switch (v.type) {
+        case 1: {
+            return v.value;
+        }
+        case 2: {
+            SPrintf(str, "%Ld (%#LX)", v.value, v.value);
+            break;
+        }
+        case 3: {
+            SPrintf(str, "(list: %d)", v.count );
+            break;
+        }
+        case 4: {
+            SPrintf(str, "(dict: %d)", v.count );
+            break;
+        }
+        default: str = "unknow";
+    }
+    return (str);
+}
+
+string get_type(const struct BDecode &v) {
+    return EnumToString(v.type);
+}
+
+string get_date (const struct BDecode &v) {
+    return UnixToDateTime(Atoi64(v.rawdata));
+}
+
+string get_hex(const struct BDecode &v) {
+    local uchar rawdata[sizeof(v.rawdata)];
+    rawdata = v.rawdata;
+    return bin2hex(rawdata);
+}
+
+string get_size(const struct BDecode &v) {
+    return FormatBytes(v.value);
+}
+
+int find_key(struct BDecode &dict, string key) {
+    local int index = -1, i;
+    for (i = 0; i < dict.count; i++) {
+        if (Stricmp(dict.key[i].rawdata, key) == 0) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
+BDecode get_value(const struct BDecode &v, string key_name) {
+    local int key_index;
+    key_index = find_key(v, key_name);
+    if (key_index != -1)
+        return v.value[key_index];
+    else
+        return -1;
+}
+
+int get_meta_version(const struct BDecode &v) {
+    local int64 info_index, meta_version_index;
+    info_index = find_key(v, "info");
+    meta_version_index = find_key(v.value[info_index], "meta version");
+    if (meta_version_index != -1)
+        return v.value[info_index].value[meta_version_index].value;
+    else
+        return 1;
+        
+}
+
+char[] get_info_hash(const struct BDecode &v, int HashType) {
+    local int64 info_index, meta_version;
+    local char hash[];
+    info_index = find_key(v, "info");
+    if (info_index > -1) {
+        switch (HashType) {
+        case 1: ChecksumAlgStr(CHECKSUM_SHA1,   hash, startof(v.value[info_index]), sizeof(v.value[info_index])); break;
+        case 2: ChecksumAlgStr(CHECKSUM_SHA256, hash, startof(v.value[info_index]), sizeof(v.value[info_index])); break;
+        }
+    }
+    return hash;
+}
+
+int checkHybrid(const struct BDecode &v) {
+    local int piece_layers, pieces, dict_info;
+    dict_info = find_key(v, "info");
+    piece_layers = find_key(v, "piece layers");
+    pieces = find_key(v.value[dict_info], "pieces");
+    return (piece_layers != -1) && (pieces != -1);
+}
+
+FSeek(0);
+BDecode contents       <name="Torrent Struct", comment="Torrent Struct", open=true>;
+local int meta_version <name="Meta Version",   comment="Torrent Version", hidden=false>;
+local BOOL IsHybrid    <name="Is Hybrid",      comment="Torrent Is Hybrid", hidden=false>;
+meta_version = get_meta_version(contents);
+IsHybrid = checkHybrid(contents);
+
+if (meta_version == 2) {
+    if (IsHybrid == 1) {
+        local char hash1[] <name="CHECKSUM_SHA1", comment="Torrent Info Hash", hidden=false>;
+        hash1 = get_info_hash(contents, 1);
+    }
+
+    local char hash2[] <name="CHECKSUM_SHA256 hash", comment="Torrent Info Hash", hidden=false>;
+    hash2 = get_info_hash(contents, 2);
+}
+else {
+    local char hash1[] <name="SHA1 hash", comment="Torrent Info Hash", hidden=false>;
+    hash1 = get_info_hash(contents, 1);
+}
+

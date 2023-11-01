@@ -1,0 +1,2896 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Languages>
+
+	<English>
+	
+		<!-- Common words and phrases -->
+		<Common>
+			<WordOK>OK</WordOK>
+			<WordCancel>Cancel</WordCancel>
+			<WordContinue>Continue</WordContinue>
+			<DontShowMessage>Don't show this message again</DontShowMessage>
+			<GetMoreInfo>Get more information...</GetMoreInfo>
+      <SelectFile>Select file...</SelectFile>
+
+			<Dialog_Launch_Caption>VBA Backdoor</Dialog_Launch_Caption>
+			<St_Launch_CommandLine>Application Command Line:</St_Launch_CommandLine>
+			<St_Launch_LaunchTip>To perfom VBA Backdoor feature AVPR will start a document host application now. Other features of AVPR will be not available when this application is still running. If you want to close AVPR, please close the host application first.&#13;&#13;When VBA Backdoor session is running you can use any password to unlock VBA macros. You can change the application command line if it needs some parameters to run properly.</St_Launch_LaunchTip>
+
+			<M_LogCopySelectedEvents>Copy Selected Events to Clipboard</M_LogCopySelectedEvents>
+			<M_LogClearLogWindow>Clear Log Window</M_LogClearLogWindow>
+
+      <Copyright>Copyright</Copyright>
+      
+      <!-- System information -->
+      <SysOSInstalled>Installed OS:</SysOSInstalled>
+      
+		</Common>
+
+    <Licenses>
+      <Lic_Trial>Trial version</Lic_Trial>
+      <Lic_Home>Home Edition</Lic_Home>
+      <Lic_Standard>Standard Edition</Lic_Standard>
+      <Lic_Professional>Professional Edition</Lic_Professional>
+      <Lic_Special>Special Edition</Lic_Special>
+      <Lic_Enterprise>Enterprise Edition</Lic_Enterprise>
+      <Lic_Forensic>Forensic Edition</Lic_Forensic>
+
+      <!-- DON'T TRANSLATE THIS SECTION ! -->
+      <map>
+        <Lic0>Lic_Trial</Lic0>
+        <Lic1>Lic_Home</Lic1>
+        <Lic2>Lic_Standard</Lic2>
+        <Lic3>Lic_Professional</Lic3>
+        <Lic4>Lic_Special</Lic4>
+        <Lic5>Lic_Enterprise</Lic5>
+        <Lic6>Lic_Forensic</Lic6>
+      </map>
+      
+    </Licenses>
+		
+		<!-- Ordering process and registration -->
+		<Order>
+
+      <!-- DON'T TRANSLATE THIS SECTION ! -->
+      <map>
+
+        <Item1 Name="PCSE_MODE_SINGLE">
+          <Text>Order/OrderTextSingle</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item1>
+
+        <Item2 Name="PCSE_MODE_MULTI">
+          <Text>Order/OrderTextMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item2>
+
+        <Item3 Name="PCSE_MODE_FEATURE">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item3>
+
+        <Item4 Name="PCSE_MODE_LENGTH">
+          <Text>Order/OrderTextLength</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item4>
+
+        <Item5 Name="PCSE_MODE_TRUNC">
+          <Text>Order/OrderTextTrunc</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item5>
+
+        <Item6 Name="PCSE_MODE_AOPR_EDITION">
+          <Text>Order/OrderTextAOPREdition</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item6>
+
+        <Item7 Name="PCSE_MODE_AOPR_EDITION_FN">
+          <Text>Order/OrderTextAOPREditionFN</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item7>
+
+        <Item8 Name="PCSE_MODE_DECR_FOUND">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item8>
+
+        <Item9 Name="PCSE_MODE_DECR_ENT">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item9>
+
+        <Item10 Name="PCSE_MODE_EXPIRED">
+          <Text>Order/OrderTextExpired</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item10>
+
+        <Item11 Name="PCSE_MODE_DECRYPT">
+          <Text>Order/OrderTextAEFSDRDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item11>
+
+        <Item12 Name="PCSE_MODE_TRUNC_MULTI">
+          <Text>Order/OrderTextTruncMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item12>
+
+        <Item13 Name="PCSE_MODE_EDITION_MULTI">
+          <Text>Order/OrderTextAOPREditionMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item13>
+
+        <Item14 Name="PCSE_MODE_DECRYPT_WIZ">
+          <Text>Order/OrderTextAEFSDRDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item14>
+
+        <Item15 Name="PCSE_MODE_PDF_DECRYPT">
+          <Text>Order/OrderTextPDFDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item15>
+
+        <Item16 Name="PCSE_MODE_PWSEX_TRIAL_LIMIT">
+          <Text>Order/OrderTextPWSEXTrial</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item16>
+
+        <Item17 Name="PCSE_MODE_PWSEX_LICENSE_LIMIT">
+          <Text>Order/OrderTextPWSEXLicense</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item17>
+
+        <Item18 Name="Reserved"></Item18>
+        <Item19 Name="Reserved"></Item19>
+
+        <Item20 Name="PCSE_MODE_EDPR_AGENTS">
+          <Text>Order/OrderTextEDPRAgents</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item20>
+
+        <Item21 Name="PCSE_MODE_PDF_TRIAL_PASSWORD">
+          <Text>Order/OrderTextPDFTrialPassword</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item21>
+
+        <Item22 Name="PCSE_MODE_PDF_STD_PASSWORD">
+          <Text>Order/OrderTextPDFStdPassword</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item22>
+
+        <Item23 Name="PCSE_MODE_PDF_TRIAL_LEN">
+          <Text>Order/OrderTextPDFTrialLen</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item23>
+
+        <Item24 Name="PCSE_MODE_PDF_STD_LEN">
+          <Text>Order/OrderTextPDFStdLen</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item24>
+
+        <Item25 Name="PCSE_MODE_PDF_DECRYPT_STD">
+          <Text>Order/OrderTextPDFDecryptStd</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item25>
+
+        <Item26 Name="PCSE_MODE_PDF_STD_RAINBOW">
+          <Text>Order/OrderTextPDFStdRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item26>
+
+        <Item27 Name="PCSE_MODE_PDF_PRO_RAINBOW">
+          <Text>Order/OrderTextPDFProRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item27>
+
+        <Item28 Name="PCSE_MODE_PDF_FEATURE_PRO">
+          <Text>Order/OrderTextPDFFeaturePro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item28>
+
+        <Item29 Name="PCSE_MODE_PDF_FEATURE_ENT">
+          <Text>Order/OrderTextPDFFeatureEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item29>
+
+        <Item30 Name="PCSE_MODE_AOPR4_UPGRADE">
+          <Text>Order/OrderTextAOPR4Upgrade</Text>
+        </Item30>
+
+        <Item31 Name="PCSE_MODE_KEY_EXPIRED">
+          <Text>Order/OrderTextKeyExpired</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item31>
+
+        <Item32 Name="PCSE_MODE_AEFSDR_PRO">
+          <Text>Order/OrderTextAEFSDRPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item32>
+
+        <Item33 Name="PCSE_MODE_AOPB_TRIAL_PRO">
+          <Text>Order/OrderTextAOPBTrialPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item33>
+
+        <Item34 Name="PCSE_MODE_AOPB_STD_RAINBOW">
+          <Text>Order/OrderTextPDFStdRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item34>
+
+        <Item35 Name="PCSE_MODE_AOPB_PRO_RAINBOW">
+          <Text>Order/OrderTextPDFProRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item35>
+
+        <Item36 Name="PCSE_MODE_PASSWORD_REG">
+          <Text>Order/OrderTextPasswordReg</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item36>
+		
+		<Item37 Name="PCSE_MODE_DEVICES">
+          <Text>Order/OrderTextDevices</Text>
+        </Item37>
+
+        <Item101 Name="PADV_AOPR_AOPB">
+          <Text>Advert/AdvertTextAOPRAOPB</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item101>
+
+        <Item102 Name="PADV_AOPR_EDPR">
+          <Text>Advert/AdvertTextAOPREDPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item102>
+
+        <Item103 Name="PADV_EDPR_AOPR">
+          <Text>Advert/AdvertTextEDPRAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item103>
+
+        <Item104 Name="PADV_AOPB_AOPR">
+          <Text>Advert/AdvertTextAOPBAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item104>
+
+        <Item105 Name="PADV_AZPR_ARCHPR">
+          <Text>Advert/AdvertTextAZPRARCHPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item105>
+
+        <Item106 Name="PADV_PDF_STDENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item106>
+
+        <Item107 Name="PADV_PDF_PROENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item107>
+
+        <Item108 Name="PADV_AOPB_PRO">
+          <Text>Advert/AdvertTextAOPBPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item108>
+
+        <Item109 Name="PADV_AOPB_STDENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item109>
+
+        <Item110 Name="PADV_AOPB_PROENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item110>
+
+        <Item111 Name="PADV_AOPB_AOPR_TRIAL">
+          <Text>Advert/AdvertTextAOPBAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item111>
+
+        <Item112 Name="PADV_AOPB_PRO_TRIAL">
+          <Text>Advert/AdvertTextAOPBPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item112>
+        
+        <Item113 Name="PADV_AOPR_TRIAL_TABLES">
+          <Text>Advert/AdvertTextAOPRTrialTables</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item113>
+        
+        <Item114 Name="PADV_AOPR_HOME_TABLES">
+          <Text>Advert/AdvertTextAOPRHomeTables</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item114>
+          
+      </map>
+      
+			<Dialog_Caption>Order Now!</Dialog_Caption>
+			<BuyNow>Order Now!</BuyNow>
+			<Button_GetFullVersion>Order Full Version!</Button_GetFullVersion>
+			<Button_UpgradeNow>Upgrade now!</Button_UpgradeNow>
+			<Button_EnterRegCode>Enter Registration Code</Button_EnterRegCode>
+			<OrderTextSingle>Your password has been found but its length exceeds the trial version limitations. The password will be displayed as "&lt;not shown in trial version&gt;".</OrderTextSingle>
+			<OrderTextMulti>Your passwords have been found but their length exceeds the trial version limitations. Passwords that don't meet the limitations will be displayed as "&lt;not shown in trial version&gt;".</OrderTextMulti>
+			<OrderTextFeature>The feature you've selected is not available in the trial version.</OrderTextFeature>
+			<OrderTextLength>The password length you've selected for attack does not meet the trial version limitations.</OrderTextLength>
+			<OrderTextTrunc>Your password has been found but its length exceeds the trial version limitations. Only first characters of password will be shown.</OrderTextTrunc>
+			<OrderTextTruncMulti>Your passwords have been found but their length exceeds the trial version limitations. Only first characters of passwords will be shown.</OrderTextTruncMulti>
+			<OrderTextAOPREdition>Your password has been found but this password type is not supported in this edition of Advanced Office Password Recovery. All unsupported passwords that meet this edition limitations will be displayed. Other unsupported passwords will be displayed as "&lt;not supported in this edition&gt;". This password type is supported in the Forensic version of Advanced Office Password Recovery.</OrderTextAOPREdition>
+			<OrderTextAOPREditionMulti>Your passwords have been found but this password type is not supported in this edition of Advanced Office Password Recovery. All unsupported passwords that meet this edition limitations will be displayed. Other unsupported passwords will be displayed as "&lt;not supported in this edition&gt;". This password type is supported in the Forensic version of Advanced Office Password Recovery.</OrderTextAOPREditionMulti>
+			<OrderTextAOPREditionFN>This function is not available in this edition of Advanced Office Password Recovery. It's available in the Forensic version only.</OrderTextAOPREditionFN>
+			<OrderTextAOPRPro>You can upgrade your current edition of Advanced Office Password Recovery to Forensic edition right now. Simply click the "Upgrade now!" button and get a 30% discount for Advanced Office Password Recovery Forensic.</OrderTextAOPRPro>
+			<OrderTextExpired>The trial version of the program has been expired. You must purchase the full version for further program using.</OrderTextExpired>
+			<OrderTextAEFSDRDecrypt>You're using the trial version of AEFSDR. Only first 512 bytes of the file have been decrypted. The rest of the file has been filled by zeros. You must purchase the full version of AEFSDR to decrypt the file completely.</OrderTextAEFSDRDecrypt>
+			<OrderTextPDFDecrypt>All restrictions have been removed.&#13;&#13;WARNING: due to trial version limitations, only first document pages (about 10%) have been written to output file. Please purchase the full version to decrypt the whole document.</OrderTextPDFDecrypt>
+			<OrderTextPDFDecryptStd>All restrictions have been removed.&#13;&#13;WARNING: due to limitations of Standard Edition, only first document pages (about 10%) have been written to output file. Please upgrade to the Professional or Enterprise Edition to decrypt the whole document.</OrderTextPDFDecryptStd>
+			<OrderTextPWSEXTrial>You're using the trial version of PPA. The number of accounts you've selected exceeds the trial version limitations. You must purchase the full version to audit this number of accounts.</OrderTextPWSEXTrial>
+			<OrderTextPWSEXLicense>The number of accounts you've selected exceeds the limitation of license you've purchased. You can upgrade your current PPA license to audit more accounts. If you click "Order full version" button right now, you'll be able to purchase any license of PPA with 40% discount.</OrderTextPWSEXLicense>
+			<OrderTextEDPRAgents>The Agent is attempting to connect to the Server, but the connections limit for this EDPR license is exceeded. You must purchase the EDPR license which supports more connections. Press the "Order Full Version" button to purchase the corresponding license.</OrderTextEDPRAgents>
+			<OrderTextPDFTrialPassword>Sorry, this document can be decrypted only if "user" or "owner" password is known, so you have to use "Brute-force", "Dictionary" or "Key search" attacks (available in Professional and Enterprise versions of APDFPR, and also in this (trial) version, but with some limitations).</OrderTextPDFTrialPassword>
+			<OrderTextPDFStdPassword>Sorry, this document can be decrypted only if "user" or "owner" password is known, so you have to use "Brute-force", "Dictionary" or "Key search" attacks (available in Professional and Enterprise versions of APDFPR, and also in this (Standard) version, but with some limitations).</OrderTextPDFStdPassword>
+			<OrderTextPDFTrialLen>You're using free trial version that has some limitations in brute-force and dictionary attacks (on maximum password length and some additional options).</OrderTextPDFTrialLen>
+			<OrderTextPDFStdLen>You're using the program edition that has some limitations in brute-force and dictionary attacks (on maximum password length and some additional options). You need to upgrade to Professional Edition to use the attack without limitations.</OrderTextPDFStdLen>
+			<OrderTextPDFStdRainbow>Sorry, "Use pre-computer hash tables" option is available in the Enterprise edition of program only, while you're using the Standard one.</OrderTextPDFStdRainbow>
+			<OrderTextPDFProRainbow>Sorry, "Use pre-computed hash tables" option is available in the Enterprise edition of program only, while you're using the Professional one. You can still run the attack without that option, but that will take several days (while using hash tables will reduce that time to just a few minutes).</OrderTextPDFProRainbow>
+			<OrderTextPDFFeaturePro>The feature you've selected is not available in the program edition that you've purchased. You need to upgrade your edition to the Professional one to use this feature.</OrderTextPDFFeaturePro>
+			<OrderTextPDFFeatureEnt>The feature you've selected is not available in the program edition that you've purchased. You need to upgrade your edition to the Enterprise one to use this feature.</OrderTextPDFFeatureEnt>
+			<OrderTextAOPR4Upgrade>Your registration key for Advanced Office Password Recovery is valid for version 3.X only. You need to  upgrade your license to get the registration key for version 4.X (the one you're using now). The upgrade is free if you purchased Advanced Office Password Recovery after October 15, 2006, or have an upgrade subscription.&#13;&#13;Please press the "Upgrade now!" button to upgrade your license and see your personal discounts to other Elcomsoft products.</OrderTextAOPR4Upgrade>
+			<OrderTextAEFSDRPro>You're using the Standard version of AEFSDR which allows to decrypt files using the "regular" keys scan method only; however, the keys (needed to decrypt your files) have been found using "Scan by sectors" feature which is available in Professional edition only. You can test the functionality of the software using Standard edition, but only first 512 bytes of file will be decrypted for testing purposes.</OrderTextAEFSDRPro>
+			<OrderTextAOPBTrialPro>Sorry, multiprocessor/multicore key search is not available in the Trial version of AOPB. You should purchase the Professional Edition of the program to use this feature. To run the attack in the Trial version, please set the number of processors to [One] in the program options.</OrderTextAOPBTrialPro>
+			<OrderTextKeyExpired>Your registration key is not valid or expired. According to our upgrade policy all program updates are for free during one year from the date of purchasing. You can still use the old version of the program or upgrade your license.</OrderTextKeyExpired>
+			<OrderTextPasswordReg>Sorry, the password for this file cannot be recovered at all. However, full (registered) version of the program is able to decrypt the file or remove the password from it, so please consider purchasing it.</OrderTextPasswordReg>
+			<OrderTextDevices>The program can work faster !&#13;&#13;The limitations of currently used edition don't allow program to use all available CPU cores and graphic cards. You can upgrade your license to use all the power of your computer. Press "Upgrade now" button to get more information.</OrderTextDevices>
+			<ExamineHelp>Please examine the program Help to learn more about trial version limitations.</ExamineHelp>
+			<ExamineHelpNT>Please examine the program Help to learn more about limitations of this version.</ExamineHelpNT>
+			<CanPurchase>You can purchase the full version of this program right now, online or offline -- simply click the "Order Full Version" button. </CanPurchase>
+			<CanUpgrade>You can upgrade your edition of the program right now with a discount. Simply click the "Upgrade now!" button to see your personal upgrade rates and discounts. </CanUpgrade>
+			<PurchaseInfo>We accept all major credit cards (online, by phone or fax), purchase orders, checks and wire transfers. The ordering page is on a secure server, ensuring that your confidential information remains confidential.</PurchaseInfo>
+			<ProgramReg>Program registration</ProgramReg>
+			<EnterRegCode>Please, enter the Registration Code:</EnterRegCode>
+      <RegCode>Registration code:</RegCode>
+
+      <kit>
+        <KitRegDlgCaption>Registration</KitRegDlgCaption>
+        <KitRegText>Please paste the registration key block or select the file that contains the key:</KitRegText>
+      </kit>
+      
+		</Order>
+		
+		<!-- Advert dialog -->
+		<Advert>
+			<Dialog_Caption>Upgrade your license to reveal program features</Dialog_Caption>
+			<AdvertTextAOPRAOPB>Your password to Office 97/2000 document was not found by this Attack. Password recovery for these type of documents may take a long time. We have a program which provides guaranteed decryption of Office 97/2000 documents - Advanced Office Password Breaker. We offer you 30% discount if you buy Advanced Office Password Breaker right now.</AdvertTextAOPRAOPB>
+			<AdvertTextAOPREDPR>Your password to MS Office document was not found by this Attack. Password recovery for these type of documents may take a long time. But there is a way to speed it up! You can look to our another program - Elcomsoft Distributed Password Recovery. This program allows to use more than one computer to perform a Brute-Force attack. Use the power of all computers you have in your network to find a password! Right now we offer you Elcomsoft Distributed Password Recovery with 30% discount.</AdvertTextAOPREDPR>
+			<AdvertTextEDPRAOPR>Password(s) for this file can be found instantly. But Elcomsoft Distributed Password Recovery does not support these passwords. You can use our another program (Advanced Office Password Recovery) to find these passwords. Advanced Office Password Recovery supports about 30 password types, all MS Office applications, MS Money, MS Project and much more. Right now we offer you this product with a 30% discount!</AdvertTextEDPRAOPR>
+			<AdvertTextAOPBAOPR>Password(s) for this file can be found instantly. But Advanced Office Password Breaker does not support these passwords. You can use our another program (Advanced Office Password Recovery) to find these passwords. Advanced Office Password Recovery supports about 30 password types, all MS Office applications, MS Money, MS Project and much more.</AdvertTextAOPBAOPR>
+			<AdvertTextAZPRARCHPR>The file format is not supported by AZPR. But we have another program which supports this format as well as RAR/WinRAR, ARJ and ACE - Advanced Archive Password Recovery. Right now we offer you this program with 30% discount!</AdvertTextAZPRARCHPR>
+			<AdvertTextPDFEnt>This attack will definitely break your file, but that may take a few days. If you would like to complete decryption in just several minutes (with 99.8% probability), you can use pre-defined hash tables available in the Enterprise version.</AdvertTextPDFEnt>
+			<AdvertTextAOPBPro>The program can run much faster! You're using the version of AOPB (Trial or Standard) that uses one processor/core only. We recommend you to upgrade to Professional edition that runs on up to FOUR processors/cores, so decryption time will decrease accordingly.</AdvertTextAOPBPro>
+			<AdvertTextAOPRTrialTables>Your file is encrypted by a weak algorithm (40-bit RC4). This means that you can search for encryption key and decrypt this document instantly. This feature is not available in Trial version. You can continue to search for a password with Trial version or purchase a license.</AdvertTextAOPRTrialTables>
+			<AdvertTextAOPRHomeTables>Key search for this file will start in one click. On average CPU it will take 5-15 hours. You can significantly speed-up key search using our patented Thunder Tables. With tables you will find the key almost instantly. This feature is available in Forensic version only. You can continue to search for a key with Home version or upgrade your license to Forensic one.</AdvertTextAOPRHomeTables>
+			<AdvertFooter>To view program's WEB page, click the "Get more information..." button. To purchase or upgrade the license, click the "Order Now!" button.</AdvertFooter>
+		</Advert>
+		
+		<!-- About dialog -->
+		<About>
+			<Dialog_Caption>About</Dialog_Caption>
+      <Get_More>Get more information about this program</Get_More>
+      <Open_PRS>Look at other Elcomsoft solutions</Open_PRS>
+      <Open_Elcom>Open Elcomsoft Co.Ltd. WEB site</Open_Elcom>
+		</About>
+
+    <!-- AOPR product -->
+    <AOPR>
+      <M_File>File</M_File>
+      <M_FileOpenFile>Open File...</M_FileOpenFile>
+      <M_FileOpenProject>Open Project...</M_FileOpenProject>
+      <M_FileSaveProject>Save Project</M_FileSaveProject>
+      <M_FileSaveProjectAs>Save Project As...</M_FileSaveProjectAs>
+      <M_FileClearHistory>Clear Files History</M_FileClearHistory>
+      <M_FileExit>Exit</M_FileExit>
+      <M_Recovery>Recovery</M_Recovery>
+      <M_RecoveryStart>Start</M_RecoveryStart>
+      <M_RecoveryStop>Stop</M_RecoveryStop>
+      <M_RecoveryShowStat>Show Extended Statistics</M_RecoveryShowStat>
+      <M_RecoveryShowMSPasswords>Show MS Money Passport Passwords</M_RecoveryShowMSPasswords>
+      <M_Internet>Internet</M_Internet>
+      <M_InternetAdvisorPassword>Internet Content Advisor Password...</M_InternetAdvisorPassword>
+      <M_InternetOutlook>Outlook Mail Accounts...</M_InternetOutlook>
+      <M_Backdoor>VBA Backdoor</M_Backdoor>
+      <M_BackdoorOpen>Open File Through Backdoor...</M_BackdoorOpen>
+      <M_BackdoorLaunch>Launch Application...</M_BackdoorLaunch>
+      <M_Help>Help</M_Help>
+      <M_HelpContents>Help Contents</M_HelpContents>
+      <M_HelpTip>Tip of the Day</M_HelpTip>
+      <M_HelpUpdates>Check for Updates...</M_HelpUpdates>
+      <M_HelpOrder>Register Your Copy Online...</M_HelpOrder>
+      <M_HelpEnterCode>Enter Registration Code...</M_HelpEnterCode>
+      <M_HelpAbout>About...</M_HelpAbout>
+      <M_Support>Support</M_Support>
+      <M_SupportSite>AOPR in the Internet</M_SupportSite>
+      <M_SupportFAQ>Frequently Asked Questions</M_SupportFAQ>
+      <M_SupportReport>Report a Bug</M_SupportReport>
+      <M_SupportSuggest>Suggest a Feature</M_SupportSuggest>
+      <M_SupportOther>Other Support Options...</M_SupportOther>
+      
+      <T_FileOpenFile>Open File...</T_FileOpenFile>
+      <T_RecoveryShowMSPasswords>MS Passport</T_RecoveryShowMSPasswords>
+      <T_InternetOutlook>MS Outlook</T_InternetOutlook>
+      <T_InternetAdvisorPassword>Internet CA</T_InternetAdvisorPassword>
+      <T_BackdoorOpen>VBA Backdoor</T_BackdoorOpen>
+      <T_RecoveryStart>Recovery Start</T_RecoveryStart>
+      <T_RecoveryStop>Recovery Stop</T_RecoveryStop>
+
+      <St_Log>Log Window</St_Log>
+      <List_Log1>Date, Time</List_Log1>
+      <List_Log2>Event</List_Log2>
+      <St_Status>Current Status</St_Status>
+      <St_CurPass>Current Password:</St_CurPass>
+      <St_CurSpeed>Current Speed:</St_CurSpeed>
+      <St_Progress>Progress Indicator</St_Progress>
+      <Tab_Main0>Recovery</Tab_Main0>
+      <Tab_Main1>Brute-Force</Tab_Main1>
+      <Tab_Main2>Dictionary</Tab_Main2>
+      <Tab_Main3>Options</Tab_Main3>
+      <Tab_Main4>Benchmark</Tab_Main4>
+      <Tab_Main5>System Information</Tab_Main5>
+      <Tab_Main6>Password Cache</Tab_Main6>
+
+      <St_Type>Type of Attack for Documents with Strong Ecryption</St_Type>
+      <Button_Brute>Brute-Force Attack (Trying all possible combinations)</Button_Brute>
+      <Button_BruteMask>Brute-Force with Mask (If some Password symbols are known)</Button_BruteMask>
+      <Button_Dictionary>Dictionary attack (Recommended)</Button_Dictionary>
+      <St_Filename>File Name:</St_Filename>
+      <Button_Order>Get Full Version!</Button_Order>
+
+      <St_PassLength>Password Length</St_PassLength>
+      <St_Min>Min:</St_Min>
+      <St_Max>Max:</St_Max>
+      <St_Charset>Character Set</St_Charset>
+      <Button_Printable>All printable</Button_Printable>
+      <Button_Space>Space</Button_Space>
+      <Button_Custom>Custom charset</Button_Custom>
+      <Button_DefineCustom>Define Custom Charset...</Button_DefineCustom>
+      <St_Password>Starting Password:</St_Password>
+      <St_Mask>Mask / Mask Character:</St_Mask>
+
+      <St_Dictionary>Dictionary File:</St_Dictionary>
+      <Button_SelectDictionary>Select Dictionary File...</Button_SelectDictionary>
+      <St_LineNumber>Start From Line Number:</St_LineNumber>
+      <St_DefaultDictionary>Default Dictionary File:</St_DefaultDictionary>
+      <Button_SelectDefault>Select Default Dictionary...</Button_SelectDefault>
+      <Button_GetDictionaries>Get Dictionaries...</Button_GetDictionaries>
+      <Button_SmartMutations>Smart mutations</Button_SmartMutations>
+      <Button_TryAll>Try all possible upper/lowercase combinations</Button_TryAll>
+
+      <St_Priority>Program Priority</St_Priority>
+      <Button_Idle>Idle</Button_Idle>
+      <Button_High>High</Button_High>
+      <St_LogFile>Log File</St_LogFile>
+      <Button_ProgramLog>Enable Program Log</Button_ProgramLog>
+      <Button_DebugLog>Enable Debug Log</Button_DebugLog>
+      <Button_Browse>Browse...</Button_Browse>
+      <St_Intervals>Intervals</St_Intervals>
+      <St_IntAutosave>Auto-save (min):</St_IntAutosave>
+      <St_IntProgress>Progress (ms):</St_IntProgress>
+      <St_GeneralOptions>General Options</St_GeneralOptions>
+      <Button_OptAutosave>Enable Auto-save</Button_OptAutosave>
+      <Button_OptToTray>Minimize to tray</Button_OptToTray>
+      <Button_OptPrompt>Prompt if project was changed</Button_OptPrompt>
+      <Button_OptPreBruteForce>Preliminary Brute-Force Attack</Button_OptPreBruteForce>
+      <Button_OptPreDictionary>Preliminary Dictionary Attack</Button_OptPreDictionary>
+      <Button_OptPreCache>Password Cache Preliminary Attack</Button_OptPreCache>
+
+      <St_Word2000>On Microsoft Word 97/2000 documents:</St_Word2000>
+      <St_Speed>passwords/second</St_Speed>
+      <St_Excel2000>On Microsoft Excel 97/2000 documents:</St_Excel2000>
+      <Button_Calculate>Calculate</Button_Calculate>
+      <St_XP>On Office XP documents with CSP encryption:</St_XP>
+
+      <St_Parameter>Parameter</St_Parameter>
+      <St_Information>Information</St_Information>
+
+      <Button_AddPasswords>Add all found Passwords to the Cache</Button_AddPasswords>
+      <St_CacheFile>Password Cache File:</St_CacheFile>
+      <Button_SelectFile>Select File...</Button_SelectFile>
+      <Button_SetPassword>Set Password...</Button_SetPassword>
+      <Button_ViewCache>View Cache...</Button_ViewCache>
+      <Button_ClearCache>Clear Cache</Button_ClearCache>
+
+      <Dialog_ICAPassword_Caption>Internet Content Advisor Password</Dialog_ICAPassword_Caption>
+      <St_ICAInfo>Internet Explorer Content Advisor Password cannot be recovered instantly because of strong encryption algorithm. But you can simply change or delete this password.  Old password can be saved and restored later at any time.</St_ICAInfo>
+      <St_CurrentPassword>Current Content Advisor Password:</St_CurrentPassword>
+      <St_SavedPassword>Saved Content Advisor Password:</St_SavedPassword>
+      <Button_DeletePassword>Delete Password</Button_DeletePassword>
+      <Button_RestorePassword>Restore Saved Password</Button_RestorePassword>
+      <St_ChangePassword>Change Password to:</St_ChangePassword>
+      <Button_ChangePassword>Change Password</Button_ChangePassword>
+      <Button_SaveOldPassword>Save old Password</Button_SaveOldPassword>
+
+      <Dialog_ShowStat_Caption>Extended Statistics</Dialog_ShowStat_Caption>
+      <St_LastPassword>Current (last recovered) password</St_LastPassword>
+      <St_PasswordStat>Passwords</St_PasswordStat>
+      <St_ProcessedPasswords>Processed:</St_ProcessedPasswords>
+      <St_TotalPasswords>Total:</St_TotalPasswords>
+      <St_Remaining>Remaining:</St_Remaining>
+      <St_SpeedStat>Speed</St_SpeedStat>
+      <St_CurrentSpeed>Current:</St_CurrentSpeed>
+      <St_AverageSpeed>Average:</St_AverageSpeed>
+      <St_TimeStat>Time</St_TimeStat>
+      <St_ElapsedTime>Elapsed:</St_ElapsedTime>
+
+      <Dialog_SetPassword_Caption>New Password</Dialog_SetPassword_Caption>
+      <St_TypePassword>Type a new password:</St_TypePassword>
+      <St_RetypePassword>Retype a new password:</St_RetypePassword>
+
+      <Dialog_ViewCache_Caption>Password Stored in Cache</Dialog_ViewCache_Caption>
+      <List_Password>Password</List_Password>
+      <Button_Copy>Copy to Clipboard</Button_Copy>
+
+      <Dialog_DefineCharset_Caption>User Defined Charset</Dialog_DefineCharset_Caption>
+      <St_CharsetText>Charset in text:</St_CharsetText>
+      <St_CharsetHex>Hex (unicode):</St_CharsetHex>
+      <Button_LoadCharset>Load Charset...</Button_LoadCharset>
+      <Button_AddCharset>Add Charset...</Button_AddCharset>
+      <Button_SaveCharset>Save Charset...</Button_SaveCharset>
+      <Button_ClearCharset>Clear Charset</Button_ClearCharset>
+
+      <Menu_Log>
+        <i32808>Common/M_LogCopySelectedEvents</i32808>
+        <i32810>Common/M_LogClearLogWindow</i32810>
+      </Menu_Log>
+
+      <Dialog_DefineCharset>
+        <Caption>Dialog_DefineCharset_Caption</Caption>
+        <c1106>St_CharsetText</c1106>
+        <c1107>St_CharsetHex</c1107>
+        <c1079>Button_LoadCharset</c1079>
+        <c1082>Button_AddCharset</c1082>
+        <c1080>Button_SaveCharset</c1080>
+        <c1081>Button_ClearCharset</c1081>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_DefineCharset>
+
+      <Dialog_ViewCache>
+        <Caption>Dialog_ViewCache_Caption</Caption>
+        <l1078_1>List_Password</l1078_1>
+        <c1077>Button_Copy</c1077>
+        <c1>Common/WordOK</c1>
+      </Dialog_ViewCache>
+      
+      <Dialog_SetPassword>
+        <Caption>Dialog_SetPassword_Caption</Caption>
+        <c1041>St_TypePassword</c1041>
+        <c1014>St_RetypePassword</c1014>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_SetPassword>
+
+      <Dialog_ShowStat>
+        <Caption>Dialog_ShowStat_Caption</Caption>
+        <c1041>St_LastPassword</c1041>
+        <c1042>St_PasswordStat</c1042>
+        <c1080>St_ProcessedPasswords</c1080>
+        <c1081>St_TotalPasswords</c1081>
+        <c1082>St_Remaining</c1082>
+        <c1043>St_SpeedStat</c1043>
+        <c1083>St_CurrentSpeed</c1083>
+        <c1084>St_AverageSpeed</c1084>
+        <c1094>St_Speed</c1094>
+        <c1095>St_Speed</c1095>
+        <c1044>St_TimeStat</c1044>
+        <c1090>St_ElapsedTime</c1090>
+        <c1091>St_Remaining</c1091>
+        <c1>Common/WordOK</c1>
+      </Dialog_ShowStat>
+
+      <Dialog_Launch>
+        <Caption>Common/Dialog_Launch_Caption</Caption>
+        <c1007>Common/St_Launch_LaunchTip</c1007>
+        <c1017>Common/St_Launch_CommandLine</c1017>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Launch>
+
+      <Dialog_ICAPassword>
+        <Caption>Dialog_ICAPassword_Caption</Caption>
+        <c1007>St_ICAInfo</c1007>
+        <c1083>St_CurrentPassword</c1083>
+        <c1104>St_SavedPassword</c1104>
+        <c1101>Button_DeletePassword</c1101>
+        <c1102>Button_RestorePassword</c1102>
+        <c1041>St_ChangePassword</c1041>
+        <c1100>Button_ChangePassword</c1100>
+        <c1103>Button_SaveOldPassword</c1103>
+        <c1>Common/WordOK</c1>
+      </Dialog_ICAPassword>
+
+      <Tab_PassCache>
+        <c1012>Button_AddPasswords</c1012>
+        <c1008>St_CacheFile</c1008>
+        <c1014>Button_SelectFile</c1014>
+        <c1016>Button_SetPassword</c1016>
+        <c1015>Button_ViewCache</c1015>
+        <c1017>Button_ClearCache</c1017>
+      </Tab_PassCache>
+
+      <Tab_SysInfo>
+        <l1011_0>St_Parameter</l1011_0>
+        <l1011_1>St_Information</l1011_1>
+      </Tab_SysInfo>
+
+      <Tab_Benchmark>
+        <c1070>St_Word2000</c1070>
+        <c1071>St_Speed</c1071>
+        <c1073>St_Excel2000</c1073>
+        <c1072>St_Speed</c1072>
+        <c1053>Button_Calculate</c1053>
+        <c1074>St_XP</c1074>
+        <c1075>St_Speed</c1075>
+        <c1054>Button_Calculate</c1054>
+      </Tab_Benchmark>
+
+      <Tab_Options>
+        <c1064>St_Priority</c1064>
+        <c1045>Button_Idle</c1045>
+        <c1046>Button_High</c1046>
+        <c1002>St_LogFile</c1002>
+        <c1047>Button_ProgramLog</c1047>
+        <c1048>Button_DebugLog</c1048>
+        <c1050>Button_Browse</c1050>
+        <c1053>St_Intervals</c1053>
+        <c1065>St_IntAutosave</c1065>
+        <c1066>St_IntProgress</c1066>
+        <c1052>St_GeneralOptions</c1052>
+        <c1058>Button_OptAutosave</c1058>
+        <c1059>Button_OptToTray</c1059>
+        <c1060>Button_OptPrompt</c1060>
+        <c1061>Button_OptPreBruteForce</c1061>
+        <c1062>Button_OptPreDictionary</c1062>
+        <c1063>Button_OptPreCache</c1063>
+      </Tab_Options>
+      
+      <Tab_Dictionary>
+        <c1019>St_Dictionary</c1019>
+        <c1021>Button_SelectDictionary</c1021>
+        <c1018>St_LineNumber</c1018>
+        <c1020>St_DefaultDictionary</c1020>
+        <c1015>Button_SelectDefault</c1015>
+        <c1016>Button_GetDictionaries</c1016>
+        <c1022>Button_SmartMutations</c1022>
+        <c1023>Button_TryAll</c1023>
+      </Tab_Dictionary>
+
+      <Tab_BruteForce>
+        <c1039>St_PassLength</c1039>
+        <c1043>St_Min</c1043>
+        <c1044>St_Max</c1044>
+        <c1040>St_Charset</c1040>
+        <c1033>Button_Printable</c1033>
+        <c1038>Button_Space</c1038>
+        <c1034>Button_Custom</c1034>
+        <c1035>Button_DefineCustom</c1035>
+        <c1041>St_Password</c1041>
+        <c1042>St_Mask</c1042>
+      </Tab_BruteForce>
+
+      <Tab_Recovery>
+        <c1076>St_Type</c1076>
+        <c1005>Button_Brute</c1005>
+        <c1006>Button_BruteMask</c1006>
+        <c1007>Button_Dictionary</c1007>
+        <c1008>St_Filename</c1008>
+        <c1010>Button_Order</c1010>
+      </Tab_Recovery>
+
+      <Dialog_Main>
+        <c1002>St_Log</c1002>
+        <l1001_1>List_Log1</l1001_1>
+        <l1001_2>List_Log2</l1001_2>
+        <c1069>St_Status</c1069>
+        <c1067>St_CurPass</c1067>
+        <c1068>St_CurSpeed</c1068>
+        <c1066>St_Progress</c1066>
+        <t1000_0>Tab_Main0</t1000_0>
+        <t1000_1>Tab_Main1</t1000_1>
+        <t1000_2>Tab_Main2</t1000_2>
+        <t1000_3>Tab_Main3</t1000_3>
+        <t1000_4>Tab_Main4</t1000_4>
+        <t1000_5>Tab_Main5</t1000_5>
+        <t1000_6>Tab_Main6</t1000_6>
+      </Dialog_Main>
+
+      <Toolbar_Main>
+        <i32770>T_FileOpenFile</i32770>
+        <i32777>T_RecoveryShowMSPasswords</i32777>
+        <i32806>T_InternetOutlook</i32806>
+        <i32804>T_InternetAdvisorPassword</i32804>
+        <i32778>T_BackdoorOpen</i32778>
+        <i32774>T_RecoveryStart</i32774>
+        <i32775>T_RecoveryStop</i32775>
+      </Toolbar_Main>
+
+      <Menu_Main>
+        <l0_i32770>M_File</l0_i32770>
+        <i32770>M_FileOpenFile</i32770>
+        <i32769>M_FileOpenProject</i32769>
+        <i32773>M_FileSaveProject</i32773>
+        <i32772>M_FileSaveProjectAs</i32772>
+        <i32771>M_FileClearHistory</i32771>
+        <i32768>M_FileExit</i32768>
+        <l0_i32774>M_Recovery</l0_i32774>
+        <i32774>M_RecoveryStart</i32774>
+        <i32775>M_RecoveryStop</i32775>
+        <i32776>M_RecoveryShowStat</i32776>
+        <i32777>M_RecoveryShowMSPasswords</i32777>
+        <l0_i32804>M_Internet</l0_i32804>
+        <i32804>M_InternetAdvisorPassword</i32804>
+        <i32806>M_InternetOutlook</i32806>
+        <l0_i32778>M_Backdoor</l0_i32778>
+        <i32778>M_BackdoorOpen</i32778>
+        <i32779>M_BackdoorLaunch</i32779>
+        <l0_i32780>M_Help</l0_i32780>
+        <i32780>M_HelpContents</i32780>
+        <i32789>M_HelpTip</i32789>
+        <i32785>M_HelpUpdates</i32785>
+        <i32786>M_HelpOrder</i32786>
+        <i32787>M_HelpEnterCode</i32787>
+        <i32788>M_HelpAbout</i32788>
+        <l0_i32781>M_Support</l0_i32781>
+        <i32781>M_SupportSite</i32781>
+        <i32790>M_SupportFAQ</i32790>
+        <i32782>M_SupportReport</i32782>
+        <i32783>M_SupportSuggest</i32783>
+        <i32784>M_SupportOther</i32784>
+      </Menu_Main>
+    </AOPR>
+    
+    <!-- AVPR product -->
+    <AVPR>
+      <Dialog_Password_Caption>VBA Password</Dialog_Password_Caption>
+      <St_Log>Log</St_Log>
+      <List_Log1>Date, Time</List_Log1>
+      <List_Log2>Event</List_Log2>
+      
+      <St_FilePath>File Path:</St_FilePath>
+      <Button_Open>Open</Button_Open>
+      <St_Password>Password:</St_Password>
+      <St_Information>Information:</St_Information>
+      <Button_ChangePassword>Change Password</Button_ChangePassword>
+      <Button_DeletePassword>Delete Password</Button_DeletePassword>
+      <Button_UnlockXLA>Unlock XLA Add-In</Button_UnlockXLA>
+      <Button_CreateBackup>Create Backup Copy</Button_CreateBackup>
+     
+      <Dialog_Change_Password_Caption>Enter New Password</Dialog_Change_Password_Caption>
+      <St_NewPassword>New Password (128 chars max):</St_NewPassword>
+      <St_ConfirmPassword>Confirm New Password:</St_ConfirmPassword>
+
+      <M_File>File</M_File>
+      <M_FileOpen>Open File...</M_FileOpen>
+      <M_FileExit>Quit AVPR</M_FileExit>
+      <M_Backdoor>VBA Backdoor</M_Backdoor>
+      <M_BackdoorOpen>Open File Through Backdoor...</M_BackdoorOpen>
+      <M_BackdoorLaunch>Launch Application...</M_BackdoorLaunch>
+      <M_Help>Help</M_Help>
+      <M_HelpContents>Help Contents</M_HelpContents>
+      <M_HelpUpdates>Check AVPR Updates...</M_HelpUpdates>
+      <M_HelpOrder>Register Your Copy Online...</M_HelpOrder>
+      <M_HelpEnterCode>Enter Registration Code...</M_HelpEnterCode>
+      <M_HelpAbout>About AVPR...</M_HelpAbout>
+      <M_Support>Support</M_Support>
+      <M_SupportSite>AVPR in the Internet</M_SupportSite>
+      <M_SupportReport>Report a Bug</M_SupportReport>
+      <M_SupportSuggest>Suggest a Feature</M_SupportSuggest>
+      <M_SupportOther>Other Support Options...</M_SupportOther>
+
+      <T_FileOpen>Open File...</T_FileOpen>
+      <T_BackdoorOpen>VBA Backdoor</T_BackdoorOpen>
+      <T_HelpOrder>Get Full Version</T_HelpOrder>
+
+      <Menu_Log>
+        <i32808>Common/M_LogCopySelectedEvents</i32808>
+        <i32810>Common/M_LogClearLogWindow</i32810>
+      </Menu_Log>
+
+      <Toolbar_Main>
+        <i32772>T_FileOpen</i32772>
+        <i32774>T_BackdoorOpen</i32774>
+        <i32900>T_HelpOrder</i32900>
+      </Toolbar_Main>
+
+      <Menu_Main>
+        <l0_i32772>M_File</l0_i32772>
+        <i32772>M_FileOpen</i32772>
+        <i32773>M_FileExit</i32773>
+        <l0_i32774>M_Backdoor</l0_i32774>
+        <i32774>M_BackdoorOpen</i32774>
+        <i32775>M_BackdoorLaunch</i32775>
+        <l0_i32780>M_Help</l0_i32780>
+        <i32780>M_HelpContents</i32780>
+        <i32781>M_HelpUpdates</i32781>
+        <i32900>M_HelpOrder</i32900>
+        <i32901>M_HelpEnterCode</i32901>
+        <i32782>M_HelpAbout</i32782>
+        <l0_i32776>M_Support</l0_i32776>
+        <i32776>M_SupportSite</i32776>
+        <i32777>M_SupportReport</i32777>
+        <i32778>M_SupportSuggest</i32778>
+        <i32779>M_SupportOther</i32779>
+      </Menu_Main>
+
+      <Dialog_Main>
+        <c1002>St_Log</c1002>
+        <l1001_1>List_Log1</l1001_1>
+        <l1001_2>List_Log2</l1001_2>
+      </Dialog_Main>
+
+      <Dialog_Password>
+        <Caption>Dialog_Password_Caption</Caption>
+        <c1004>St_FilePath</c1004>
+        <c1003>Button_Open</c1003>
+        <c1005>St_Password</c1005>
+        <c1007>St_Information</c1007>
+        <c1009>Button_ChangePassword</c1009>
+        <c1010>Button_DeletePassword</c1010>
+        <c1011>Button_UnlockXLA</c1011>
+        <c1012>Button_CreateBackup</c1012>
+        <c1>Common/WordOK</c1>
+      </Dialog_Password>
+
+      <Dialog_Change_Password>
+        <Caption>Dialog_Change_Password_Caption</Caption>
+        <c1005>St_NewPassword</c1005>
+        <c1014>St_ConfirmPassword</c1014>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Change_Password>
+
+      <Dialog_Launch>
+        <Caption>Common/Dialog_Launch_Caption</Caption>
+        <c1007>Common/St_Launch_LaunchTip</c1007>
+        <c1017>Common/St_Launch_CommandLine</c1017>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Launch>
+
+    </AVPR>
+
+  </English>
+
+  <German>
+
+    <!-- Gemeine Wörter und Phrasen -->
+    <Common>
+      <WordOK>OK</WordOK>
+      <WordCancel>Abbrechen</WordCancel>
+      <WordContinue>Fortsetzen</WordContinue>
+      <DontShowMessage>Diese Meldung nicht mehr zeigen</DontShowMessage>
+      <GetMoreInfo>Mehr Informationen...</GetMoreInfo>
+      <!--Don't forget to translate !!!-->
+      <SelectFile>Select file...</SelectFile>
+
+      <Copyright>Copyright</Copyright>
+
+      <!-- System information -->
+      <SysOSInstalled>Installed OS:</SysOSInstalled>
+      
+    </Common>
+
+    <Licenses>
+      <Lic_Trial>Trial version</Lic_Trial>
+      <Lic_Home>Home Edition</Lic_Home>
+      <Lic_Standard>Standard Edition</Lic_Standard>
+      <Lic_Professional>Professional Edition</Lic_Professional>
+      <Lic_Special>Special Edition</Lic_Special>
+      <Lic_Enterprise>Enterprise Edition</Lic_Enterprise>
+      <Lic_Forensic>Forensic Edition</Lic_Forensic>
+
+      <!-- DON'T TRANSLATE THIS SECTION ! -->
+      <map>
+        <Lic0>Lic_Trial</Lic0>
+        <Lic1>Lic_Home</Lic1>
+        <Lic2>Lic_Standard</Lic2>
+        <Lic3>Lic_Professional</Lic3>
+        <Lic4>Lic_Special</Lic4>
+        <Lic5>Lic_Enterprise</Lic5>
+        <Lic6>Lic_Forensic</Lic6>
+      </map>
+
+    </Licenses>
+
+    <!-- Kaufen- und Registrierungsprozess -->
+    <Order>
+
+      <!-- DON'T TRANSLATE THIS SECTION ! -->
+      <map>
+
+        <Item1 Name="PCSE_MODE_SINGLE">
+          <Text>Order/OrderTextSingle</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item1>
+
+        <Item2 Name="PCSE_MODE_MULTI">
+          <Text>Order/OrderTextMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item2>
+
+        <Item3 Name="PCSE_MODE_FEATURE">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item3>
+
+        <Item4 Name="PCSE_MODE_LENGTH">
+          <Text>Order/OrderTextLength</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item4>
+
+        <Item5 Name="PCSE_MODE_TRUNC">
+          <Text>Order/OrderTextTrunc</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item5>
+
+        <Item6 Name="PCSE_MODE_AOPR_EDITION">
+          <Text>Order/OrderTextAOPREdition</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item6>
+
+        <Item7 Name="PCSE_MODE_AOPR_EDITION_FN">
+          <Text>Order/OrderTextAOPREditionFN</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item7>
+
+        <Item8 Name="PCSE_MODE_DECR_FOUND">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item8>
+
+        <Item9 Name="PCSE_MODE_DECR_ENT">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item9>
+
+        <Item10 Name="PCSE_MODE_EXPIRED">
+          <Text>Order/OrderTextExpired</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item10>
+
+        <Item11 Name="PCSE_MODE_DECRYPT">
+          <Text>Order/OrderTextAEFSDRDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item11>
+
+        <Item12 Name="PCSE_MODE_TRUNC_MULTI">
+          <Text>Order/OrderTextTruncMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item12>
+
+        <Item13 Name="PCSE_MODE_EDITION_MULTI">
+          <Text>Order/OrderTextAOPREditionMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item13>
+
+        <Item14 Name="PCSE_MODE_DECRYPT_WIZ">
+          <Text>Order/OrderTextAEFSDRDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item14>
+
+        <Item15 Name="PCSE_MODE_PDF_DECRYPT">
+          <Text>Order/OrderTextPDFDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item15>
+
+        <Item16 Name="PCSE_MODE_PWSEX_TRIAL_LIMIT">
+          <Text>Order/OrderTextPWSEXTrial</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item16>
+
+        <Item17 Name="PCSE_MODE_PWSEX_LICENSE_LIMIT">
+          <Text>Order/OrderTextPWSEXLicense</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item17>
+
+        <Item18 Name="Reserved"></Item18>
+        <Item19 Name="Reserved"></Item19>
+
+        <Item20 Name="PCSE_MODE_EDPR_AGENTS">
+          <Text>Order/OrderTextEDPRAgents</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item20>
+
+        <Item21 Name="PCSE_MODE_PDF_TRIAL_PASSWORD">
+          <Text>Order/OrderTextPDFTrialPassword</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item21>
+
+        <Item22 Name="PCSE_MODE_PDF_STD_PASSWORD">
+          <Text>Order/OrderTextPDFStdPassword</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item22>
+
+        <Item23 Name="PCSE_MODE_PDF_TRIAL_LEN">
+          <Text>Order/OrderTextPDFTrialLen</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item23>
+
+        <Item24 Name="PCSE_MODE_PDF_STD_LEN">
+          <Text>Order/OrderTextPDFStdLen</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item24>
+
+        <Item25 Name="PCSE_MODE_PDF_DECRYPT_STD">
+          <Text>Order/OrderTextPDFDecryptStd</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item25>
+
+        <Item26 Name="PCSE_MODE_PDF_STD_RAINBOW">
+          <Text>Order/OrderTextPDFStdRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item26>
+
+        <Item27 Name="PCSE_MODE_PDF_PRO_RAINBOW">
+          <Text>Order/OrderTextPDFProRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item27>
+
+        <Item28 Name="PCSE_MODE_PDF_FEATURE_PRO">
+          <Text>Order/OrderTextPDFFeaturePro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item28>
+
+        <Item29 Name="PCSE_MODE_PDF_FEATURE_ENT">
+          <Text>Order/OrderTextPDFFeatureEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item29>
+
+        <Item30 Name="PCSE_MODE_AOPR4_UPGRADE">
+          <Text>Order/OrderTextAOPR4Upgrade</Text>
+        </Item30>
+
+        <Item31 Name="PCSE_MODE_KEY_EXPIRED">
+          <Text>Order/OrderTextKeyExpired</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item31>
+
+        <Item32 Name="PCSE_MODE_AEFSDR_PRO">
+          <Text>Order/OrderTextAEFSDRPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item32>
+
+        <Item33 Name="PCSE_MODE_AOPB_TRIAL_PRO">
+          <Text>Order/OrderTextAOPBTrialPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item33>
+
+        <Item34 Name="PCSE_MODE_AOPB_STD_RAINBOW">
+          <Text>Order/OrderTextPDFStdRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item34>
+
+        <Item35 Name="PCSE_MODE_AOPB_PRO_RAINBOW">
+          <Text>Order/OrderTextPDFProRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item35>
+
+        <Item36 Name="PCSE_MODE_PASSWORD_REG">
+          <Text>Order/OrderTextPasswordReg</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item36>
+		
+		<Item37 Name="PCSE_MODE_DEVICES">
+          <Text>Order/OrderTextDevices</Text>
+        </Item37>
+
+        <Item101 Name="PADV_AOPR_AOPB">
+          <Text>Advert/AdvertTextAOPRAOPB</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item101>
+
+        <Item102 Name="PADV_AOPR_EDPR">
+          <Text>Advert/AdvertTextAOPREDPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item102>
+
+        <Item103 Name="PADV_EDPR_AOPR">
+          <Text>Advert/AdvertTextEDPRAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item103>
+
+        <Item104 Name="PADV_AOPB_AOPR">
+          <Text>Advert/AdvertTextAOPBAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item104>
+
+        <Item105 Name="PADV_AZPR_ARCHPR">
+          <Text>Advert/AdvertTextAZPRARCHPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item105>
+
+        <Item106 Name="PADV_PDF_STDENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item106>
+
+        <Item107 Name="PADV_PDF_PROENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item107>
+
+        <Item108 Name="PADV_AOPB_PRO">
+          <Text>Advert/AdvertTextAOPBPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item108>
+
+        <Item109 Name="PADV_AOPB_STDENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item109>
+
+        <Item110 Name="PADV_AOPB_PROENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item110>
+
+        <Item111 Name="PADV_AOPB_AOPR_TRIAL">
+          <Text>Advert/AdvertTextAOPBAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item111>
+
+        <Item112 Name="PADV_AOPB_PRO_TRIAL">
+          <Text>Advert/AdvertTextAOPBPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item112>
+
+        <Item113 Name="PADV_AOPR_TRIAL_TABLES">
+          <Text>Advert/AdvertTextAOPRTrialTables</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item113>
+        
+        <Item114 Name="PADV_AOPR_HOME_TABLES">
+          <Text>Advert/AdvertTextAOPRHomeTables</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item114>
+
+      </map>
+      
+      <Dialog_Caption>Programm kaufen</Dialog_Caption>
+      <BuyNow>Jetzt bestellen!</BuyNow>
+      <Button_GetFullVersion>Vollversion bestellen!</Button_GetFullVersion>
+      <Button_UpgradeNow>Jetzt aktualisieren!</Button_UpgradeNow>
+      <Button_EnterRegCode>RegistrierungsCode eingeben</Button_EnterRegCode>
+      <OrderTextSingle>Ihr Passwort wurde nicht gefunden aber seine Länge überschreitet die Beschränkungen einer Testversion. Das Password wird als "&lt;Testversion&gt;" gezeigt.</OrderTextSingle>
+      <OrderTextMulti>Ihre Passwörter wurden gefunden aber ihre Länge überschreitet die Beschränkungen einer Testversion. Passwörter, die Beschränkungen überschreiten, werden als "&lt;Testversion&gt;" gezeigt.</OrderTextMulti>
+      <OrderTextFeature>Die von Ihnen ausgewählte Funktion ist in der Testversion nicht verfügbar.</OrderTextFeature>
+      <OrderTextLength>Die von Ihnen ausgewählte Passwortlänge überschreitet die Beschränkungen der Testversion.</OrderTextLength>
+      <OrderTextTrunc>Ihr Passwort wurde gefunden aber seine Länge überschreitet die Beschränkungen der Testversion. Nur die ersten Symbole des Passworts werden gezeigt.</OrderTextTrunc>
+      <OrderTextTruncMulti>Ihre Passwörter wurden gefunden aber ihre Länge überschreitet die Beschränkungen einer Testversion. Nur die ersten Symbole von Passwörtern werden gezeigt.</OrderTextTruncMulti>
+      <OrderTextAOPREdition>Ihr Passwort wurde gefunden aber solcher Passwort-Typ ist in dieser Edition von Advanced Office Password Recovery nicht unterstützt. Alle nicht unterstützten Passwörter, die Beschränkungen dieser Edition nicht überschreiten, werden gezeigt. Andere nicht unterstützte Passwörter werden als "&lt;nicht unterstützt in dieser Edition&gt;" gezeigt. Dieser Passwort-Typ ist in der Forensic Version von Advanced Office Password Recovery unterstützt.</OrderTextAOPREdition>
+      <OrderTextAOPREditionMulti>Ihre Passwörter wurden gefunden aber solcher Passwort-Typ ist in dieser Edition von Advanced Office Password Recovery nicht unterstützt. Alle nicht unterstützten Passwörter, die Beschränkungen dieser Edition nicht überschreiten, werden gezeigt. Andere nicht unterstützte Passwörter werden als "&lt;nicht unterstützt in dieser Edition&gt;" gezeigt. Dieser Passwort-Typ ist in der Forensic Version von Advanced Office Password Recovery unterstützt.</OrderTextAOPREditionMulti>
+      <OrderTextAOPREditionFN>Diese Funktion ist in dieser Edition von Advanced Office Password Recovery nicht verfügbar. Sie ist nur in der Forensic Version verfügbar.</OrderTextAOPREditionFN>
+      <OrderTextAOPRPro>Sie können Ihre aktuelle Edition von Advanced Office Password Recovery zur Forensic Edition jetzt ändern. Klicken Sie einfach auf "Jetzt aktualisieren !"-Taste und bekommen Sie 30%-Rabatt für Advanced Office Password Recovery Forensic.</OrderTextAOPRPro>
+      <OrderTextExpired>Die Testversion von dem Programm ist abgelaufen. Sie müssen eine Vollversion bestellen, um das Programm weiter zu nutzen.</OrderTextExpired>
+      <OrderTextAEFSDRDecrypt>Sie nutzen eine Testversion von AEFSDR. Nur die ersten 512 bytes der Datei wurden entschlüsselt. Der Rest der Datei wurde mit Nullen erfüllt. Sie müssen eine Vollversion von AEFSDR bestellen, um die Datei völlig zu entschlüsseln.</OrderTextAEFSDRDecrypt>
+      <OrderTextPDFDecrypt>Alle Beschränkungen wurden entfernt.&#13;&#13;WARNUNG: wegen der Beschränkungen der Testversion sind nur die ersten Dokumentseiten (gegen 10%) in die Ausgabedatei geschrieben. Bestellen Sie bitte eine Vollversion, um das ganzes Dokument zu entschlüsseln.</OrderTextPDFDecrypt>
+      <OrderTextPDFDecryptStd>Alle Beschränkungen wurden entfernt.&#13;&#13;WARNUNG: wegen der Beschränkungen der Standard-Edition sind nur die ersten Dokument-Seiten (gegen 10%) in die Ausgabedatei geschrieben. Steigen Sie bitte auf Professional- oder Enterprise-Edition um, um das ganze Dokument zu entschlüsseln.</OrderTextPDFDecryptStd>
+      <OrderTextPWSEXTrial>Sie nutzen eine Testversion von PPA. Die Anzahl der von Ihnen ausgewählten Konten überschreitet die Beschränkungen der Testversion. Sie müssen eine Vollversion bestellen, um diese Anzahl der Konten zu audieren.</OrderTextPWSEXTrial>
+      <OrderTextPWSEXLicense>Die Anzahl der von Ihnen ausgewählten Konten überschreitet die Beschränkungen der von Ihnen bestellten Lizenz. Sie können Ihre aktuelle PPA-Lizenz erweitern, um mehr Konten zu audieren. Wenn Sie auf "Vollversion bestellen"-Taste jetzt klicken, können Sie jede PPA-Lizenz mit 40%-Rabatt kaufen.</OrderTextPWSEXLicense>
+      <OrderTextEDPRAgents>Der Agent versucht, sich an den Server anzuschließen, aber die Anschließung-Begränzung für diese EDPR-Lizenz ist schon überschritten. Sie müssen eine EDPR-Lizenz bestellen, die mehr Anschließungen erlaubt. Drücken Sie bitte "Vollversion bestellen"-Taste, um die gewünschte Lizenz zu kaufen.</OrderTextEDPRAgents>
+      <OrderTextPDFTrialPassword>Entschuldigung, dieses Dokument kann nur entschlüsselt werden, wenn "User"- oder "Owner"-Passwort bekannt ist, so brauchen Sie "Brute-force"-, "Wörterbuch"- oder "Key search"-Attacken zu nutzen, die in den Professionellen- und Enterprise-Versionen von APDFPR verfügbar sind, sowie in dieser (Test)-Version, aber mit einigen Beschränkungen.</OrderTextPDFTrialPassword>
+      <OrderTextPDFStdPassword>Entschuldigung, dieses Dokument kann nur entschlüsselt werden, wenn "User"- oder "Owner"-Passwort bekannt ist, so brauchen Sie "Brute-force"-, "Wörterbuch"- oder "Key search"-Attacken zu nutzen , die in den Professionellen- und Enterprise-Versionen von APDFPR verfügbar sind, sowie in dieser (Standard)-Version, aber mit einigen Beschränkungen.</OrderTextPDFStdPassword>
+      <OrderTextPDFTrialLen>Sie nutzen eine kostenlose Testversion, die einige Beschränkungen in Brute-Force- und Wörterbuch-Attacken (für maximale Passwortlänge und einige zusätzliche Optionen) hat.</OrderTextPDFTrialLen>
+      <OrderTextPDFStdLen>Sie benutzen eine Programm-Edition, die einige Beschränkungen (bezüglich Passwortlänge und anderer Optionen) in Brute-Force- und Wörterbuch-Attacken hat. Sie müssen auf Professional-Edition umsteigen, um diese Attacken ohne Beschränkungen zu benutzen. </OrderTextPDFStdLen>
+      <OrderTextPDFStdRainbow>Entschuldigung, “Prekonfigurierte Hash-Tabellen benutzen”- Option ist nur in Enterprise-Edition verfügbar, und Sie benutzen Standart-Edition.</OrderTextPDFStdRainbow>
+      <OrderTextPDFProRainbow>Entschuldigung, „Prekonfigurierte Hash-Tabellen benutzen”- Option ist nur in Enterprise-Edition verfügbar, und Sie benutzen Professional-Edition. Sie können diese Attacke auch ohne diese Option starten, aber es wird einige Tage dauern (statt ein paar Minuten mit Hash-Tabellen).</OrderTextPDFProRainbow>
+      <OrderTextPDFFeaturePro>Die von Ihnen ausgewählte Funktion ist in der bestellte Version nicht verfügbar. Sie können auf Professional-Edition steigern, um diese Funktion zu benutzen.</OrderTextPDFFeaturePro>
+      <OrderTextPDFFeatureEnt>Die von Ihnen ausgewählte Funktion ist in der bestellte Version nicht verfügbar. Sie können auf Enterprise-Edition steigern, um diese Funktion zu benutzen. </OrderTextPDFFeatureEnt>
+      <OrderTextAOPR4Upgrade>Ihr Registrierungsschlüssel für Advanced Office Password Recovery ist nur für 3.X-Version gültig. Sie können Ihre Lizenz aktualisieren, um Registrierungsschlüssel für 4.X-Version zu bekommen. Die Aktualisierung ist kostenlos, wenn Sie Advanced Office Password Recovery später als October 15, 2006 oder Aktualisierung- Subskription bestellt haben.&#13;&#13;Drücken Sie bitte "Jetzt aktualisieren!" -Taste, um Ihre Lizenz und Ihre persönliche Rabatte für andere Produkte von ElcomSoft zu aktualisieren.</OrderTextAOPR4Upgrade>
+      <OrderTextAEFSDRPro>Sie benutzen Standart-Version von AEFSDR, die erlaubt es, nur die Methode des Scannens von üblichen Schlüsseln zu anwenden. Aber die Schlüssel (die nötig sind, um Ihre Dateien zu entschlüsseln) wurden durch „Sektoren scannen“- Funktion gefunden, die nur in Professional-Edition verfügbar ist. Sie können die Funktionalität der Software mit Standart-Edition testen, aber nur die ersten 512 Bytes der Datei werden entschlüsselt.</OrderTextAEFSDRPro>
+      <OrderTextAOPBTrialPro>Entschuldigung, Mehrprozessor/MehrCore-Schlüsselsuche ist in der Testversion von AOPB nicht verfügbar. Sie müssen Professional Edition bestellen, um diese Funktion zu benutzen. Um diese Attacke in der Testversion zu starten, setzen Sie bitte die Zahl der Prozessoren in den Programm-Optionen als [ein].</OrderTextAOPBTrialPro>
+      <OrderTextKeyExpired>Ihr RegistrierungsCode ist ungültig. Laut unserer Upgrade-Politik sind alle Programm-Updates kostenfrei während eines Jahres nach dem Bestellungsdatum. Sie können trotzdem Ihre alte Programmversion benutzen oder auch Ihre Lizenz aktualisieren.</OrderTextKeyExpired>
+      <OrderTextPasswordReg>Entschuldigung, das Passwort für diese Datei kann nicht wiederhergestellt werden. Aber eine vollkommene (registrierte) Version kann die Datei entschlüsseln oder auch das Passwort entfernen, so bedenken Sie bitte, ob Sie sie bestellen möchten.</OrderTextPasswordReg>
+      <OrderTextDevices>Das Programm kann schneller arbeiten!&#13;&#13;Die Beschränkungen der derzeit benutzten Edition erlauben es dem Programm nicht,  alle verfügbare CPU-Kerne  und Grafikkarten zu verwenden. Sie können Ihre Edition aktualisieren, um alle Leistungsfähigkeit Ihres Rechners zu benutzen. Drücken Sie bitte „Jetzt aktualisieren“-Taste, um mehr Info zu bekommen.</OrderTextDevices>
+	  <ExamineHelp>Lesen Sie bitte Programm-Hilfe, um mehr über Beschränkungen der Testversion zu erfahren.</ExamineHelp>
+      <ExamineHelpNT>Bitte lesen Sie die Hilfe-Datei, um mehr über die Beschränkungen dieser Version zu erfahren.</ExamineHelpNT>
+      <CanPurchase>Sie können jetzt eine Vollversion von diesem Programm bestellen, online oder offline -- klicken Sie einfach auf "Vollversion bestellen"-Taste. </CanPurchase>
+      <CanUpgrade>Sie können jetzt Ihre Programm-Edition mit dem Rabatt aktualisieren. Klicken Sie einfach "Jetzt aktualisieren!"-Taste, um Ihre persönliche Rabatte zu sehen. </CanUpgrade>
+      <PurchaseInfo>Wir akzeptieren alle gängige Kreditkarten (per Internet, Telefon oder Fax), per Scheck/Zahlungsanweisung oder per Banküberweisung. Die Bestellungsseite befindet sich auf einem sicheren Server so, dass Ihre vertrauliche Informationen bleiben vertraulich.</PurchaseInfo>
+      <ProgramReg>Programm-Registrierung</ProgramReg>
+      <EnterRegCode>Bitte geben Sie den RegistrierungsCode ein:</EnterRegCode>
+      <RegCode>RegistrierungsCode:</RegCode>
+
+      <!-- Don't forget to translate !!! -->
+      <kit>
+        <KitRegDlgCaption>Registration</KitRegDlgCaption>
+        <KitRegText>Please paste the registration key block or select the file that contains the key:</KitRegText>
+      </kit>
+
+    </Order>
+
+    <!-- Advert dialog -->
+    <Advert>
+      <Dialog_Caption>Aktualisieren Sie Ihre Lizenz, um Programmfunktionen zu aktivieren</Dialog_Caption>
+      <AdvertTextAOPRAOPB>Ihr Passwort von Office-97/2000-Dokument wurde durch diese Attacke nicht gefunden. Wiederherstellung von Passwörtern für solche Dokumenttypen kann lange dauern. Wir haben ein Programm, das eine garantierte Entschlüsselung von Office-97/2000-Dokumenten ermöglicht - Advanced Office Password Breaker. Wir bieten Ihnen gerne 30%-Rabatt an, wenn Sie Advanced Office Password Breaker jetzt kaufen.</AdvertTextAOPRAOPB>
+      <AdvertTextAOPREDPR>Ihr Passwort von MS-Office-Dokument wurde durch diese Attacke nicht gefunden. Wiederherstellung von Passwörtern für solche Dokumenttypen kann lange dauern. Aber Sie können es beschleunigen! Wir stellen Ihnen ein anderes Programm zur verfügung - Elcomsoft Distributed Password Recovery. Dieses Programm ermöglicht es, mehr als einen Computer für Brute-Force-Attacke zu nutzen. Nutzen Sie die Kraft aller Computer, die Sie in Ihrem Netzwerk haben! Jetzt bieten wir Ihnen Elcomsoft Distributed Password Recovery mit 30%-Rabatt an.</AdvertTextAOPREDPR>
+      <AdvertTextEDPRAOPR>Passwörter von dieser Datei können gleich wiederhergestellt werden. Aber Elcomsoft Distributed Password Recovery unterstützt diese Passwörter nicht. Sie können ein anderes Programm (Advanced Office Password Recovery) nutzen, um diese Passwörter zu finden. Advanced Office Password Recovery unterstützt gegen 30 Passwort-Typen, alle MS-Office-Applikationen, MS Money, MS Project u.s.w. Jetzt bieten wir Ihnen dieses Produkt mit 30%-Rabatt an!</AdvertTextEDPRAOPR>
+      <AdvertTextAOPBAOPR>Passwörter von dieser Datei können gleich wiederhergestellt werden. Aber Advanced Office Password Breaker unterstützt diese Passwörter nicht. Sie können ein anderes Programm (Advanced Office Password Recovery) nutzen, um diese Passwörter zu finden. Advanced Office Password Recovery unterstützt gegen 30 Passwort-Typen, alle MS-Office-Applikationen, MS Money, MS Project u.s.w.</AdvertTextAOPBAOPR>
+      <AdvertTextAZPRARCHPR>Dieses Datei-Format ist von AZPR nicht unterstützt. Aber wir haben ein anderes Programm, das dieses Format sowie RAR/WinRAR, ARJ und ACE unterstützt - Advanced Archive Password Recovery. Jetzt bieten wir Ihnen dieses Produkt mit 30%-Rabatt an!</AdvertTextAZPRARCHPR>
+      <AdvertTextPDFEnt>Diese Attacke wird Ihre Datei ganz bestimmt entschlüsseln, aber es kann ein paar Tage dauern. Wenn Sie die Entschlüsselung in wenigen Minuten (mit 99.8%-Wahrscheinlichkeit) beenden möchten,dann können Sie vorkonfigurierte Hash-Tabellen nutzen, die in der Enterprise-Version verfügbar sind.</AdvertTextPDFEnt>
+      <AdvertTextAOPBPro>Das Programm kann schneller laufen! Sie benutzen Test-/Standardversion von AOPB, die nur einen Prozessor/Core unterstützt. Wir empfehlen Ihnen, auf Professional Edition zu umsteigen, die bis zu VIER Prozessoren/Cores unterstützt. So wird die Entschlüsselungszeit dementsprechend verkürzt.</AdvertTextAOPBPro>
+      <AdvertTextAOPRTrialTables>Ihre Datei verwendet einen schwachen Verschlüsselungs-Algorithmus (40-Bit RC4). Deshalb können Sie nach einem Verschlüsselungs-Schlüssel suchen und dieses Dokument fast sofort entschlüsseln. Diese Funktion ist in der Testversion nicht verfügbar. Sie können entweder mit der Testversion weiterhin nach dem Passwort suchen oder eine Produktlizenz kaufen.</AdvertTextAOPRTrialTables>
+      <AdvertTextAOPRHomeTables>Die Schlüsselsuche für diese Datei wird mit einem Klick gestartet. Bei einer durchschnittlichen CPU dauert es 5-15 Stunde. Aber Sie können die Schlüsselsuche erheblich beschleunigen, indem Sie unsere patentierten Thunder Tables verwenden. Wenn Sie die Tabellen verwenden, finden Sie den Schlüssel fast sofort. Diese Funktion ist nur in der Forensic Version verfügbar. Sie können entweder mit der Home-Version weiterhin nach einem Schlüssel suchen oder Ihre Lizenz auf Forensic aktualisieren.</AdvertTextAOPRHomeTables>
+
+      <AdvertFooter>Um Programm-Webseite zu sehen, klicken Sie bitte auf "Mehr Informationen..."-Taste. Um die gewünschte Software mit dem Rabatt zu bekommen, klicken Sie bitte auf "Jetzt kaufen!"-Taste. Bemerken Sie bitte, dass Sie keinen Rabatt bekommen, wenn Sie die Software von der Webseite bestellen.</AdvertFooter>
+    </Advert>
+
+    <!-- About dialog -->
+    <About>
+      <Dialog_Caption>About</Dialog_Caption>
+      <Get_More>Get more information about this program</Get_More>
+      <Open_PRS>Look at other Elcomsoft solutions</Open_PRS>
+      <Open_Elcom>Open Elcomsoft Co.Ltd. WEB site</Open_Elcom>
+    </About>
+
+    <!-- AOPR product -->
+    <AOPR>
+
+      <Menu_Log>
+        <i32808>Common/M_LogCopySelectedEvents</i32808>
+        <i32810>Common/M_LogClearLogWindow</i32810>
+      </Menu_Log>
+
+      <Dialog_DefineCharset>
+        <Caption>Dialog_DefineCharset_Caption</Caption>
+        <c1106>St_CharsetText</c1106>
+        <c1107>St_CharsetHex</c1107>
+        <c1079>Button_LoadCharset</c1079>
+        <c1082>Button_AddCharset</c1082>
+        <c1080>Button_SaveCharset</c1080>
+        <c1081>Button_ClearCharset</c1081>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_DefineCharset>
+
+      <Dialog_ViewCache>
+        <Caption>Dialog_ViewCache_Caption</Caption>
+        <l1078_1>List_Password</l1078_1>
+        <c1077>Button_Copy</c1077>
+        <c1>Common/WordOK</c1>
+      </Dialog_ViewCache>
+
+      <Dialog_SetPassword>
+        <Caption>Dialog_SetPassword_Caption</Caption>
+        <c1041>St_TypePassword</c1041>
+        <c1014>St_RetypePassword</c1014>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_SetPassword>
+
+      <Dialog_ShowStat>
+        <Caption>Dialog_ShowStat_Caption</Caption>
+        <c1041>St_LastPassword</c1041>
+        <c1042>St_PasswordStat</c1042>
+        <c1080>St_ProcessedPasswords</c1080>
+        <c1081>St_TotalPasswords</c1081>
+        <c1082>St_Remaining</c1082>
+        <c1043>St_SpeedStat</c1043>
+        <c1083>St_CurrentSpeed</c1083>
+        <c1084>St_AverageSpeed</c1084>
+        <c1094>St_Speed</c1094>
+        <c1095>St_Speed</c1095>
+        <c1044>St_TimeStat</c1044>
+        <c1090>St_ElapsedTime</c1090>
+        <c1091>St_Remaining</c1091>
+        <c1>Common/WordOK</c1>
+      </Dialog_ShowStat>
+
+      <Dialog_Launch>
+        <Caption>Common/Dialog_Launch_Caption</Caption>
+        <c1007>Common/St_Launch_LaunchTip</c1007>
+        <c1017>Common/St_Launch_CommandLine</c1017>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Launch>
+
+      <Dialog_ICAPassword>
+        <c1007>St_ICAInfo</c1007>
+        <c1083>St_CurrentPassword</c1083>
+        <c1104>St_SavedPassword</c1104>
+        <c1101>Button_DeletePassword</c1101>
+        <c1102>Button_RestorePassword</c1102>
+        <c1141>St_ChangePassword</c1141>
+        <c1100>Button_ChangePassword</c1100>
+        <c1103>Button_SaveOldPassword</c1103>
+        <c1>Common/WordOK</c1>
+      </Dialog_ICAPassword>
+
+      <Tab_PassCache>
+        <c1012>Button_AddPasswords</c1012>
+        <c1008>St_CacheFile</c1008>
+        <c1014>Button_SelectFile</c1014>
+        <c1016>Button_SetPassword</c1016>
+        <c1015>Button_ViewCache</c1015>
+        <c1017>Button_ClearCache</c1017>
+      </Tab_PassCache>
+
+      <Tab_SysInfo>
+        <l1011_0>St_Parameter</l1011_0>
+        <l1011_1>St_Information</l1011_1>
+      </Tab_SysInfo>
+
+      <Tab_Benchmark>
+        <c1070>St_Word2000</c1070>
+        <c1071>St_Speed</c1071>
+        <c1073>St_Excel2000</c1073>
+        <c1072>St_Speed</c1072>
+        <c1053>Button_Calculate</c1053>
+        <c1074>St_XP</c1074>
+        <c1075>St_Speed</c1075>
+        <c1054>Button_Calculate</c1054>
+      </Tab_Benchmark>
+
+      <Tab_Options>
+        <c1064>St_Priority</c1064>
+        <c1045>Button_Idle</c1045>
+        <c1046>Button_High</c1046>
+        <c1002>St_LogFile</c1002>
+        <c1047>Button_ProgramLog</c1047>
+        <c1048>Button_DebugLog</c1048>
+        <c1050>Button_Browse</c1050>
+        <c1053>St_Intervals</c1053>
+        <c1065>St_IntAutosave</c1065>
+        <c1066>St_IntProgress</c1066>
+        <c1052>St_GeneralOptions</c1052>
+        <c1058>Button_OptAutosave</c1058>
+        <c1059>Button_OptToTray</c1059>
+        <c1060>Button_OptPrompt</c1060>
+        <c1061>Button_OptPreBruteForce</c1061>
+        <c1062>Button_OptPreDictionary</c1062>
+        <c1063>Button_OptPreCache</c1063>
+      </Tab_Options>
+
+      <Tab_Dictionary>
+        <c1019>St_Dictionary</c1019>
+        <c1021>Button_SelectDictionary</c1021>
+        <c1018>St_LineNumber</c1018>
+        <c1020>St_DefaultDictionary</c1020>
+        <c1015>Button_SelectDefault</c1015>
+        <c1016>Button_GetDictionaries</c1016>
+        <c1022>Button_SmartMutations</c1022>
+        <c1023>Button_TryAll</c1023>
+      </Tab_Dictionary>
+
+      <Tab_BruteForce>
+        <c1039>St_PassLength</c1039>
+        <c1043>St_Min</c1043>
+        <c1044>St_Max</c1044>
+        <c1040>St_Charset</c1040>
+        <c1033>Button_Printable</c1033>
+        <c1038>Button_Space</c1038>
+        <c1034>Button_Custom</c1034>
+        <c1035>Button_DefineCustom</c1035>
+        <c1041>St_Password</c1041>
+        <c1042>St_Mask</c1042>
+      </Tab_BruteForce>
+
+      <Tab_Recovery>
+        <c1076>St_Type</c1076>
+        <c1005>Button_Brute</c1005>
+        <c1006>Button_BruteMask</c1006>
+        <c1007>Button_Dictionary</c1007>
+        <c1008>St_Filename</c1008>
+        <c1010>Button_Order</c1010>
+      </Tab_Recovery>
+
+      <Dialog_Main>
+        <c1002>St_Log</c1002>
+        <l1001_1>List_Log1</l1001_1>
+        <l1001_2>List_Log2</l1001_2>
+        <c1069>St_Status</c1069>
+        <c1067>St_CurPass</c1067>
+        <c1068>St_CurSpeed</c1068>
+        <c1066>St_Progress</c1066>
+        <t1000_0>Tab_Main0</t1000_0>
+        <t1000_1>Tab_Main1</t1000_1>
+        <t1000_2>Tab_Main2</t1000_2>
+        <t1000_3>Tab_Main3</t1000_3>
+        <t1000_4>Tab_Main4</t1000_4>
+        <t1000_5>Tab_Main5</t1000_5>
+        <t1000_6>Tab_Main6</t1000_6>
+      </Dialog_Main>
+
+      <Toolbar_Main>
+        <i32770>T_FileOpenFile</i32770>
+        <i32777>T_RecoveryShowMSPasswords</i32777>
+        <i32806>T_InternetOutlook</i32806>
+        <i32804>T_InternetAdvisorPassword</i32804>
+        <i32778>T_BackdoorOpen</i32778>
+        <i32774>T_RecoveryStart</i32774>
+        <i32775>T_RecoveryStop</i32775>
+      </Toolbar_Main>
+
+      <Menu_Main>
+        <l0_i32770>M_File</l0_i32770>
+        <i32770>M_FileOpenFile</i32770>
+        <i32769>M_FileOpenProject</i32769>
+        <i32773>M_FileSaveProject</i32773>
+        <i32772>M_FileSaveProjectAs</i32772>
+        <i32771>M_FileClearHistory</i32771>
+        <i32768>M_FileExit</i32768>
+        <l0_i32774>M_Recovery</l0_i32774>
+        <i32774>M_RecoveryStart</i32774>
+        <i32775>M_RecoveryStop</i32775>
+        <i32776>M_RecoveryShowStat</i32776>
+        <i32777>M_RecoveryShowMSPasswords</i32777>
+        <l0_i32804>M_Internet</l0_i32804>
+        <i32804>M_InternetAdvisorPassword</i32804>
+        <i32806>M_InternetOutlook</i32806>
+        <l0_i32778>M_Backdoor</l0_i32778>
+        <i32778>M_BackdoorOpen</i32778>
+        <i32779>M_BackdoorLaunch</i32779>
+        <l0_i32780>M_Help</l0_i32780>
+        <i32780>M_HelpContents</i32780>
+        <i32789>M_HelpTip</i32789>
+        <i32785>M_HelpUpdates</i32785>
+        <i32786>M_HelpOrder</i32786>
+        <i32787>M_HelpEnterCode</i32787>
+        <i32788>M_HelpAbout</i32788>
+        <l0_i32781>M_Support</l0_i32781>
+        <i32781>M_SupportSite</i32781>
+        <i32790>M_SupportFAQ</i32790>
+        <i32782>M_SupportReport</i32782>
+        <i32783>M_SupportSuggest</i32783>
+        <i32784>M_SupportOther</i32784>
+      </Menu_Main>
+    </AOPR>
+
+    <AVPR>
+      <Menu_Log>
+        <i32808>Common/M_LogCopySelectedEvents</i32808>
+        <i32810>Common/M_LogClearLogWindow</i32810>
+      </Menu_Log>
+
+      <Toolbar_Main>
+        <i32772>T_FileOpen</i32772>
+        <i32774>T_BackdoorOpen</i32774>
+        <i32900>T_HelpOrder</i32900>
+      </Toolbar_Main>
+
+      <Menu_Main>
+        <l0_i32772>M_File</l0_i32772>
+        <i32772>M_FileOpen</i32772>
+        <i32773>M_FileExit</i32773>
+        <l0_i32774>M_Backdoor</l0_i32774>
+        <i32774>M_BackdoorOpen</i32774>
+        <i32775>M_BackdoorLaunch</i32775>
+        <l0_i32780>M_Help</l0_i32780>
+        <i32780>M_HelpContents</i32780>
+        <i32781>M_HelpUpdates</i32781>
+        <i32900>M_HelpOrder</i32900>
+        <i32901>M_HelpEnterCode</i32901>
+        <i32782>M_HelpAbout</i32782>
+        <l0_i32776>M_Support</l0_i32776>
+        <i32776>M_SupportSite</i32776>
+        <i32777>M_SupportReport</i32777>
+        <i32778>M_SupportSuggest</i32778>
+        <i32779>M_SupportOther</i32779>
+      </Menu_Main>
+
+      <Dialog_Main>
+        <c1002>St_Log</c1002>
+        <l1001_1>List_Log1</l1001_1>
+        <l1001_2>List_Log2</l1001_2>
+      </Dialog_Main>
+
+      <Dialog_Password>
+        <Caption>Dialog_Password_Caption</Caption>
+        <c1004>St_FilePath</c1004>
+        <c1003>Button_Open</c1003>
+        <c1005>St_Password</c1005>
+        <c1007>St_Information</c1007>
+        <c1009>Button_ChangePassword</c1009>
+        <c1010>Button_DeletePassword</c1010>
+        <c1011>Button_UnlockXLA</c1011>
+        <c1012>Button_CreateBackup</c1012>
+        <c1>Common/WordOK</c1>
+      </Dialog_Password>
+
+      <Dialog_Change_Password>
+        <Caption>Dialog_Change_Password_Caption</Caption>
+        <c1005>St_NewPassword</c1005>
+        <c1014>St_ConfirmPassword</c1014>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Change_Password>
+
+      <Dialog_Launch>
+        <Caption>Common/Dialog_Launch_Caption</Caption>
+        <c1007>Common/St_Launch_LaunchTip</c1007>
+        <c1017>Common/St_Launch_CommandLine</c1017>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Launch>
+
+    </AVPR>
+
+  </German>
+
+
+   <Russian LangName="Russian (Русский)">
+   
+		<!-- Общие слова и фразы -->
+		<Common>
+			<WordOK>OK</WordOK>
+			<WordCancel>Отмена</WordCancel>
+			<WordContinue>Продолжить</WordContinue>
+			<DontShowMessage>Не показывать в дальнейшем это сообщение</DontShowMessage>
+			<GetMoreInfo>Доп. информация...</GetMoreInfo>
+
+      <Dialog_Launch_Caption>VBA Backdoor</Dialog_Launch_Caption>
+      <St_Launch_CommandLine>Командная строка запуска приложения:</St_Launch_CommandLine>
+      <St_Launch_LaunchTip>Для того, чтобы использовать VBA Backdoor, AVPR запустит приложение, работающее с документом. Другие возможности AVPR будут не доступны, пока это приложение не будет закрыто. Если вы хотите выйти из AVPR, пожалуйста, сначала закройте это приложение.&#13;&#13;В то время, пока запущена сессия VBA Backdoor, вы можете использовать произвольный пароль для разблокировки макросов VBA. Вы можете изменить командную строку, если это необходимо.</St_Launch_LaunchTip>
+
+      <M_LogCopySelectedEvents>Скопировать выбранные события в буфер обмена</M_LogCopySelectedEvents>
+      <M_LogClearLogWindow>Очистить журнал</M_LogClearLogWindow>
+      <SelectFile>Выбрать файл...</SelectFile>
+
+      <Copyright>Copyright</Copyright>
+
+      <!-- System information -->
+      <SysOSInstalled>Операционная система:</SysOSInstalled>
+
+    </Common>
+
+     <Licenses>
+       <Lic_Trial>Trial version</Lic_Trial>
+       <Lic_Home>Home Edition</Lic_Home>
+       <Lic_Standard>Standard Edition</Lic_Standard>
+       <Lic_Professional>Professional Edition</Lic_Professional>
+       <Lic_Special>Special Edition</Lic_Special>
+       <Lic_Enterprise>Enterprise Edition</Lic_Enterprise>
+       <Lic_Forensic>Forensic Edition</Lic_Forensic>
+
+       <!-- DON'T TRANSLATE THIS SECTION ! -->
+       <map>
+         <Lic0>Lic_Trial</Lic0>
+         <Lic1>Lic_Home</Lic1>
+         <Lic2>Lic_Standard</Lic2>
+         <Lic3>Lic_Professional</Lic3>
+         <Lic4>Lic_Special</Lic4>
+         <Lic5>Lic_Enterprise</Lic5>
+         <Lic6>Lic_Forensic</Lic6>
+       </map>
+
+     </Licenses>
+
+     <!-- Процесс покупки и регистрации программы -->
+		<Order>
+
+      <!-- DON'T TRANSLATE THIS SECTION ! -->
+      <map>
+
+        <Item1 Name="PCSE_MODE_SINGLE">
+          <Text>Order/OrderTextSingle</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item1>
+
+        <Item2 Name="PCSE_MODE_MULTI">
+          <Text>Order/OrderTextMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item2>
+
+        <Item3 Name="PCSE_MODE_FEATURE">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item3>
+
+        <Item4 Name="PCSE_MODE_LENGTH">
+          <Text>Order/OrderTextLength</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item4>
+
+        <Item5 Name="PCSE_MODE_TRUNC">
+          <Text>Order/OrderTextTrunc</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item5>
+
+        <Item6 Name="PCSE_MODE_AOPR_EDITION">
+          <Text>Order/OrderTextAOPREdition</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item6>
+
+        <Item7 Name="PCSE_MODE_AOPR_EDITION_FN">
+          <Text>Order/OrderTextAOPREditionFN</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item7>
+
+        <Item8 Name="PCSE_MODE_DECR_FOUND">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item8>
+
+        <Item9 Name="PCSE_MODE_DECR_ENT">
+          <Text>Order/OrderTextFeature</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item9>
+
+        <Item10 Name="PCSE_MODE_EXPIRED">
+          <Text>Order/OrderTextExpired</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item10>
+
+        <Item11 Name="PCSE_MODE_DECRYPT">
+          <Text>Order/OrderTextAEFSDRDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item11>
+
+        <Item12 Name="PCSE_MODE_TRUNC_MULTI">
+          <Text>Order/OrderTextTruncMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item12>
+
+        <Item13 Name="PCSE_MODE_EDITION_MULTI">
+          <Text>Order/OrderTextAOPREditionMulti</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/OrderTextAOPRPro</Text>
+        </Item13>
+
+        <Item14 Name="PCSE_MODE_DECRYPT_WIZ">
+          <Text>Order/OrderTextAEFSDRDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item14>
+
+        <Item15 Name="PCSE_MODE_PDF_DECRYPT">
+          <Text>Order/OrderTextPDFDecrypt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item15>
+
+        <Item16 Name="PCSE_MODE_PWSEX_TRIAL_LIMIT">
+          <Text>Order/OrderTextPWSEXTrial</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item16>
+
+        <Item17 Name="PCSE_MODE_PWSEX_LICENSE_LIMIT">
+          <Text>Order/OrderTextPWSEXLicense</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item17>
+
+        <Item18 Name="Reserved"></Item18>
+        <Item19 Name="Reserved"></Item19>
+
+        <Item20 Name="PCSE_MODE_EDPR_AGENTS">
+          <Text>Order/OrderTextEDPRAgents</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item20>
+
+        <Item21 Name="PCSE_MODE_PDF_TRIAL_PASSWORD">
+          <Text>Order/OrderTextPDFTrialPassword</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item21>
+
+        <Item22 Name="PCSE_MODE_PDF_STD_PASSWORD">
+          <Text>Order/OrderTextPDFStdPassword</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item22>
+
+        <Item23 Name="PCSE_MODE_PDF_TRIAL_LEN">
+          <Text>Order/OrderTextPDFTrialLen</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item23>
+
+        <Item24 Name="PCSE_MODE_PDF_STD_LEN">
+          <Text>Order/OrderTextPDFStdLen</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item24>
+
+        <Item25 Name="PCSE_MODE_PDF_DECRYPT_STD">
+          <Text>Order/OrderTextPDFDecryptStd</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item25>
+
+        <Item26 Name="PCSE_MODE_PDF_STD_RAINBOW">
+          <Text>Order/OrderTextPDFStdRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item26>
+
+        <Item27 Name="PCSE_MODE_PDF_PRO_RAINBOW">
+          <Text>Order/OrderTextPDFProRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item27>
+
+        <Item28 Name="PCSE_MODE_PDF_FEATURE_PRO">
+          <Text>Order/OrderTextPDFFeaturePro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item28>
+
+        <Item29 Name="PCSE_MODE_PDF_FEATURE_ENT">
+          <Text>Order/OrderTextPDFFeatureEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item29>
+
+        <Item30 Name="PCSE_MODE_AOPR4_UPGRADE">
+          <Text>Order/OrderTextAOPR4Upgrade</Text>
+        </Item30>
+
+        <Item31 Name="PCSE_MODE_KEY_EXPIRED">
+          <Text>Order/OrderTextKeyExpired</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item31>
+
+        <Item32 Name="PCSE_MODE_AEFSDR_PRO">
+          <Text>Order/OrderTextAEFSDRPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item32>
+
+        <Item33 Name="PCSE_MODE_AOPB_TRIAL_PRO">
+          <Text>Order/OrderTextAOPBTrialPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelp</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanPurchase</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item33>
+
+        <Item34 Name="PCSE_MODE_AOPB_STD_RAINBOW">
+          <Text>Order/OrderTextPDFStdRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item34>
+
+        <Item35 Name="PCSE_MODE_AOPB_PRO_RAINBOW">
+          <Text>Order/OrderTextPDFProRainbow</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item35>
+
+        <Item36 Name="PCSE_MODE_PASSWORD_REG">
+          <Text>Order/OrderTextPasswordReg</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/ExamineHelpNT</Text>
+          <CRLF>2</CRLF>
+          <Text>Order/CanUpgrade</Text>
+          <Text>Order/PurchaseInfo</Text>
+        </Item36>
+		
+		<Item37 Name="PCSE_MODE_DEVICES">
+          <Text>Order/OrderTextDevices</Text>
+        </Item37>
+
+        <Item101 Name="PADV_AOPR_AOPB">
+          <Text>Advert/AdvertTextAOPRAOPB</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item101>
+
+        <Item102 Name="PADV_AOPR_EDPR">
+          <Text>Advert/AdvertTextAOPREDPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item102>
+
+        <Item103 Name="PADV_EDPR_AOPR">
+          <Text>Advert/AdvertTextEDPRAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item103>
+
+        <Item104 Name="PADV_AOPB_AOPR">
+          <Text>Advert/AdvertTextAOPBAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item104>
+
+        <Item105 Name="PADV_AZPR_ARCHPR">
+          <Text>Advert/AdvertTextAZPRARCHPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item105>
+
+        <Item106 Name="PADV_PDF_STDENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item106>
+
+        <Item107 Name="PADV_PDF_PROENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item107>
+
+        <Item108 Name="PADV_AOPB_PRO">
+          <Text>Advert/AdvertTextAOPBPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item108>
+
+        <Item109 Name="PADV_AOPB_STDENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item109>
+
+        <Item110 Name="PADV_AOPB_PROENT">
+          <Text>Advert/AdvertTextPDFEnt</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item110>
+
+        <Item111 Name="PADV_AOPB_AOPR_TRIAL">
+          <Text>Advert/AdvertTextAOPBAOPR</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item111>
+
+        <Item112 Name="PADV_AOPB_PRO_TRIAL">
+          <Text>Advert/AdvertTextAOPBPro</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item112>
+
+		<Item113 Name="PADV_AOPR_TRIAL_TABLES">
+          <Text>Advert/AdvertTextAOPRTrialTables</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item113>
+        
+        <Item114 Name="PADV_AOPR_HOME_TABLES">
+          <Text>Advert/AdvertTextAOPRHomeTables</Text>
+          <CRLF>2</CRLF>
+          <Text>Advert/AdvertFooter</Text>
+        </Item114>
+
+      </map>
+      
+			<Dialog_Caption>Покупка программы</Dialog_Caption>
+			<BuyNow>Купить сейчас !</BuyNow>
+			<Button_GetFullVersion>Купить полную версию</Button_GetFullVersion>
+			<Button_UpgradeNow>Сделать апгрейд</Button_UpgradeNow>
+			<Button_EnterRegCode>Ввести рег. код</Button_EnterRegCode>
+      <OrderTextSingle>Ваш пароль найден, но его длина превышает ограничения демонстрационной версии. Пароль будет показан как "&lt;демо-версия&gt;".</OrderTextSingle>
+			<OrderTextMulti>Ваши пароли найдены, но их длина превышает ограничения демонстрационной версии. Пароли, которые не удовлетворяют ограничениям, будут показаны как "&lt;демо-версия&gt;".</OrderTextMulti>
+			<OrderTextFeature>Выбранная Вами функция недоступна в демонстрационной версии программы.</OrderTextFeature>
+			<OrderTextLength>Выбранная Вами длина пароля превышает лимит демонстрационной версии.</OrderTextLength>
+			<OrderTextTrunc>Ваш пароль найден, но его длина превышает ограничения демонстрационной версии. Будут показаны только первые символы пароля.</OrderTextTrunc>
+			<OrderTextTruncMulti>Ваши пароли найдены, но их длина превышает ограничения демонстрационной версии. Будут показаны только первые символы паролей.</OrderTextTruncMulti>
+			<OrderTextAOPREdition>Ваш пароль найден, но этот тип паролей не поддерживается в Вашей редакции Advanced Office Password Recovery. Этот тип паролей поддерживается в Advanced Office Password Recovery Forensic. Все пароли данного типа, не превышающие ограничений демо-версии, будут показаны.</OrderTextAOPREdition>
+			<OrderTextAOPREditionMulti>Ваши пароли найдены, но этот тип паролей не поддерживается в Вашей редакции Advanced Office Password Recovery. Этот тип паролей поддерживается в Advanced Office Password Recovery Forensic. Все пароли данного типа, не превышающие ограничений демо-версии, будут показаны.</OrderTextAOPREditionMulti>
+			<OrderTextAOPREditionFN>Эта функция не поддерживается в Вашей редакции Advanced Office Password Recovery. Она доступна только в Advanced Office Password Recovery Forensic.</OrderTextAOPREditionFN>
+			<OrderTextAOPRPro>Вы можете сделать апгрейд Вашей редакции Advanced Office Password Recovery на Advanced Office Password Recovery Forensic прямо сейчас. Нажмите кнопку "Купить полную версию" и Вы автоматически получите 30% скидку на покупку Advanced Office Password Recovery Forensic.</OrderTextAOPRPro>
+			<OrderTextExpired>Период использования демонстрационной версии окончен. Для продолжения использования программы Вы должны приобрести полную версию.</OrderTextExpired>
+			<OrderTextAEFSDRDecrypt>Вы используете демонстрационную версию AEFSDR. Только первые 512 байт выбранного файла были расшифрованы. Остальные байты заполнены нулями. Вы должны приобрести полную версию AEFSDR для полной расшифровки файла.</OrderTextAEFSDRDecrypt>
+			<OrderTextPDFDecrypt>С файла сняты все ограничения. Демонстрационная версия записала в файл только первые страницы документа (около 10%). Вы должны приобрести полную версию программы для полной расшифровки документа.</OrderTextPDFDecrypt>
+			<OrderTextPDFDecryptStd>С файла сняты все ограничения. Standard версия продукта записала в файл только первые страницы документа (около 10%). Вы должны сделать апгрейд на версию Professional или Enterprise для полной расшифровки документа.</OrderTextPDFDecryptStd>
+			<OrderTextPWSEXTrial>Вы используете демонстрационную версию PPA. Количество выбранных аккаунтов превышает ограничения демо-версии. Вы должны приобрести полную версию программы для аудита этого количества аккаунтов.</OrderTextPWSEXTrial>
+			<OrderTextPWSEXLicense>Количество выбранных Вами аккаунтов превышает ограничения приобретенной лицензии. Вы можете сделать апгрейд Вашей текущей лицензии для анализа такого количества аккаунтов. Если Вы нажмете кнопку "Купить полную версию" прямо сейчас, Вам будет предоставлена скидка 40% на любую лицензию.</OrderTextPWSEXLicense>
+			<OrderTextAOPBFormat>Пароли для выбранного файла могут быть найдены без использования перебора. Однако эти пароли не могут быть найдены с помощью Advanced Office Password Breaker. Для нахождения паролей Вы можете использовать другую нашу программу - Advanced Office Password Recovery Professional. Прямо сейчас мы предлагаем Вам купить этот продукт со скидкой 30% ! Нажмите кнопку "Купить сейчас !" и Вы автоматически получите скидку.</OrderTextAOPBFormat>
+			<OrderTextAZPRFormat/>
+			<OrderTextEDPRAgents>Произведена попытка подключения агента к серверу, однако превышен лимит количества соединений для данной лицензии EDPR. Вы должны приобрести лицензию, которая поддерживает большее количество соединений. Для покупки соответствующей лицензии нажмите кнопку "Купить полную версию".</OrderTextEDPRAgents>
+			<OrderTextPDFTrialPassword>Этот документ может быть расшифрован, если известны "user" и "owner" пароли. Для нахождения этих паролей может использоваться прямой перебор, атака по словарю, либо поиск ключа шифрования. Возможность нахождения пароля или ключа доступна в версиях Professional и Enterprise, а также в демонстрационной версии, но с ограничениями.</OrderTextPDFTrialPassword>
+			<OrderTextPDFStdPassword>Этот документ может быть расшифрован, если известны "user" и "owner" пароли. Для нахождения этих паролей может использоваться прямой перебор, атака по словарю, либо поиск ключа шифрования. Возможность нахождения пароля или ключа доступна в версиях Professional и Enterprise, а также в текущей версии (Standard), но с ограничениями.</OrderTextPDFStdPassword>
+			<OrderTextPDFTrialLen>Вы используете демонстрационную версию, которая имеет ограничения при использовании прямого перебора и атаки по словарю (ограничена максимальная длина пароля и некоторые дополнительные параметры).</OrderTextPDFTrialLen>
+			<OrderTextPDFStdLen>Вы используете версию Standard, которая имеет ограничения при использовании прямого перебора и атаки по словарю (ограничена максимальная длина пароля и некоторые дополнительные параметры).</OrderTextPDFStdLen>
+			<OrderTextPDFStdRainbow>Возможность поиска ключа по заранее вычисленным хеш-таблицам доступна только в Enterprise версии. Вы используете версию Standard.</OrderTextPDFStdRainbow>
+			<OrderTextPDFProRainbow>Возможность поиска ключа по заранее вычисленным хеш-таблицами доступна только в Enterprise версии. Вы используете версию Professional, которая позволяет производить поиск ключа прямым перебором и при этом время нахождения ключа составляет несколько дней. В Enterprise версии ключ находится за несколько минут.</OrderTextPDFProRainbow>
+			<OrderTextPDFFeaturePro>Выбранная функция недоступна в текущей редакции программы. Вы должны сделать апгрейд Вашей лицензии на редакцию Professional для использования этой функции.</OrderTextPDFFeaturePro>
+			<OrderTextPDFFeatureEnt>Выбранная функция недоступна в текущей редакции программы. Вы должны сделать апгрейд Вашей лицензии на редакцию Enterprise для использования этой функции.</OrderTextPDFFeatureEnt>
+			<OrderTextAOPR4Upgrade>Введенный регистрационный ключ предназначен только для Advanced Office Password Recovery версии 3.X. Для версии 4.X Вы должны сделать апгрейд Вашей лицензии. Апгрейд предоставляется бесплатно для всех, кто купил программу позднее 15 октября 2006 года.&#13;&#13;Нажмите кнопку "Сделать апгрейд" для апгрейда Вашей лицензии.</OrderTextAOPR4Upgrade>
+			<OrderTextAEFSDRPro>Вы используете Standard версию программы, которая позволяет расшифровывать файлы с использованием "обычного" метода сканирования ключей. Однако ключи, необходимы для расшифровки Вашего файла, были найдены методом посекторного сканирования, который доступен только версии Professional. Вы можете протестировать процесс расшифровки файлов и в версии Standard, но при этом будут расшифрованы только первые 512 файла.</OrderTextAEFSDRPro>
+			<OrderTextAOPBTrialPro>Мультипроцессорный/многядерный метод поиска ключей недоступен в Trial версии программы. Вы должны приобрести версию Professional, чтобы использовать эту возможность. Для запуска атаки в Trial версии пожалуйста установите в опциях программы один процессор.</OrderTextAOPBTrialPro>
+			<OrderTextKeyExpired>Ваш регистрационный ключ невалиден, либо просрочен. В соответствии с нашей политикой апгрейдов все апдейты программы доступны бесплатно в течение года с момента покупки. Вы можете использовать старую версию программы или сделать апгрейд лицензии.</OrderTextKeyExpired>
+			<OrderTextPasswordReg>Пароль к данному файлу не может быть найден демо-версией программы. Возможность восстановления паролей такого типа существует только в полной версии.</OrderTextPasswordReg>
+			<OrderTextDevices>Ваша программа может работать быстрее !&#13;&#13;Приобретенная лицензия не позволяет использовать все ресурсы Вашего компьютера. Для перебора паролей могут использоваться ядра центрального процессора, а также графические карты. Вы можете сделать апгрейд Вашей текущей лицензии и использовать компьютер на полную мощность.</OrderTextDevices>
+			<ExamineHelp>Более подробно об ограничениях демонстрационной версии Вы можете прочитать в файле Справки.</ExamineHelp>
+			<ExamineHelpNT>Более подробно об ограничениях этой версии программы Вы можете прочитать в файле Справки.</ExamineHelpNT>
+			<CanPurchase>Вы можете приобрести полную версию программы через Интернет прямо сейчас. Нажмите кнопку "Купить полную версию" для покупки программы. </CanPurchase>
+			<CanUpgrade>Вы можете сделать апгрейд Вашей версии программы через Интернет прямо сейчас. Нажмите кнопку "Сделать апгрейд" для подробной информации о стоимости апгрейда и Ваших персональных скидках. </CanUpgrade>
+			<PurchaseInfo>Оплата может быть произведена при помощи кредитной или дебетовой карты, оплаты счета через Сбербанк, банковским переводом, а также через платежные системы Webmoney и Яндекс.Деньги.</PurchaseInfo>
+			<ProgramReg>Регистрация программы</ProgramReg>
+			<EnterRegCode>Пожалуйста, введите Регистрационный Код:</EnterRegCode>
+      <RegCode>Регистрационный код:</RegCode>
+
+      <kit>
+        <KitRegDlgCaption>Регистрация</KitRegDlgCaption>
+        <KitRegText>Пожалуйста, скопируйте текст ключа или выберите файл, который содержит ключ:</KitRegText>
+      </kit>
+		
+		</Order>
+		
+		<!-- Advert dialog -->
+		<Advert>
+			<Dialog_Caption>Обновите Вашу лицензию для доступа к новым возможностям</Dialog_Caption>
+			<AdvertTextAOPRAOPB>Ваш пароль к документу Office 97/2000 не найден выбранной атакой. Восстановление паролей для документов этого типа может занять большое количество времени. Для ускорения процесса расшифровки документа Вы можете воспользоваться другой нашей программой - Advanced Office Password Breaker. Мы предлагаем Вам купить эту программу прямо сейчас со скидкой 30%.</AdvertTextAOPRAOPB>
+			<AdvertTextAOPREDPR>Ваш пароль к документу MS Office не найден выбранной атакой. Восстановление паролей для документов этого типа может занять большое количество времени. Однако Вы можете ускорить этот процесс, воспользовавшись другой нашей программой - Elcomsoft Distributed Password Recovery. Эта программа позволяет использовать вычислительные мощности нескольких компьютеров для перебора. Используйте всю доступную Вам вычислительную мощность для нахождения пароля ! Мы предлагаем Вам купить Elcomsoft Distributed Password Recovery прямо сейчас, со скидкой 30%.</AdvertTextAOPREDPR>
+			<AdvertTextEDPRAOPR>Пароли для выбранного файла могут быть найдены без использования перебора. Однако эти пароли не поддерживаются Elcomsoft Distributed Password Recovery. Вы можете использовать другую нашу программу (Advanced Office Password Recovery) для нахождения этих паролей. Advanced Office Password Recovery поддерживает около 30 типов паролей, все приложения MS Office, MS Money, MS Project. Мы предлагаем Вам купить эту программу прямо сейчас, со скидкой 30%.</AdvertTextEDPRAOPR>
+			<AdvertTextAOPBAOPR>Пароли для выбранного файла могут быть найдены без использования перебора. Однако эти пароли не могут быть найдены с помощью Advanced Office Password Breaker. Для нахождения паролей Вы можете использовать другую нашу программу - Advanced Office Password Recovery Professional.</AdvertTextAOPBAOPR>
+			<AdvertTextAZPRARCHPR>Данный формат файла не поддерживается AZPR. Однако Вы можете воспользоваться другой нашей программой, которая поддерживает этот формат, а также архивы RAR/WinRAR, ARJ и ACE - Advanced Archive Password Recovery. Прямо сейчас Вы можете купить эту программу со скидкой 30% !</AdvertTextAZPRARCHPR>
+			<AdvertTextPDFEnt>Эта атака позволит Вам расшифровать файл, однако ее выполнение займет несколько дней. Если Вы хотите расшифровать файл за несколько минут, Вы можете использовать атаку по хеш-таблицам, доступную в версии Enterprise.</AdvertTextPDFEnt>
+			<AdvertTextAOPBPro>Программа может работать быстрее ! Вы используете версию программы, которая поддерживает только один процессор (ядро). Мы рекомендуем Вам сделать апгрейд на версию Professional, которая поддерживает до четырех процессоров (ядер). При этом время расшифровки файла уменьшается пропорционально количеству используемых процессоров (ядер).</AdvertTextAOPBPro>
+      <AdvertTextAOPRTrialTables>Ваш файл зашифрован уязвимым алгоритмом шифрования (RC4 c 40-битным ключом). Вы можете не искать пароль к этому файлу, а запустить перебор ключей, который гарантированно расшифрует документ. Однако эта возможность недоступна в Trial версии продукта. Чтобы гарантированно расшифровать документ, нужно купить полную версию.</AdvertTextAOPRTrialTables>
+      <AdvertTextAOPRHomeTables>Полный перебор ключей займет 5-15 часов на современном процессоре. Вы можете ускорить перебор, используя нашу запатентованную технологию Thunder Tables. С помощью этих таблиц ключ будет найден за несколько секунд. Эта возможность доступна только в Forensic версии продукта. Вы можете продолжить перебор ключа в Home версии, либо приобрести апгрейд до Forensic версии.</AdvertTextAOPRHomeTables>
+      <AdvertFooter>Нажмите кнопку "Дополнительная информация..." для просмотра веб-страницы программы. Для покупки или апгрейда лицензии нажмите кнопку "Купить сейчас!".</AdvertFooter>
+		</Advert>
+		
+		<!-- About dialog -->
+		<About>
+			<Dialog_Caption>О программе</Dialog_Caption>
+      <Get_More>Информация о программе</Get_More>
+      <Open_PRS>Посмотреть другие программы Элкомсофт</Open_PRS>
+      <Open_Elcom>Открыть веб-сайт компании Элкомсофт</Open_Elcom>
+		</About>
+
+     <!-- AOPR product -->
+     <AOPR>
+       <M_File>Файл</M_File>
+       <M_FileOpenFile>Открыть файл...</M_FileOpenFile>
+       <M_FileOpenProject>Открыть проект...</M_FileOpenProject>
+       <M_FileSaveProject>Сохранить проект</M_FileSaveProject>
+       <M_FileSaveProjectAs>Сохранить проект как...</M_FileSaveProjectAs>
+       <M_FileClearHistory>Очистить историю файлов</M_FileClearHistory>
+       <M_FileExit>Выход</M_FileExit>
+       <M_Recovery>Восстановление</M_Recovery>
+       <M_RecoveryStart>Запустить</M_RecoveryStart>
+       <M_RecoveryStop>Остановить</M_RecoveryStop>
+       <M_RecoveryShowStat>Показать подробную статистику</M_RecoveryShowStat>
+       <M_RecoveryShowMSPasswords>Показать пароли MS Money Passport</M_RecoveryShowMSPasswords>
+       <M_Internet>Интернет</M_Internet>
+       <M_InternetAdvisorPassword>Пароли Internet Content Advisor...</M_InternetAdvisorPassword>
+       <M_InternetOutlook>Учётные записи Outlook...</M_InternetOutlook>
+       <M_Backdoor>VBA Backdoor</M_Backdoor>
+       <M_BackdoorOpen>Открыть файл через Backdoor...</M_BackdoorOpen>
+       <M_BackdoorLaunch>Запустить приложение...</M_BackdoorLaunch>
+       <M_Help>Помощь</M_Help>
+       <M_HelpContents>Содержание</M_HelpContents>
+       <M_HelpTip>Подсказка дня</M_HelpTip>
+       <M_HelpUpdates>Проверить обновления...</M_HelpUpdates>
+       <M_HelpOrder>Приобрести программу...</M_HelpOrder>
+       <M_HelpEnterCode>Ввести регистрационный код...</M_HelpEnterCode>
+       <M_HelpAbout>О программе...</M_HelpAbout>
+       <M_Support>Поддержка</M_Support>
+       <M_SupportSite>Домашняя страница AVOR</M_SupportSite>
+       <M_SupportFAQ>Часто-задаваемые вопросы</M_SupportFAQ>
+       <M_SupportReport>Сообщить об ошибке в программе</M_SupportReport>
+       <M_SupportSuggest>Предложить улучшение</M_SupportSuggest>
+       <M_SupportOther>Техническая поддержка...</M_SupportOther>
+
+       <T_FileOpenFile>Открыть файл...</T_FileOpenFile>
+       <T_RecoveryShowMSPasswords>MS Passport</T_RecoveryShowMSPasswords>
+       <T_InternetOutlook>MS Outlook</T_InternetOutlook>
+       <T_InternetAdvisorPassword>Internet CA</T_InternetAdvisorPassword>
+       <T_BackdoorOpen>VBA Backdoor</T_BackdoorOpen>
+       <T_RecoveryStart>Запустить</T_RecoveryStart>
+       <T_RecoveryStop>Остановить</T_RecoveryStop>
+
+       <St_Log>Журнал</St_Log>
+       <List_Log1>Дата, Время</List_Log1>
+       <List_Log2>Событие</List_Log2>
+       <St_Status>Статус</St_Status>
+       <St_CurPass>Текущий пароль:</St_CurPass>
+       <St_CurSpeed>Текущая скорость:</St_CurSpeed>
+       <St_Progress>Прогресс</St_Progress>
+       <Tab_Main0>Восстановление</Tab_Main0>
+       <Tab_Main1>Brute-Force</Tab_Main1>
+       <Tab_Main2>Словарь</Tab_Main2>
+       <Tab_Main3>Настройки</Tab_Main3>
+       <Tab_Main4>Производительность</Tab_Main4>
+       <Tab_Main5>Информация</Tab_Main5>
+       <Tab_Main6>Кэш паролей</Tab_Main6>
+
+       <St_Type>Тип атаки для документов с сильным шифрованием</St_Type>
+       <Button_Brute>Brute-Force атака (перебор всех возможных комбинаций)</Button_Brute>
+       <Button_BruteMask>Brute-Force с использованием маски (если известна часть пароля)</Button_BruteMask>
+       <Button_Dictionary>Атака с использованием словаря (рекомендуется)</Button_Dictionary>
+       <St_Filename>Файл:</St_Filename>
+       <Button_Order>Купить полную версию!</Button_Order>
+
+       <St_PassLength>Длина пароля</St_PassLength>
+       <St_Min>Мин.:</St_Min>
+       <St_Max>Макс.:</St_Max>
+       <St_Charset>Набор символов</St_Charset>
+       <Button_Printable>Все печат.</Button_Printable>
+       <Button_Space>Пробел</Button_Space>
+       <Button_Custom>Произвольный набор</Button_Custom>
+       <Button_DefineCustom>Задать набор...</Button_DefineCustom>
+       <St_Password>Начальный пароль:</St_Password>
+       <St_Mask>Маска / Символ маски:</St_Mask>
+
+       <St_Dictionary>Файл словаря:</St_Dictionary>
+       <Button_SelectDictionary>Выбрать словарь...</Button_SelectDictionary>
+       <St_LineNumber>Начинать со строки №:</St_LineNumber>
+       <St_DefaultDictionary>Словарь по умолчанию:</St_DefaultDictionary>
+       <Button_SelectDefault>Выбрать словарь по ум...</Button_SelectDefault>
+       <Button_GetDictionaries>Получить словари...</Button_GetDictionaries>
+       <Button_SmartMutations>Умный перебор паролей</Button_SmartMutations>
+       <Button_TryAll>Перебрать все комбинации строчных/заглавных букв</Button_TryAll>
+
+       <St_Priority>Приоритет программы</St_Priority>
+       <Button_Idle>Низкий</Button_Idle>
+       <Button_High>Высокий</Button_High>
+       <St_LogFile>Файл журнала</St_LogFile>
+       <Button_ProgramLog>Включить журнал программы</Button_ProgramLog>
+       <Button_DebugLog>Включить журнал отладки</Button_DebugLog>
+       <Button_Browse>Обзор...</Button_Browse>
+       <St_Intervals>Интервалы</St_Intervals>
+       <St_IntAutosave>Автосохр. (мин):</St_IntAutosave>
+       <St_IntProgress>Прогресс (мс):</St_IntProgress>
+       <St_GeneralOptions>Общие настройки</St_GeneralOptions>
+       <Button_OptAutosave>Включить автосохранение</Button_OptAutosave>
+       <Button_OptToTray>Минимизировать программу в трей</Button_OptToTray>
+       <Button_OptPrompt>Предупреждать если проект был изменён</Button_OptPrompt>
+       <Button_OptPreBruteForce>Предварительная Brute-Force атака</Button_OptPreBruteForce>
+       <Button_OptPreDictionary>Предварительная атака по словарю</Button_OptPreDictionary>
+       <Button_OptPreCache>Предварительная атака по кэшу паролей</Button_OptPreCache>
+
+       <St_Word2000>На документах Microsoft Word 97/2000:</St_Word2000>
+       <St_Speed>паролей в секунду</St_Speed>
+       <St_Excel2000>На документах Microsoft Excel 97/2000:</St_Excel2000>
+       <Button_Calculate>Рассчитать</Button_Calculate>
+       <St_XP>На документах Office XP с шифрованием CSP:</St_XP>
+
+       <St_Parameter>Параметр</St_Parameter>
+       <St_Information>Информация</St_Information>
+
+       <Button_AddPasswords>Добавлять все найденные пароли в кэш</Button_AddPasswords>
+       <St_CacheFile>Файл кэша паролей:</St_CacheFile>
+       <Button_SelectFile>Выбрать файл...</Button_SelectFile>
+       <Button_SetPassword>Установить пароль...</Button_SetPassword>
+       <Button_ViewCache>Просмотреть кэш...</Button_ViewCache>
+       <Button_ClearCache>Очистить кэш</Button_ClearCache>
+
+       <Dialog_ICAPassword_Caption>Пароль Internet Content Advisor</Dialog_ICAPassword_Caption>
+       <St_ICAInfo>Пароль Internet Explorer Content Advisor не может быть быстро восстановлен из-за сильного метода шифрования. Но вы можете просто изменить или удалить его. Старый пароль может быть сохранён и восстановлен позже в любой момент.</St_ICAInfo>
+       <St_CurrentPassword>Текущий пароль CA:</St_CurrentPassword>
+       <St_SavedPassword>Сохранённый пароль CA:</St_SavedPassword>
+       <Button_DeletePassword>Удалить пароль</Button_DeletePassword>
+       <Button_RestorePassword>Восстановить пароль</Button_RestorePassword>
+       <St_ChangePassword>Новый пароль:</St_ChangePassword>
+       <Button_ChangePassword>Изменить пароль</Button_ChangePassword>
+       <Button_SaveOldPassword>Сохранить старый пароль</Button_SaveOldPassword>
+
+       <Dialog_ShowStat_Caption>Подробная статистика</Dialog_ShowStat_Caption>
+       <St_LastPassword>Текущий (последний восстановленный) пароль</St_LastPassword>
+       <St_PasswordStat>Пароли</St_PasswordStat>
+       <St_ProcessedPasswords>Проверено:</St_ProcessedPasswords>
+       <St_TotalPasswords>Всего:</St_TotalPasswords>
+       <St_Remaining>Осталось:</St_Remaining>
+       <St_SpeedStat>Скорость</St_SpeedStat>
+       <St_CurrentSpeed>Текущая:</St_CurrentSpeed>
+       <St_AverageSpeed>Средняя:</St_AverageSpeed>
+       <St_TimeStat>Время</St_TimeStat>
+       <St_ElapsedTime>Прошло:</St_ElapsedTime>
+
+       <Dialog_SetPassword_Caption>Новый пароль</Dialog_SetPassword_Caption>
+       <St_TypePassword>Введите новый пароль:</St_TypePassword>
+       <St_RetypePassword>Повторите пароль:</St_RetypePassword>
+
+       <Dialog_ViewCache_Caption>Кэш паролей</Dialog_ViewCache_Caption>
+       <List_Password>Пароль</List_Password>
+       <Button_Copy>Скопировать в буфер обмена</Button_Copy>
+
+       <Dialog_DefineCharset_Caption>Пользовательский набор символов</Dialog_DefineCharset_Caption>
+       <St_CharsetText>Символы:</St_CharsetText>
+       <St_CharsetHex>Коды символов (unicode):</St_CharsetHex>
+       <Button_LoadCharset>Загрузить набор...</Button_LoadCharset>
+       <Button_AddCharset>Добавить набор...</Button_AddCharset>
+       <Button_SaveCharset>Сохранить набор...</Button_SaveCharset>
+       <Button_ClearCharset>Очистить набор</Button_ClearCharset>
+
+       <Menu_Log>
+         <i32808>Common/M_LogCopySelectedEvents</i32808>
+         <i32810>Common/M_LogClearLogWindow</i32810>
+       </Menu_Log>
+
+       <Dialog_DefineCharset>
+         <Caption>Dialog_DefineCharset_Caption</Caption>
+         <c1106>St_CharsetText</c1106>
+         <c1107>St_CharsetHex</c1107>
+         <c1079>Button_LoadCharset</c1079>
+         <c1082>Button_AddCharset</c1082>
+         <c1080>Button_SaveCharset</c1080>
+         <c1081>Button_ClearCharset</c1081>
+         <c1>Common/WordOK</c1>
+         <c2>Common/WordCancel</c2>
+       </Dialog_DefineCharset>
+
+       <Dialog_ViewCache>
+         <Caption>Dialog_ViewCache_Caption</Caption>
+         <l1078_1>List_Password</l1078_1>
+         <c1077>Button_Copy</c1077>
+         <c1>Common/WordOK</c1>
+       </Dialog_ViewCache>
+
+       <Dialog_SetPassword>
+         <Caption>Dialog_SetPassword_Caption</Caption>
+         <c1041>St_TypePassword</c1041>
+         <c1014>St_RetypePassword</c1014>
+         <c1>Common/WordOK</c1>
+         <c2>Common/WordCancel</c2>
+       </Dialog_SetPassword>
+
+       <Dialog_ShowStat>
+         <Caption>Dialog_ShowStat_Caption</Caption>
+         <c1041>St_LastPassword</c1041>
+         <c1042>St_PasswordStat</c1042>
+         <c1080>St_ProcessedPasswords</c1080>
+         <c1081>St_TotalPasswords</c1081>
+         <c1082>St_Remaining</c1082>
+         <c1043>St_SpeedStat</c1043>
+         <c1083>St_CurrentSpeed</c1083>
+         <c1084>St_AverageSpeed</c1084>
+         <c1094>St_Speed</c1094>
+         <c1095>St_Speed</c1095>
+         <c1044>St_TimeStat</c1044>
+         <c1090>St_ElapsedTime</c1090>
+         <c1091>St_Remaining</c1091>
+         <c1>Common/WordOK</c1>
+       </Dialog_ShowStat>
+
+       <Dialog_Launch>
+         <Caption>Common/Dialog_Launch_Caption</Caption>
+         <c1007>Common/St_Launch_LaunchTip</c1007>
+         <c1017>Common/St_Launch_CommandLine</c1017>
+         <c1>Common/WordOK</c1>
+         <c2>Common/WordCancel</c2>
+       </Dialog_Launch>
+
+       <Dialog_ICAPassword>
+         <Caption>Dialog_ICAPassword_Caption</Caption>
+         <c1007>St_ICAInfo</c1007>
+         <c1083>St_CurrentPassword</c1083>
+         <c1104>St_SavedPassword</c1104>
+         <c1101>Button_DeletePassword</c1101>
+         <c1102>Button_RestorePassword</c1102>
+         <c1041>St_ChangePassword</c1041>
+         <c1100>Button_ChangePassword</c1100>
+         <c1103>Button_SaveOldPassword</c1103>
+         <c1>Common/WordOK</c1>
+       </Dialog_ICAPassword>
+
+       <Tab_PassCache>
+         <c1012>Button_AddPasswords</c1012>
+         <c1008>St_CacheFile</c1008>
+         <c1014>Button_SelectFile</c1014>
+         <c1016>Button_SetPassword</c1016>
+         <c1015>Button_ViewCache</c1015>
+         <c1017>Button_ClearCache</c1017>
+       </Tab_PassCache>
+
+       <Tab_SysInfo>
+         <l1011_0>St_Parameter</l1011_0>
+         <l1011_1>St_Information</l1011_1>
+       </Tab_SysInfo>
+       
+       <Tab_Benchmark>
+         <c1070>St_Word2000</c1070>
+         <c1071>St_Speed</c1071>
+         <c1073>St_Excel2000</c1073>
+         <c1072>St_Speed</c1072>
+         <c1053>Button_Calculate</c1053>
+         <c1074>St_XP</c1074>
+         <c1075>St_Speed</c1075>
+         <c1054>Button_Calculate</c1054>
+       </Tab_Benchmark>
+
+       <Tab_Options>
+         <c1064>St_Priority</c1064>
+         <c1045>Button_Idle</c1045>
+         <c1046>Button_High</c1046>
+         <c1002>St_LogFile</c1002>
+         <c1047>Button_ProgramLog</c1047>
+         <c1048>Button_DebugLog</c1048>
+         <c1050>Button_Browse</c1050>
+         <c1053>St_Intervals</c1053>
+         <c1065>St_IntAutosave</c1065>
+         <c1066>St_IntProgress</c1066>
+         <c1052>St_GeneralOptions</c1052>
+         <c1058>Button_OptAutosave</c1058>
+         <c1059>Button_OptToTray</c1059>
+         <c1060>Button_OptPrompt</c1060>
+         <c1061>Button_OptPreBruteForce</c1061>
+         <c1062>Button_OptPreDictionary</c1062>
+         <c1063>Button_OptPreCache</c1063>
+       </Tab_Options>
+       
+       <Tab_Dictionary>
+         <c1019>St_Dictionary</c1019>
+         <c1021>Button_SelectDictionary</c1021>
+         <c1018>St_LineNumber</c1018>
+         <c1020>St_DefaultDictionary</c1020>
+         <c1015>Button_SelectDefault</c1015>
+         <c1016>Button_GetDictionaries</c1016>
+         <c1022>Button_SmartMutations</c1022>
+         <c1023>Button_TryAll</c1023>
+       </Tab_Dictionary>
+
+       <Tab_BruteForce>
+         <c1039>St_PassLength</c1039>
+         <c1043>St_Min</c1043>
+         <c1044>St_Max</c1044>
+         <c1040>St_Charset</c1040>
+         <c1033>Button_Printable</c1033>
+         <c1038>Button_Space</c1038>
+         <c1034>Button_Custom</c1034>
+         <c1035>Button_DefineCustom</c1035>
+         <c1041>St_Password</c1041>
+         <c1042>St_Mask</c1042>
+       </Tab_BruteForce>
+
+       <Tab_Recovery>
+         <c1076>St_Type</c1076>
+         <c1005>Button_Brute</c1005>
+         <c1006>Button_BruteMask</c1006>
+         <c1007>Button_Dictionary</c1007>
+         <c1008>St_Filename</c1008>
+         <c1010>Button_Order</c1010>
+       </Tab_Recovery>  
+
+       <Dialog_Main>
+         <c1002>St_Log</c1002>
+         <l1001_1>List_Log1</l1001_1>
+         <l1001_2>List_Log2</l1001_2>
+         <c1069>St_Status</c1069>
+         <c1067>St_CurPass</c1067>
+         <c1068>St_CurSpeed</c1068>
+         <c1066>St_Progress</c1066>
+         <t1000_0>Tab_Main0</t1000_0>
+         <t1000_1>Tab_Main1</t1000_1>
+         <t1000_2>Tab_Main2</t1000_2>
+         <t1000_3>Tab_Main3</t1000_3>
+         <t1000_4>Tab_Main4</t1000_4>
+         <t1000_5>Tab_Main5</t1000_5>
+         <t1000_6>Tab_Main6</t1000_6>
+       </Dialog_Main>
+
+       <Toolbar_Main>
+         <i32770>T_FileOpenFile</i32770>
+         <i32777>T_RecoveryShowMSPasswords</i32777>
+         <i32806>T_InternetOutlook</i32806>
+         <i32804>T_InternetAdvisorPassword</i32804>
+         <i32778>T_BackdoorOpen</i32778>
+         <i32774>T_RecoveryStart</i32774>
+         <i32775>T_RecoveryStop</i32775>
+       </Toolbar_Main>
+
+       <Menu_Main>
+         <l0_i32770>M_File</l0_i32770>
+         <i32770>M_FileOpenFile</i32770>
+         <i32769>M_FileOpenProject</i32769>
+         <i32773>M_FileSaveProject</i32773>
+         <i32772>M_FileSaveProjectAs</i32772>
+         <i32771>M_FileClearHistory</i32771>
+         <i32768>M_FileExit</i32768>
+         <l0_i32774>M_Recovery</l0_i32774>
+         <i32774>M_RecoveryStart</i32774>
+         <i32775>M_RecoveryStop</i32775>
+         <i32776>M_RecoveryShowStat</i32776>
+         <i32777>M_RecoveryShowMSPasswords</i32777>
+         <l0_i32804>M_Internet</l0_i32804>
+         <i32804>M_InternetAdvisorPassword</i32804>
+         <i32806>M_InternetOutlook</i32806>
+         <l0_i32778>M_Backdoor</l0_i32778>
+         <i32778>M_BackdoorOpen</i32778>
+         <i32779>M_BackdoorLaunch</i32779>
+         <l0_i32780>M_Help</l0_i32780>
+         <i32780>M_HelpContents</i32780>
+         <i32789>M_HelpTip</i32789>
+         <i32785>M_HelpUpdates</i32785>
+         <i32786>M_HelpOrder</i32786>
+         <i32787>M_HelpEnterCode</i32787>
+         <i32788>M_HelpAbout</i32788>
+         <l0_i32781>M_Support</l0_i32781>
+         <i32781>M_SupportSite</i32781>
+         <i32790>M_SupportFAQ</i32790>
+         <i32782>M_SupportReport</i32782>
+         <i32783>M_SupportSuggest</i32783>
+         <i32784>M_SupportOther</i32784>
+       </Menu_Main>
+     </AOPR>
+
+     <!-- AVPR product -->
+     <AVPR>
+       <Dialog_Password_Caption>VBA пароль</Dialog_Password_Caption>
+       <St_Log>Журнал</St_Log>
+       <List_Log1>Дата, Время</List_Log1>
+       <List_Log2>Событие</List_Log2>
+       
+       <St_FilePath>Файл:</St_FilePath>
+       <Button_Open>Открыть</Button_Open>
+       <St_Password>Пароль:</St_Password>
+       <St_Information>Информация:</St_Information>
+       <Button_ChangePassword>Изменить пароль</Button_ChangePassword>
+       <Button_DeletePassword>Удалить пароль</Button_DeletePassword>
+       <Button_UnlockXLA>Разблок. XLA Add-In</Button_UnlockXLA>
+       <Button_CreateBackup>Создать резервную копию</Button_CreateBackup>
+
+       <Dialog_Change_Password_Caption>Смена пароля</Dialog_Change_Password_Caption>
+       <St_NewPassword>Введите новый пароль (максимум 128 символов):</St_NewPassword>
+       <St_ConfirmPassword>Подтвердите пароль:</St_ConfirmPassword>
+
+       <M_File>Файл</M_File>
+       <M_FileOpen>Открыть файл...</M_FileOpen>
+       <M_FileExit>Выйти из AVPR</M_FileExit>
+       <M_Backdoor>VBA Backdoor</M_Backdoor>
+       <M_BackdoorOpen>Открыть файл через Backdoor...</M_BackdoorOpen>
+       <M_BackdoorLaunch>Запустить приложение...</M_BackdoorLaunch>
+       <M_Help>Помощь</M_Help>
+       <M_HelpContents>Содержание</M_HelpContents>
+       <M_HelpUpdates>Проверить обновления AVPR...</M_HelpUpdates>
+       <M_HelpOrder>Приобрести программу...</M_HelpOrder>
+       <M_HelpEnterCode>Ввести регистрационный код...</M_HelpEnterCode>
+       <M_HelpAbout>О программе...</M_HelpAbout>
+       <M_Support>Поддержка</M_Support>
+       <M_SupportSite>Домашняя страница AVPR</M_SupportSite>
+       <M_SupportReport>Сообщить об ошибке в программе</M_SupportReport>
+       <M_SupportSuggest>Предложить улучшение</M_SupportSuggest>
+       <M_SupportOther>Техническая поддержка...</M_SupportOther>
+       
+       <T_FileOpen>Открыть файл...</T_FileOpen>
+       <T_BackdoorOpen>VBA Backdoor</T_BackdoorOpen>
+       <T_HelpOrder>Купить программу</T_HelpOrder>
+
+       <Menu_Log>
+         <i32808>Common/M_LogCopySelectedEvents</i32808>
+         <i32810>Common/M_LogClearLogWindow</i32810>
+       </Menu_Log>
+
+       <Toolbar_Main>
+         <i32772>T_FileOpen</i32772>
+         <i32774>T_BackdoorOpen</i32774>
+         <i32900>T_HelpOrder</i32900>
+       </Toolbar_Main>
+
+       <Menu_Main>
+         <l0_i32772>M_File</l0_i32772>
+         <i32772>M_FileOpen</i32772>
+         <i32773>M_FileExit</i32773>
+         <l0_i32774>M_Backdoor</l0_i32774>
+         <i32774>M_BackdoorOpen</i32774>
+         <i32775>M_BackdoorLaunch</i32775>
+         <l0_i32780>M_Help</l0_i32780>
+         <i32780>M_HelpContents</i32780>
+         <i32781>M_HelpUpdates</i32781>
+         <i32900>M_HelpOrder</i32900>
+         <i32901>M_HelpEnterCode</i32901>
+         <i32782>M_HelpAbout</i32782>
+         <l0_i32776>M_Support</l0_i32776>
+         <i32776>M_SupportSite</i32776>
+         <i32777>M_SupportReport</i32777>
+         <i32778>M_SupportSuggest</i32778>
+         <i32779>M_SupportOther</i32779>
+       </Menu_Main>
+       
+       <Dialog_Main>
+         <c1002>St_Log</c1002>
+         <l1001_1>List_Log1</l1001_1>
+         <l1001_2>List_Log2</l1001_2>
+       </Dialog_Main>
+
+       <Dialog_Password>
+         <Caption>Dialog_Password_Caption</Caption>
+         <c1004>St_FilePath</c1004>
+         <c1003>Button_Open</c1003>
+         <c1005>St_Password</c1005>
+         <c1007>St_Information</c1007>
+         <c1009>Button_ChangePassword</c1009>
+         <c1010>Button_DeletePassword</c1010>
+         <c1011>Button_UnlockXLA</c1011>
+         <c1012>Button_CreateBackup</c1012>
+         <c1>Common/WordOK</c1>
+       </Dialog_Password>
+
+       <Dialog_Change_Password>
+         <Caption>Dialog_Change_Password_Caption</Caption>
+         <c1005>St_NewPassword</c1005>
+         <c1014>St_ConfirmPassword</c1014>
+         <c1>Common/WordOK</c1>
+         <c2>Common/WordCancel</c2>
+       </Dialog_Change_Password>
+
+       <Dialog_Launch>
+         <Caption>Common/Dialog_Launch_Caption</Caption>
+         <c1007>Common/St_Launch_LaunchTip</c1007>
+         <c1017>Common/St_Launch_CommandLine</c1017>
+         <c1>Common/WordOK</c1>
+         <c2>Common/WordCancel</c2>
+       </Dialog_Launch>
+
+     </AVPR>
+     
+   </Russian>
+
+	<Japanese>
+	
+		<!-- Common words and phrases -->
+		<Common>
+			<WordOK>はい</WordOK>
+			<WordCancel>いいえ</WordCancel>
+			<WordContinue>閉じる</WordContinue>
+			<DontShowMessage>今後、このメッセージを表示しない</DontShowMessage>
+			<GetMoreInfo>詳細を見る</GetMoreInfo>
+
+      <Copyright>Copyright</Copyright>
+		</Common>
+
+    <Licenses>
+      <Lic_Trial>Trial version</Lic_Trial>
+      <Lic_Home>Home Edition</Lic_Home>
+      <Lic_Standard>Standard Edition</Lic_Standard>
+      <Lic_Professional>Professional Edition</Lic_Professional>
+      <Lic_Special>Special Edition</Lic_Special>
+      <Lic_Enterprise>Enterprise Edition</Lic_Enterprise>
+      <Lic_Forensic>Forensic Edition</Lic_Forensic>
+
+      <!-- DON'T TRANSLATE THIS SECTION ! -->
+      <map>
+        <Lic0>Lic_Trial</Lic0>
+        <Lic1>Lic_Home</Lic1>
+        <Lic2>Lic_Standard</Lic2>
+        <Lic3>Lic_Professional</Lic3>
+        <Lic4>Lic_Special</Lic4>
+        <Lic5>Lic_Enterprise</Lic5>
+        <Lic6>Lic_Forensic</Lic6>
+      </map>
+
+    </Licenses>
+		
+		<!-- Ordering process and registration -->
+		<Order>
+			<Dialog_Caption>ファイナルパスワード復旧2007を購入しますか？</Dialog_Caption>
+			<BuyNow>購入</BuyNow>
+			<Button_GetFullVersion>製品版を購入</Button_GetFullVersion>
+			<Button_UpgradeNow>Professional版を購入</Button_UpgradeNow>
+			<Button_EnterRegCode>プロダクトキーの入力</Button_EnterRegCode>
+			<OrderTextSingle>パスワードを発見いたしましたが、試供版の為全ての表示はできません。製品版をご購入いただければ表示が可能になります。</OrderTextSingle>
+			<OrderTextMulti>パスワードを発見いたしましたが、試供版の為全ての表示はできません。製品版をご購入いただければ表示が可能になります。</OrderTextMulti>
+			<OrderTextFeature>この機能は、試供版ではお使いいただけません。</OrderTextFeature>
+			<OrderTextLength>現在選択されています、パスワード長は試供版ではお使いいただけません。</OrderTextLength>
+			<OrderTextTrunc>パスワードを発見しましたが、試供版の為全ての表示はできません。最初の文字のみ表示されます。</OrderTextTrunc>
+			<OrderTextTruncMulti>パスワードを発見しましたが、試供版の為全ての表示はできません。最初の文字のみ表示されます。</OrderTextTruncMulti>
+			<OrderTextAOPREdition>パスワードを発見しましたが、現在のバージョンでは表示されません。ファイナルパスワード復旧2007 Professional版をご購入ください。</OrderTextAOPREdition>
+			<OrderTextAOPREditionMulti>パスワードを発見しましたが、現在のバージョンでは表示されません。ファイナルパスワード復旧2007 Professional版をご購入ください</OrderTextAOPREditionMulti>
+			<OrderTextAOPREditionFN>パスワードを発見しましたが、現在のバージョンでは表示されません。ファイナルパスワード復旧2007 Professional版をご購入ください</OrderTextAOPREditionFN>
+			<OrderTextAOPRPro>ファイナルパスワード復旧2007 Professional版をご希望の方は、下記の購入ボタンより販売サイトへ行くことができます。</OrderTextAOPRPro>
+			<OrderTextExpired>試供版の期限が切れました。製品版をご購入ください。</OrderTextExpired>
+			<OrderTextAEFSDRDecrypt/>
+			<OrderTextPDFDecrypt/>
+			<OrderTextPWSEXTrial/>
+			<OrderTextPWSEXLicense/>
+			<OrderTextEDPRAgents/>
+			<OrderTextPDFTrialPassword/>
+			<OrderTextPDFStdPassword/>
+			<OrderTextPDFTrialLen/>
+			<OrderTextPDFStdLen/>
+			<ExamineHelp>試供版での制限事項は、ヘルプファイルを参照してください。</ExamineHelp>
+			<CanPurchase>ファイナルパスワード復旧2007製品版をご希望の方は、下記の購入ボタンより販売サイトへ行くことができます</CanPurchase>
+			<CanUpgrade>ファイナルパスワード復旧2007 Professional版をご希望の方は、下記の購入ボタンより販売サイトへ行くことができます。</CanUpgrade>
+			<PurchaseInfo/>
+			<ProgramReg>プロダクトキー入力</ProgramReg>
+			<EnterRegCode>プロダクトキー入力:</EnterRegCode>
+		</Order>
+		
+		<!-- Advert dialog -->
+		<Advert>
+			<Dialog_Caption>ファイナルパスワード復旧2007</Dialog_Caption>
+			<AdvertTextAOPRAOPB/>
+			<AdvertTextAOPREDPR/>
+			<AdvertTextEDPRAOPR/>
+			<AdvertTextAOPBAOPR/>
+			<AdvertTextAZPRARCHPR/>
+			<AdvertTextPDFEnt/>
+			<AdvertFooter/>
+		</Advert>
+
+    <AVPR>
+      <Toolbar_Main>
+        <i32772>T_FileOpen</i32772>
+        <i32774>T_BackdoorOpen</i32774>
+        <i32900>T_HelpOrder</i32900>
+      </Toolbar_Main>
+
+      <Menu_Main>
+        <l0_i32772>M_File</l0_i32772>
+        <i32772>M_FileOpen</i32772>
+        <i32773>M_FileExit</i32773>
+        <l0_i32774>M_Backdoor</l0_i32774>
+        <i32774>M_BackdoorOpen</i32774>
+        <i32775>M_BackdoorLaunch</i32775>
+        <l0_i32780>M_Help</l0_i32780>
+        <i32780>M_HelpContents</i32780>
+        <i32781>M_HelpUpdates</i32781>
+        <i32900>M_HelpOrder</i32900>
+        <i32901>M_HelpEnterCode</i32901>
+        <i32782>M_HelpAbout</i32782>
+        <l0_i32776>M_Support</l0_i32776>
+        <i32776>M_SupportSite</i32776>
+        <i32777>M_SupportReport</i32777>
+        <i32778>M_SupportSuggest</i32778>
+        <i32779>M_SupportOther</i32779>
+      </Menu_Main>
+
+      <Dialog_Main>
+        <c1002>St_Log</c1002>
+        <l1001_1>List_Log1</l1001_1>
+        <l1001_2>List_Log2</l1001_2>
+      </Dialog_Main>
+
+      <Dialog_Password>
+        <Caption>Dialog_Password_Caption</Caption>
+        <c1004>St_FilePath</c1004>
+        <c1003>Button_Open</c1003>
+        <c1005>St_Password</c1005>
+        <c1007>St_Information</c1007>
+        <c1009>Button_ChangePassword</c1009>
+        <c1010>Button_DeletePassword</c1010>
+        <c1011>Button_UnlockXLA</c1011>
+        <c1012>Button_CreateBackup</c1012>
+        <c1>Common/WordOK</c1>
+      </Dialog_Password>
+
+      <Dialog_Change_Password>
+        <Caption>Dialog_Change_Password_Caption</Caption>
+        <c1005>St_NewPassword</c1005>
+        <c1014>St_ConfirmPassword</c1014>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Change_Password>
+
+      <Dialog_Launch>
+        <Caption>Dialog_Launch_Caption</Caption>
+        <c1007>St_LaunchTip</c1007>
+        <c1017>St_CommandLine</c1017>
+        <c1>Common/WordOK</c1>
+        <c2>Common/WordCancel</c2>
+      </Dialog_Launch>
+
+    </AVPR>
+		
+   </Japanese>
+   
+</Languages>

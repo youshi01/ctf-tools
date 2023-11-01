@@ -1,0 +1,120 @@
+//------------------------------------------------
+//--- 010 Editor v8.0 Binary Template
+//
+//      File: Torrent.bt
+//   Authors: Bartosz Dziewonski
+//   Version: 1.1
+//   Purpose: Parse torrent files.
+//  Category: Internet
+// File Mask: *.torrent
+//  ID Bytes: 
+//   History: 
+//   1.1   2021-09-10 qiuqiu: Minor Update
+//   1.0   2018-01-31 Bartosz Dziewonski: Initial version.
+//   1.1   2020-09-10 qiuqiu: Minor Update.
+//------------------------------------------------
+
+int64 find_next( char terminator ) {
+    local int64 pos = FTell();
+    local int64 len = 0;
+    while( ReadByte(pos+len) != terminator )
+        len++;
+    return len;
+}
+
+struct ed2k {
+    BigEndian();
+    uint64 data[2]<hidden=true,format=hex>;
+    LittleEndian();
+};
+
+struct ed2ks {
+    char length[ find_next(':') ]<name="length">;
+    char string_identifier <hidden=false, format=hex,fgcolor=cRed, name="string identifier">;
+    local int n <hidden=true> = Atoi(length);
+    struct ed2k data <read=read_ed2k, name="ed2k">;
+};
+
+string read_ed2k( struct ed2k &v ) {
+    string s;
+    SPrintf( s, "%LX%LX", v.data[ 0], v.data[ 1] );
+    return s;
+}
+
+struct sha1 {
+    BigEndian();
+    uint32 data[5]<hidden=true>;
+    LittleEndian();
+};
+
+struct sha1s {
+    char length[ find_next(':') ]<name="length">;
+    char string_identifier <hidden=false, format=hex,fgcolor=cRed, name="string identifier">;
+    local int n <hidden=true> = Atoi(length) / 20;
+    while (n--) {
+        struct sha1 data <read=read_sha1,fgcolor=cLtYellow,name="sha1">;
+    }
+};
+
+string read_sha1( struct sha1 &v ) {
+    string s;
+    SPrintf( s, "%08x%08x%08x%08x%08x",
+        v.data[ 0], v.data[ 1], v.data[ 2], v.data[ 3], v.data[ 4]
+    );
+    return s;
+}
+
+typedef struct {
+    local char identifier <hidden=true> = ReadByte();
+    if (identifier == 'i') {
+        char int_identifier <hidden=false, fgcolor=cRed,name="integer identifier",comment="identifier">;
+        char integer[ find_next('e') ] <name="value", fgcolor=0xFF7FFF>;
+        char terminator <fgcolor=cRed,hidden=0, name="terminator", comment="terminator">;
+    } else if (identifier == 'l') {
+        local int length <hidden=true> = 0;
+        char list_identifier <fgcolor=cRed,name="list identifier",comment="identifier">;
+        while (ReadByte() != 'e') {
+            length++;
+            struct bencode item<name="list item">;
+        }
+        char terminator <hidden=0, fgcolor=cRed,name="terminator", comment="terminator">;
+    } else if (identifier == 'd') {
+        local int length <hidden=true> = 0;
+        char dict_identifier <hidden=false,fgcolor=cRed,name="dict identifier",comment="identifier">;
+        while (ReadByte() != 'e') {
+            length++;
+            struct bencode key <name="dict_key">;
+            switch (key.str) {
+                case "ed2k": struct ed2ks value <name="ed2k", format=hex, comment="ed2k hash">; break;
+                case "filehash": 
+                case "pieces": struct sha1s value<name="pieces",comment="sha1 hash">; break;
+                default: {
+                    struct bencode value <name="dict_value",format=hex>;
+                }
+            }
+        }
+        char terminator <hidden=0, fgcolor=cRed,name="terminator", comment="terminator">;
+    } else {
+        char length[ find_next(':') ]<name="length",fgcolor=cLtRed>;
+        char string_identifier <fgcolor=cRed, name="string identifier", format=hex,comment="identifier">;
+        char str[ Atoi(length) ]<fgcolor=cWhite, name="strings", format=hex>;
+    }
+} bencode <read=read_bencode, name="torrent contents">;
+
+string read_bencode( struct bencode &v ) {
+    string s;
+    if (v.identifier == 'i')
+        return v.integer;
+    if (v.identifier == 'l') {
+        SPrintf( s, "(list: %u)", v.length );
+        return s;
+    }
+    if (v.identifier == 'd') {
+        SPrintf( s, "(dict: %u)", v.length );
+        return s;
+    }
+
+    return v.str;
+}
+
+bencode contents;

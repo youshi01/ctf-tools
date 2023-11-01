@@ -1,0 +1,32 @@
+<010EditorNews ver="1.0" revision="54">
+    <newversion>14.0</newversion>
+    <item link="010editor/latest_version.html" minVersion="3.0.0" maxVersion="13.0.2">010 Editor v14.0 Released - Click here for details</item>
+    <item link="010editor/forum.html">Forum Now Available</item>
+    <item link="010editor/latest_version.html" minVersion="3.0.0" maxVersion="14.0">Template Styles Now Available</item>
+    <item link="010editor/latest_version_v13.html" minVersion="3.0.0" maxVersion="14.0">Projects and Workspaces Now Available</item>
+    <item link="010editor/latest_version_v12.html" minVersion="3.0.0" maxVersion="14.0">Mini Map Now Available</item>
+    <item link="010editor/latest_version_v12.html" minVersion="3.0.0" maxVersion="13.0">Disassembler Now Available</item>
+    <item link="-1400" minVersion="14.0" maxVersion="14.0">What's new in version 14.0?</item>
+    <item link="-1400" minVersion="13.0" maxVersion="13.0">What's new in version 13.0?</item>
+    <item link="-1400" minVersion="12.0" maxVersion="12.0">What's new in version 12.0?</item>
+    <item link="-1400" minVersion="11.0" maxVersion="11.0">What's new in version 11.0?</item>
+    <item link="-1400" minVersion="10.0" maxVersion="10.0">What's new in version 10.0?</item>
+    <item link="-1400" minVersion="9.0" maxVersion="9.0">What's new in version 9.0?</item>
+    <item link="-1400" minVersion="8.0" maxVersion="8.0">What's new in version 8.0?</item>
+    <item link="-1400" minVersion="7.0" maxVersion="7.0">What's new in version 7.0?</item>
+    <item link="-1400" minVersion="6.0" maxVersion="6.0">What's new in version 6.0?</item>
+    <item link="-1400" minVersion="5.0" maxVersion="5.0">What's new in version 5.0?</item>
+    <item link="-1400" minVersion="4.0" maxVersion="4.0">What's new in version 4.0?</item>
+    <item link="-1400" minVersion="3.2" maxVersion="3.2">What's new in version 3.2?</item>
+    <item link="-1400" minVersion="3.1" maxVersion="3.1">What's new in version 3.1?</item>
+    <item link="-1400" minVersion="3.0" maxVersion="3.0">What's new in version 3.0?</item>
+    <item link="010editor/latest_version_v10.html" minVersion="3.0.0" maxVersion="11.0">Debugger Now Available</item>
+    <item link="-choosetheme" minVersion="8.0" maxVersion="14.0">Switch Theme</item>
+    <item link="-repositorydialog" minVersion="7.0" maxVersion="14.0">View the Repository Dialog</item>
+    <item link="-tutorialrepository" minVersion="7.0" maxVersion="14.0">Tutorial: Using the Repository</item>
+    <item link="-tutorialwriting" minVersion="6.0" maxVersion="14.0">Tutorial: Writing Binary Templates</item>
+    <item link="-tutorial">Tutorial: Using Binary Templates</item>
+    <item link="010editor/mac_osx.html" minVersion="3.0.0" maxVersion="4.0">Mac OS X Version Now Available</item>
+    <item link="-1000">Getting started with 010 Editor</item>
+    <item link="010editor/templates/" minVersion="3.0" maxVersion="6.0">Visit the online template repository</item>
+</010EditorNews>

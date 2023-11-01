@@ -1,0 +1,88 @@
+//------------------------------------------------
+//--- 010 Editor v13.0.1 Binary Template
+//
+//      File: Surge_Wavetable.bt
+//   Authors: Kyle Crockett
+//    E-mail: kyle@kyle-crockett.com
+//   Version: 1.0
+//   Purpose: Used for inspecting and editing Surge Synth wavetable files.
+//  Category: Audio
+// File Mask: *.wt
+//  ID Bytes: 76 61 77 74 // vawt
+//   History: 
+//            1.0 2023-01-04 Kyle Crockett: Initial release.
+//------------------------------------------------
+
+BitfieldDisablePadding();
+
+// Typedefs for the wt file
+BigEndian();
+typedef char ID[4];
+
+LittleEndian();
+
+typedef enum <ubyte> {
+    no,
+    yes
+} bool;
+
+typedef struct{
+    bool is_sample : 1 <name = "Is Sample">;
+    bool is_loop : 1 <name = "Is Loop">;
+    bool is_int16 : 1 <name = "Is 16 bit format">;
+    bool range : 1 <name = "Is in range 2^16">;
+    bool unused4 : 1 <name = "Unused bits">;
+    bool unused5 : 1 <name = "Unused bits">;
+    bool unused6 : 1 <name = "Unused bits">;
+    bool unused7 : 1 <name = "Unused bits">;
+    uchar unused <name = "Unused byte">;
+} flags <name= "Flags">;
+
+// Stores the file header information
+typedef struct 
+{
+    ID      formatID <name = "File format", fgcolor = cBlue>; // Is it a wavetable?
+    long    wave_size <fgcolor = cYellow>; // Length of waves
+    short   wave_count <fgcolor = cPurple>; // Number of waves
+    //short   info <format=binary>;
+    flags   info <fgcolor = cAqua>;
+    
+} WAVETABLEHEADER;
+
+WAVETABLEHEADER header <bgcolor = cLtGreen>;
+
+typedef struct{
+    if (header.info.is_int16 != 0){
+        short sample[header.wave_size];
+    }
+    else{
+    long data[header.wave_size];
+    }
+}WAVE;
+
+
+//---------------------------------------------
+
+// Define the headers
+LittleEndian(); 
+SetBackColor( cLtPurple );
+
+local uint cnt = 0;
+
+// Check for valid header
+if( header.formatID != "vawt")
+{
+    Warning( "File is not a valid wavetable file. Template stopped." );
+    return -1;
+}
+
+while( !FEof() )
+{
+    if(cnt % 2 == 0){
+    WAVE wave <fgcolor = cLtRed>;
+    }
+    else{
+    WAVE wave <fgcolor = cLtAqua>;
+    }
+    cnt++;
+}

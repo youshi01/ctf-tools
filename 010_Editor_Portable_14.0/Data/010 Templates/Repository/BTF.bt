@@ -1,0 +1,390 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: BTF.bt
+//   Authors: feicong
+//   Version: 1.0
+//    E-mail: fei_cong@hotmail.com
+//       Url: https://github.com/feicong/ebpf-course/releases/download/latest/BTF.bt
+//   Purpose: parse eBPF BTF info.
+//  Category: Programming
+// File Mask: *.btf
+//  ID Bytes: 9F EB 01
+//   History:
+//      1.0   2023-04-04 feicong: first version.
+//
+//------------------------------------------------
+
+// https://github.com/torvalds/linux/blob/master/include/uapi/linux/btf.h
+// https://www.kernel.org/doc/html/latest/bpf/btf.html
+// https://github.com/libbpf/libbpf/blob/master/src/btf.h
+
+#define BTF_MAGIC 0xeB9F
+#define BTF_VERSION	1
+
+typedef int32 __s32;
+typedef uint32 __u32;
+typedef uint16 __u16;
+typedef uchar __u8;
+
+typedef struct {
+    __u16   magic <format=hex>;
+    __u8    version;
+    __u8    flags <format=hex>;
+    __u32   hdr_len <format=hex>;
+
+    /* All offsets are in bytes relative to the end of this header */
+    __u32   type_off <format=hex>;       /* offset of type section       */
+    __u32   type_len <format=hex>;       /* length of type section       */
+    __u32   str_off <format=hex>;        /* offset of string section     */
+    __u32   str_len <format=hex>;        /* length of string section     */
+} btf_header;
+
+typedef struct {
+    __u16   magic;
+    __u8    version;
+    __u8    flags;
+    __u32   hdr_len;
+
+    __u32   func_info_off;
+    __u32   func_info_len;
+    __u32   line_info_off;
+    __u32   line_info_len;
+} btf_ext_header;
+
+/* Max # of type identifier */
+#define BTF_MAX_TYPE	0x000fffff
+/* Max offset into the string section */
+#define BTF_MAX_NAME_OFFSET	0x00ffffff
+/* Max # of struct/union/enum members or func args */
+#define BTF_MAX_VLEN	0xffff
+
+typedef struct {
+	__u32 name_off;
+	/* "info" bits arrangement
+	 * bits  0-15: vlen (e.g. # of struct's members)
+	 * bits 16-23: unused
+	 * bits 24-28: kind (e.g. int, ptr, array...etc)
+	 * bits 29-30: unused
+	 * bit     31: kind_flag, currently used by
+	 *             struct, union, enum, fwd and enum64
+	 */
+	__u32 info;
+	/* "size" is used by INT, ENUM, STRUCT, UNION, DATASEC and ENUM64.
+	 * "size" tells the size of the type it is describing.
+	 *
+	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
+	 * FUNC, FUNC_PROTO, VAR, DECL_TAG and TYPE_TAG.
+	 * "type" is a type_id referring to another type.
+	 */
+	union {
+		__u32 size;
+		__u32 type;
+	} val;
+} btf_type <read = TypeRead, optimize=false>;
+
+// #define BTF_INFO_KIND(info)	(((info) >> 24) & 0x1f)
+// #define BTF_INFO_VLEN(info)	((info) & 0xffff)
+// #define BTF_INFO_KFLAG(info)	((info) >> 31)
+int BTF_INFO_KIND(int info)	    { return (((info) >> 24) & 0x1f); }
+int BTF_INFO_VLEN(int info)	    { return ((info) & 0xffff); }
+int BTF_INFO_KFLAG(int info)	{ return ((info) >> 31); }
+
+enum {
+	BTF_KIND_UNKN		= 0,	/* Unknown	*/
+	BTF_KIND_INT		= 1,	/* Integer	*/
+	BTF_KIND_PTR		= 2,	/* Pointer	*/
+	BTF_KIND_ARRAY		= 3,	/* Array	*/
+	BTF_KIND_STRUCT		= 4,	/* Struct	*/
+	BTF_KIND_UNION		= 5,	/* Union	*/
+	BTF_KIND_ENUM		= 6,	/* Enumeration up to 32-bit values */
+	BTF_KIND_FWD		= 7,	/* Forward	*/
+	BTF_KIND_TYPEDEF	= 8,	/* Typedef	*/
+	BTF_KIND_VOLATILE	= 9,	/* Volatile	*/
+	BTF_KIND_CONST		= 10,	/* Const	*/
+	BTF_KIND_RESTRICT	= 11,	/* Restrict	*/
+	BTF_KIND_FUNC		= 12,	/* Function	*/
+	BTF_KIND_FUNC_PROTO	= 13,	/* Function Proto	*/
+	BTF_KIND_VAR		= 14,	/* Variable	*/
+	BTF_KIND_DATASEC	= 15,	/* Section	*/
+	BTF_KIND_FLOAT		= 16,	/* Floating point	*/
+	BTF_KIND_DECL_TAG	= 17,	/* Decl Tag */
+	BTF_KIND_TYPE_TAG	= 18,	/* Type Tag */
+	BTF_KIND_ENUM64		= 19,	/* Enumeration up to 64-bit values */
+
+	NR_BTF_KINDS,
+	BTF_KIND_MAX		= NR_BTF_KINDS - 1,
+};
+
+/* For some specific BTF_KIND, "struct btf_type" is immediately
+ * followed by extra data.
+ */
+
+/* BTF_KIND_INT is followed by a u32 and the following
+ * is the 32 bits arrangement:
+ */
+// #define BTF_INT_ENCODING(VAL)	(((VAL) & 0x0f000000) >> 24)
+// #define BTF_INT_OFFSET(VAL)	(((VAL) & 0x00ff0000) >> 16)
+// #define BTF_INT_BITS(VAL)	((VAL)  & 0x000000ff)
+int BTF_INT_ENCODING(int VAL)	{ return (((VAL) & 0x0f000000) >> 24); }
+int BTF_INT_OFFSET(int VAL)	    { return (((VAL) & 0x00ff0000) >> 16); }
+int BTF_INT_BITS(int VAL)	    { return ((VAL)  & 0x000000ff); }
+
+/* Attributes stored in the BTF_INT_ENCODING */
+#define BTF_INT_SIGNED	(1 << 0)
+#define BTF_INT_CHAR	(1 << 1)
+#define BTF_INT_BOOL	(1 << 2)
+
+/* BTF_KIND_ENUM is followed by multiple "struct btf_enum".
+ * The exact number of btf_enum is stored in the vlen (of the
+ * info in "struct btf_type").
+ */
+struct btf_enum {
+	__u32	name_off;
+	__s32	val;
+} ;
+
+/* BTF_KIND_ARRAY is followed by one "struct btf_array" */
+struct btf_array {
+	__u32	type;
+	__u32	index_type;
+	__u32	nelems;
+};
+
+/* BTF_KIND_STRUCT and BTF_KIND_UNION are followed
+ * by multiple "struct btf_member".  The exact number
+ * of btf_member is stored in the vlen (of the info in
+ * "struct btf_type").
+ */
+struct btf_member {
+	__u32	name_off;
+	__u32	type;
+	/* If the type info kind_flag is set, the btf_member offset
+	 * contains both member bitfield size and bit offset. The
+	 * bitfield size is set for bitfield members. If the type
+	 * info kind_flag is not set, the offset contains only bit
+	 * offset.
+	 */
+	__u32	offset;
+};
+
+/* If the struct/union type info kind_flag is set, the
+ * following two macros are used to access bitfield_size
+ * and bit_offset from btf_member.offset.
+ */
+// #define BTF_MEMBER_BITFIELD_SIZE(val)	((val) >> 24)
+// #define BTF_MEMBER_BIT_OFFSET(val)	((val) & 0xffffff)
+int BTF_MEMBER_BITFIELD_SIZE(int val)	{ return ((val) >> 24); }
+int BTF_MEMBER_BIT_OFFSET(int val)	{ return ((val) & 0xffffff); }
+
+/* BTF_KIND_FUNC_PROTO is followed by multiple "struct btf_param".
+ * The exact number of btf_param is stored in the vlen (of the
+ * info in "struct btf_type").
+ */
+struct btf_param {
+	__u32	name_off;
+	__u32	type;
+};
+
+enum {
+	BTF_VAR_STATIC = 0,
+	BTF_VAR_GLOBAL_ALLOCATED = 1,
+	BTF_VAR_GLOBAL_EXTERN = 2,
+};
+
+enum btf_func_linkage {
+	BTF_FUNC_STATIC = 0,
+	BTF_FUNC_GLOBAL = 1,
+	BTF_FUNC_EXTERN = 2,
+};
+
+/* BTF_KIND_VAR is followed by a single "struct btf_var" to describe
+ * additional information related to the variable such as its linkage.
+ */
+struct btf_var {
+	__u32	linkage;
+};
+
+/* BTF_KIND_DATASEC is followed by multiple "struct btf_var_secinfo"
+ * to describe all BTF_KIND_VAR types it contains along with it's
+ * in-section offset as well as size.
+ */
+struct btf_var_secinfo {
+	__u32	type;
+	__u32	offset;
+	__u32	size;
+};
+
+/* BTF_KIND_DECL_TAG is followed by a single "struct btf_decl_tag" to describe
+ * additional information related to the tag applied location.
+ * If component_idx == -1, the tag is applied to a struct, union,
+ * variable or function. Otherwise, it is applied to a struct/union
+ * member or a func argument, and component_idx indicates which member
+ * or argument (0 ... vlen-1).
+ */
+struct btf_decl_tag {
+       __s32   component_idx;
+};
+
+/* BTF_KIND_ENUM64 is followed by multiple "struct btf_enum64".
+ * The exact number of btf_enum64 is stored in the vlen (of the
+ * info in "struct btf_type").
+ */
+struct btf_enum64 {
+	__u32	name_off;
+	__u32	val_lo32;
+	__u32	val_hi32;
+};
+
+struct btf_ext_info_sec {
+    __u32   sec_name_off; /* offset to section name */
+    __u32   num_info;
+    /* Followed by num_info * record_size number of bytes */
+    __u8    data[0];
+};
+
+struct btf_int {
+    uint32 bits:8;
+    uint32 pad1:8;
+    uint32 offset:8;
+    uint32 encoding:4;
+    uint32 pad2:4;
+};
+
+///////////////////////////////// beginning //////////////////////////
+btf_header header;
+Assert((BTF_MAGIC == header.magic), "BTF magic error!\n");
+Assert((BTF_VERSION == header.version), "BTF version error!\n");
+Assert((sizeof(btf_header) == header.hdr_len), "BTF header size error!\n");
+
+typedef struct {
+    btf_type tp;
+
+    local int kind_ = BTF_INFO_KIND(tp.info);
+    // Printf("kind:%d\n", kind_);
+
+    if (kind_ == BTF_KIND_INT) {
+        btf_int value;
+    } else if (kind_ == BTF_KIND_PTR) {
+        // none
+    } else if (kind_ == BTF_KIND_ARRAY) {
+        btf_array array;
+    } else if (kind_ == BTF_KIND_STRUCT) {
+        btf_member member;
+    } else if (kind_ == BTF_KIND_UNION) {
+        btf_member member;
+    } else if (kind_ == BTF_KIND_FUNC) {
+        // none
+    } else if (kind_ == BTF_KIND_ENUM) {
+        btf_enum enum_;
+    } else if (kind_ == BTF_KIND_TYPEDEF) {
+        // none
+    } else if (kind_ == BTF_KIND_FUNC_PROTO) {
+        btf_param param;
+    } else if (kind_ == BTF_KIND_CONST) {
+        // none
+    } else if (kind_ == BTF_KIND_VAR) {
+        btf_var var; // TODO: struct btf_variable
+    } else if (kind_ == BTF_KIND_FWD) {
+        // none
+    } else if (kind_ == BTF_KIND_VOLATILE) {
+        // none
+    } else if (kind_ == BTF_KIND_RESTRICT) {
+        // none
+    } else if (kind_ == BTF_KIND_DATASEC) {
+        btf_var_secinfo secinfo;
+    } else if (kind_ == BTF_KIND_FLOAT) {
+        // none
+    } else if (kind_ == BTF_KIND_DECL_TAG) {
+        // SPrintf(tmp, "BTF_KIND_DECL_TAG");
+    } else if (kind_ == BTF_KIND_TYPE_TAG) {
+        // SPrintf(tmp, "BTF_KIND_TYPE_TAG");
+    } else if (kind_ == BTF_KIND_ENUM64) {
+        // SPrintf(tmp, "BTF_KIND_ENUM64");
+    }
+
+} btf_type_with_data <optimize=false>;
+
+typedef struct {
+    local int sz = sizeof(btf_header);
+    while (FTell() < (header.type_len+sz)) {
+        btf_type_with_data type;
+        // btf_type tp;
+    }
+    // btf_type type[header.type_len / sizeof(btf_type)];
+} btf_types <optimize=false>;
+
+string TypeRead(btf_type& tp) {
+    local int kind = BTF_INFO_KIND(tp.info);
+    // Printf("kind:%d\n", kind);
+    local string tmp;
+
+    if (kind == BTF_KIND_INT) {
+        SPrintf(tmp, "BTF_KIND_INT");
+    } else if (kind == BTF_KIND_PTR) {
+        SPrintf(tmp, "BTF_KIND_PTR");
+    } else if (kind == BTF_KIND_ARRAY) {
+        SPrintf(tmp, "BTF_KIND_ARRAY");
+    } else if (kind == BTF_KIND_STRUCT) {
+        SPrintf(tmp, "BTF_KIND_STRUCT");
+    } else if (kind == BTF_KIND_UNION) {
+        SPrintf(tmp, "BTF_KIND_UNION");
+    } else if (kind == BTF_KIND_FUNC) {
+        SPrintf(tmp, "BTF_KIND_FUNC");
+    } else if (kind == BTF_KIND_ENUM) {
+        SPrintf(tmp, "BTF_KIND_ENUM");
+    } else if (kind == BTF_KIND_TYPEDEF) {
+        SPrintf(tmp, "BTF_KIND_TYPEDEF");
+    } else if (kind == BTF_KIND_FUNC_PROTO) {
+        SPrintf(tmp, "BTF_KIND_FUNC_PROTO");
+    } else if (kind == BTF_KIND_CONST) {
+        SPrintf(tmp, "BTF_KIND_CONST");
+    } else if (kind == BTF_KIND_VAR) {
+        SPrintf(tmp, "BTF_KIND_VAR");
+    } else if (kind == BTF_KIND_FWD) {
+        SPrintf(tmp, "BTF_KIND_FWD");
+    } else if (kind == BTF_KIND_VOLATILE) {
+        SPrintf(tmp, "BTF_KIND_VOLATILE");
+    } else if (kind == BTF_KIND_RESTRICT) {
+        SPrintf(tmp, "BTF_KIND_RESTRICT");
+    } else if (kind == BTF_KIND_DATASEC) {
+        SPrintf(tmp, "BTF_KIND_DATASEC");
+    } else if (kind == BTF_KIND_FLOAT) {
+        SPrintf(tmp, "BTF_KIND_FLOAT");
+    } else if (kind == BTF_KIND_DECL_TAG) {
+        btf_decl_tag decl_tag;
+    } else if (kind == BTF_KIND_TYPE_TAG) {
+        SPrintf(tmp, "BTF_KIND_TYPE_TAG");
+    } else if (kind == BTF_KIND_ENUM64) {
+        btf_enum64 enum64;
+    }
+
+    return tmp;
+};
+
+btf_types types;
+
+local int64 pos = FTell();
+local int64 file_sz = FileSize();
+Printf("pos:%ld, str_off:%d\n", pos, header.str_off);
+Assert((pos == header.str_off+header.hdr_len), "type info size error!\n");
+
+typedef struct {
+    string str;
+} btf_string <read = StringRead, optimize=false>;
+
+string StringRead(btf_string& str) {
+    return str.str;
+};
+
+typedef struct {
+    uchar ch;
+    while (FTell() < file_sz)
+        btf_string str;
+} btf_strings <optimize=false>;
+
+btf_strings strings;
+
+Assert((FTell() == file_sz), "btf_strings size error!\n");
+
+Printf("Parse BTF info done!\n");

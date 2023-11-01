@@ -1,0 +1,29 @@
+https://www.52pojie.cn/thread-675251-1-1.html
+
+IDA Pro 7.0 绿色版是Hmily和微笑一刀基于外网泄露的IDA Pro 7.0 Windows原版制作，直接绿色解压即可使用，免去IDA和Python的安装步骤，本次绿化的目的是简单稳定的运行IDA，所以只进行了必要的修改，没有添加更多插件功能，有需要请自行添加。
+
+修改说明：
+1、由微笑一刀提供patch后的python绿化模块进行打包。
+2、由微笑一刀提供中文字符搜索的修改方法。
+3、Hmily把局域网授权数量检测和idb黑名单检测限制进行了patch。
+4、添加了KeyPatch插件，方便文件patch操作。
+
+
+需要注意：
+1、绿色版释放路径不要含有中文或者路径长度不能超过72字符。（python模块自身的bug）
+2、由于python已经绿化了，所以通过pip安装可以直接用命令，如安装keystone：
+
+python.exe \lib\site-packages\pip install keystone
+
+更多插件：
+https://www.52pojie.cn/forum.php?mod=forumdisplay&fid=4&filter=typeid&typeid=134
+
+提供原版和绿色版的下载地址，分别存放在爱盘和百度网盘，大家可以根据自己的需要进行下载。
+
+百度网盘下载：
+链接: https://pan.baidu.com/s/1o8Lt2qA 密码: b8r2
+
+爱盘下载：
+https://down.52pojie.cn/Tools/Disassemblers/IDA_Pro_v7.0_and_Hex-Rays_Decompiler_(ARMx64,ARM,x64,x86).zip （Windows原版）
+https://down.52pojie.cn/Tools/Disassemblers/IDA_Pro_v7.0(MacOS)_and_Hex-Rays_Decompiler_(ARMx64,ARM,x64,x86).zip （MacOS原版）
+https://down.52pojie.cn/Tools/Disassemblers/IDA_Pro_v7.0_Portable.zip （Windows绿色版）

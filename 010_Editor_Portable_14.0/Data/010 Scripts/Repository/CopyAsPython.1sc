@@ -1,0 +1,74 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Script File
+//
+//       File: CopyAsPython.1sc
+//    Authors: 0xWhoa
+//    Version: 2.0
+//    Purpose: Copy selection as Python bytes.
+//   Category: Clipboard
+//    History:
+//   2.0   2022-04-25 0xWhoa: Changed copy format. Modernized script.
+//   1.1   2016-02-10 SweetScape Software: Updated header for repository submission.
+//   1.0   A Nicolaiev: Initial release.
+//------------------------------------------------
+
+const uchar BYTES_PER_LINE = 16;
+
+uint buffer_start = GetSelStart();
+uint buffer_size = GetSelSize();
+uint i = 0;
+
+if (buffer_size == 0)
+{
+    MessageBox(idOk, "Copy as Python", "No bytes selected.");
+    return -1;
+}
+
+uchar buffer[buffer_size] = {0};
+char hexbytes[buffer_size*5+48];
+string singlebyte;
+
+ReadBytes( buffer, buffer_start, buffer_size );
+
+string output = "";
+output += "# Copy as Python - byte count: %d (0x%X)\n";
+SPrintf( output, output, buffer_size, buffer_size );
+
+if ( buffer_size < BYTES_PER_LINE )
+{
+    for ( i = 0; i < buffer_size; i++ )
+    {
+        SPrintf( singlebyte, "\\x%.2X", buffer[i] );
+        hexbytes += singlebyte;
+    }
+
+    output += "buffer = b'" + hexbytes + "'\n";
+}
+else
+{
+    output += "buffer = b''.join([\n";
+
+    for ( i = 0; i < buffer_size; i++ )
+    {
+        if ( i % BYTES_PER_LINE == 0 )
+        {
+            hexbytes += "    b'";
+        }
+
+        SPrintf( singlebyte, "\\x%.2X", buffer[i] );
+        hexbytes += singlebyte;
+
+        if ( (i + 1) % BYTES_PER_LINE == 0 )
+        {
+            if ( (i + 1) != buffer_size )
+            {
+                hexbytes += "',\n";
+            }
+        }
+    }
+
+    SPrintf( hexbytes, "%s'])\n", hexbytes );
+    SPrintf( output, "%s%s", output, hexbytes );
+}
+
+CopyStringToClipboard( output );

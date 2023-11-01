@@ -1,0 +1,30 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: SKPSilk.bt
+//   Authors: yangzhikai
+//   Version: 1.0
+//   Purpose: Parse SKP_SILK file
+//  Category: Audio
+// File Mask: *.silk
+//  ID Bytes: 23 21 53 49 4C 4B //#!SILK_V3
+//   History: 
+//   1.0   2020-12-15 yangzhikai: initial release
+//------------------------------------------------
+
+typedef struct {
+    uint16 payload_len;
+    byte payload[payload_len];
+
+} BLOCK;
+
+
+char header[9];
+while(!FEof())
+{
+    if (ReadUShort( FTell() ) == 0xffff){
+        break;
+    }
+    //SetBackColor( cLtGray )
+	BLOCK block;
+}

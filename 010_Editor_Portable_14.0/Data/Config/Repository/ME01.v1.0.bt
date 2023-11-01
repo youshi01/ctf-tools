@@ -1,0 +1,42 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: ME01.bt
+//   Authors: EntranceJew
+//   Version: 1.0
+//   Purpose: Parse ME01 archive files.
+//  Category: Archive
+// File Mask: *.me0
+//  ID Bytes: 4D 45 30 31 //ME01
+//   History: 
+//   1.0   2019-08-08  EntranceJew: Published initial version.
+//------------------------------------------------
+LittleEndian();
+
+typedef struct FileEntry (uint seekPos, uint seekLength){
+    union PaddedStringBlock {
+        string fileName;
+        char fileBlock[128];
+    } fileInfo;
+    local int64 lastPos = FTell();
+    FSeek(seekPos);
+    uchar blob[seekLength];
+    FSeek(lastPos);
+};
+
+typedef struct ME01 {
+    char magic[4]; // 4D 45 30 31
+    uint fileCount;
+
+    uint headerLength;
+
+    uint filePositions[fileCount];
+    uint fileLengths[fileCount];
+
+    local int i;
+    for( i = 0; i < fileCount; i++ ) {
+        FileEntry fileEntries(headerLength + filePositions[i], fileLengths[i]);
+    }
+};
+
+ME01 file;

@@ -1,0 +1,112 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: ASE.bt
+//   Authors: Jack Humbert
+//   Version: 1.0
+//   Purpose: Parse Adobe Color Palette Files
+//  Category: Image
+// File Mask: *.ase
+//  ID Bytes: 41 53 45 46 // ASEF
+//   History: 
+//   1.0    2022-01-15 Jack Humbert: Initial working template
+//
+//  ASE File format info from:
+//   https://github.com/sambecker/ase-palette/
+//------------------------------------------------
+BigEndian(); 
+
+typedef enum <uint16> COLOR_TYPE {
+    Global,
+    Spot,
+    Normal
+} color_types;
+
+typedef enum <uint32> BLOCK_TYPE {
+    Group_Start = 0xC0010000,
+    Group_End = 0xC0020000,
+    Color = 0x00010000,
+} block_types;
+
+typedef struct {
+    char id[4];
+    uint16 version_major;
+    uint16 version_minor;
+    uint32 count;
+} HEADER;
+
+typedef struct {
+    float R <name="Red">;
+    float G <name="Green">; 
+    float B <name="Blue">;
+} RGB;
+
+typedef struct {
+    float C <name="Cyan">;
+    float M <name="Magenta">; 
+    float Y <name="Yellow">;
+    float K <name="Black">;
+} CMYK;
+
+typedef struct {
+    float L <name="Lightness">;
+    float A <name="Red/Green">; 
+    float B <name="Blue/Yellow">;
+} LAB;
+
+typedef struct {
+    BLOCK_TYPE block_type <name="Block Type">;
+    uint16 size;
+    uint16 name_length;
+    wchar_t name[name_length] <name="Color Name">;
+    char type[4];
+    if (type == "RGB ") {
+        RGB color;
+    } else if (type == "CMYK") {
+        CMYK color;
+    } else if (type == "LAB ") {
+        LAB color;
+    } else if (type == "GRAY") {
+        CMYK color;
+    }
+
+    COLOR_TYPE type <name="Color Type">;
+} COLOR <name=name>;
+
+struct BLOCK;
+
+typedef struct {
+    BLOCK_TYPE block_type <name="Block Type">;
+    uint16 size;
+    uint16 name_length;
+    wchar_t name[name_length] <name="Group Name">;
+    local int j <hidden=true>;
+    local BLOCK_TYPE type <hidden=true> = Color;
+    while (type != Group_End) {
+        BLOCK block;
+        type = block.type;
+    }
+} GROUP_START;
+
+typedef struct {
+    local string name = "-- End";
+    BLOCK_TYPE block_type <name="Block Type">;
+    uint16 uk;
+} GROUP_END;
+
+typedef struct {
+    local uint32 block_start <hidden=true> = FTell();
+    BLOCK_TYPE type <hidden=true>;
+    FSeek(block_start);
+    if (type == 0x00010000) {
+        COLOR block <name=name>;
+    } else if (type == 0xC0010000) {
+        GROUP_START block <name=name>;
+    } else if (type == 0xC0020000) {
+        GROUP_END block <name=name>;
+    }
+} BLOCK <name=block.name>;
+
+HEADER header;
+while(FTell() < FileSize())
+    BLOCK block;

@@ -1,0 +1,183 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+//
+//      File: DS_Store.bt
+//   Authors: Aurora
+//   Version: 0.5
+//   Purpose: Apple .DS_Store files. Stores file attributes.
+//  Category: Operating System
+// File Mask: .DS_Store
+//  ID Bytes: 00 00 00 01 42 75 64 31
+//   History: 
+//   0.5   2022-09-16 Aurora: Initial version.
+//
+// See https://0day.work/parsing-the-ds_store-file-format/
+//------------------------------------------------
+RequiresVersion( 12 );
+
+// Header for the file
+typedef struct {
+    int     endian;
+    char    magic[4];
+    int     rootBlockPos;
+    int     rootBlockSize;
+    int     rootBlockCopy;
+    uchar   unknown[16];
+} HEADER <bgcolor=cLtPurple>;
+
+// List of offsets to nodes
+typedef struct {
+    int     header;
+    int     count;
+    int     empty;
+    int     offsets[count]; // for each offset, the last 5 bits indicate the size of the block
+} OFFSETS <bgcolor=cGreen>;
+
+// Function to jump to a node
+void GotoNode( int node )
+{
+    FSeek( offsets.offsets[ node ] & (~0x1f) ); // ignore last 5 bits
+}
+
+// Table of contents
+typedef struct {
+    uchar   padding[12];
+    int     count;
+
+    struct TOC_ENTRY {
+        uchar nameLength;
+        char  name[ nameLength ];
+        int   id;
+
+        struct FREE_LIST {
+            int count <bgcolor=cLtGreen>;
+            if( count > 0 )
+                int offsets[count] <bgcolor=cLtBlue>;
+
+        } freeList[32] <optimize=false>;
+
+    } entry[count] <optimize=false, read=name>;
+
+} TABLE_OF_CONTENTS <bgcolor=cYellow>;
+
+// Binary plist - not completely parsed yet
+typedef struct ( int dataSize )
+{
+    // Header information
+    char    header[8];
+
+    // Data - TODO: parse this
+    uchar   data[ dataSize - 32 - 8 ];
+
+    // Footer
+    uchar   unknown[6];
+    uchar   offsetTableOffsetSize;
+    uchar   objectRefSize;
+    int64   numObjects;
+    int64   topObjectOffset;
+    int64   offsetTableStart;
+} BPLIST <bgcolor=cDkYellow>;
+
+// Data record - could be many different types of data
+typedef struct  {
+    int     nameLength;
+    wchar_t name[nameLength];
+    char    structureID[4];
+    char    structureType[4];
+    if( structureType == "long" )
+        int     data;
+    else if( structureType == "shor" )
+        ushort  data;
+    else if( structureType == "bool" )
+        uchar   data;
+    else if( structureType == "shor" )
+        ushort  data;
+    else if( structureType == "blob" )
+    {
+        int     dataSize;
+        if( (dataSize > 8) && (ReadString( FTell(), 8 ) == "bplist00") )
+            BPLIST bplist( dataSize );
+        else
+            uchar   data[dataSize];
+    }
+    else if( structureType == "type" )
+        char    data[4];
+    else if( structureType == "ustr" )
+    {
+        int     dataSize;
+        wchar_t data[dataSize];
+    }
+    else if( structureType == "comp" )
+        uint64  data;
+    else if( structureType == "dutc" )
+        FILETIME data;
+} RECORD <bgcolor=cLtBlue, read=Str( "%s [%s]", name, structureID )>;
+
+// Node of the b-tree - could be a leaf or internal node
+struct NODE;
+typedef struct {
+    local int pos;
+    int empty;
+    int mode;
+    int count;
+    
+    if( mode > 0 )
+    {
+        // Internal node with count+1 nodes and count records
+        local int i;
+        for( i = 0; i < count; i++ )
+        {
+            // Read the child nodes
+            int nextID;
+            pos = FTell();
+            GotoNode( nextID );
+            NODE child;
+            FSeek( pos );
+
+            // Record information
+            RECORD record;    
+        }
+
+        // Last node comes from the mode
+        pos = FTell();
+        GotoNode( mode );
+        NODE child;
+        FSeek( pos );
+    }
+    else
+    {
+        // Leaf node
+        RECORD record[count] <optimize=false>;
+    }
+} NODE <bgcolor=cRed>;
+
+// Root node of the b-tree with some statistics
+typedef struct  {
+    int     empty;
+    int     id;
+    int     numLevels;  // total levels in the tree
+    int     numRecords; // total records in the tree
+    int     numNodes;   // total nodes in the tree
+    int     unused;     // always 0x1000
+
+    local int pos = FTell();
+    GotoNode( id );
+    NODE child;
+    FSeek( pos );
+} ROOT_NODE <bgcolor=cLtRed>;
+
+// Header
+BigEndian();
+HEADER header;
+
+// Offsets table
+FSeek( header.rootBlockPos );
+OFFSETS offsets;
+
+// Table of contents
+FSeek( header.rootBlockPos + 0x400 );
+TABLE_OF_CONTENTS contents;
+
+// File hierarchy
+GotoNode( contents.entry[0].id );
+ROOT_NODE root;

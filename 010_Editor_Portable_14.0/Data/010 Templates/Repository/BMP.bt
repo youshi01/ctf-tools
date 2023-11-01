@@ -1,0 +1,139 @@
+//------------------------------------------------
+//--- 010 Editor v2.0 Binary Template
+//
+//      File: BMP.bt
+//    Author: SweetScape Software, Jakob Klein
+//   Version: 2.5
+//   Purpose: Parse BMP image files.
+//  Category: Image
+// File Mask: *.bmp
+//  ID Bytes: 42 4D //BM
+//   History:  
+//   2.5   2023-06-09 SweetScape: Updated to use template styles.
+//   2.4   2021-01-08 Jakob Klein: Seek to actual start of image data.
+//   2.3   2016-02-26 SweetScape: Allow negative heights.
+//   2.2   2015-10-13 SweetScape: Updated header for repository submission.
+//   2.1   SweetScape: Bug fix for ReadRGBQUAD function.
+//   2.0   SweetScape: Added read functions.
+//   1.0   SweetScape: Initial release.
+//
+// More information available at
+//  https://en.wikipedia.org/wiki/BMP_file_format
+//------------------------------------------------
+RequiresVersion( 14 );
+
+// Define structures used in BMP files
+
+typedef struct {   // header
+    CHAR    bfType[2] <style=sHeading1Accent>;
+    DWORD   bfSize;
+    WORD    bfReserved1;
+    WORD    bfReserved2;
+    DWORD   bfOffBits;
+} BITMAPFILEHEADER <style=sHeading1>;
+
+typedef struct {    // info
+    DWORD   biSize;
+    LONG    biWidth;
+    LONG    biHeight;
+    WORD    biPlanes;
+    WORD    biBitCount;
+    DWORD   biCompression;
+    DWORD   biSizeImage;
+    LONG    biXPelsPerMeter;
+    LONG    biYPelsPerMeter;
+    DWORD   biClrUsed;
+    DWORD   biClrImportant;
+} BITMAPINFOHEADER <style=sHeading2>;
+
+typedef struct {   // rgbq
+    UBYTE   rgbBlue;
+    UBYTE   rgbGreen;
+    UBYTE   rgbRed;
+    UBYTE   rgbReserved;
+} RGBQUAD <read=ReadRGBQUAD>;
+
+typedef struct {   // rgbt
+    UBYTE   rgbBlue;
+    UBYTE   rgbGreen;
+    UBYTE   rgbRed;
+} RGBTRIPLE <read=ReadRGBTRIPLE>;
+
+//---------------------------------------------
+// Custom read functions for color types - this allows the
+//  color to be displayed without having to open up the structure.
+
+string ReadRGBQUAD( RGBQUAD &a )
+{
+    string s;
+    SPrintf( s, "#%02X%02X%02X%02X", a.rgbReserved, a.rgbRed, a.rgbGreen, a.rgbBlue );
+    return s;
+}
+
+string ReadRGBTRIPLE( RGBTRIPLE &a )
+{
+    string s;
+    SPrintf( s, "#%02X%02X%02X", a.rgbRed, a.rgbGreen, a.rgbBlue );
+    return s;
+}
+
+//---------------------------------------------
+
+// Define the headers
+LittleEndian(); 
+BITMAPFILEHEADER header;
+BITMAPINFOHEADER info;
+
+// Check for header
+if( header.bfType != "BM" )
+{
+    Warning( "File is not a bitmap. Template stopped." );
+    return -1;
+}
+
+// Define the color table
+if( (info.biBitCount != 24) && (info.biBitCount != 32) )
+{
+    if( info.biClrUsed > 0 )
+        RGBQUAD colors[ info.biClrUsed ] <style=sHeading3>;
+    else
+        RGBQUAD colors[ 1 << info.biBitCount ] <style=sHeading3>;
+}
+
+// Define the bytes of the data
+FSeek(header.bfOffBits);
+if( info.biCompression > 0 )
+{
+    // Bytes are compressed
+    if( info.biSizeImage > 0 )
+        UBYTE rleData[ info.biSizeImage ] <style=sData>;
+    else
+        UBYTE rleData[ header.bfSize - FTell() ] <style=sData>;
+}
+else
+{
+    // Calculate bytes per line and padding required
+    local int bytesPerLine = (int)Ceil( info.biWidth * info.biBitCount / 8.0 );
+    local int padding      = 4 - (bytesPerLine % 4);
+    if( padding == 4 )
+        padding = 0;
+
+    // Define each line of the image
+    struct BITMAPLINE {
+
+        // Define color data
+        if( info.biBitCount < 8 )
+             UBYTE     imageData[ bytesPerLine ];
+        else if( info.biBitCount == 8 )
+             UBYTE     colorIndex[ info.biWidth ];
+        else if( info.biBitCount == 24 )
+             RGBTRIPLE colors[ info.biWidth ];
+        else if( info.biBitCount == 32 )
+             RGBQUAD   colors[ info.biWidth ];
+
+        // Pad if necessary        
+        if( padding != 0 )
+             UBYTE padBytes[ padding ];
+
+    } lines[ (info.biHeight < 0) ? -info.biHeight : info.biHeight] <optimize=true, style=sData>;
+} 

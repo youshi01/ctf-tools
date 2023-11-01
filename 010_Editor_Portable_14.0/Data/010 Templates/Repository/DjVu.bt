@@ -1,0 +1,292 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: DjVu.bt
+//   Authors: Pavel Rusanov
+//   Version: 1.0
+//   Purpose: Parse DjVu document files
+//  Category: Document
+// File Mask: *.djvu
+//  ID Bytes: 41 54 26 54 46 4F 52 4D //AT&TFORM
+//   History:
+//   1.0   2021-01-12 Pavel Rusanov: Initial release.
+//------------------------------------------------
+
+
+// Typedefs for the djvu file 
+
+// Usual chunk header - 4 chars
+typedef char ID[4];
+
+
+// Basic chunk structure
+typedef struct 
+{
+    SetBackColor( cLtAqua );
+    ID     chunkID;
+    BigEndian();
+    uint length;
+    char data[length];
+} CHUNK;
+
+
+typedef struct 
+{
+  byte flag:1;
+  byte version:7;
+} FLAG_VERSION;
+
+typedef struct 
+{
+    SetBackColor( cLtGreen );
+    ID     chunkID;
+    BigEndian();
+    uint length;
+    FLAG_VERSION fv <name="Flag/Version byte", comment=flagInfo>;
+    ushort nFiles <comment="Number of component files">;
+
+    local uint data_length = fv.flag?(length - 3 - nFiles*4):(length - 3);
+
+    if (fv.flag)
+        uint offsets[nFiles] <comment="Offsets of each of the component file">; 
+
+    char data[data_length] <comment="BZZ encoded data">;
+} DIRM_CHUNK;
+
+
+typedef struct 
+{
+    // This chunk should be next to DIRM
+    SetBackColor( cLtBlue );
+    ID  chunkID;
+    BigEndian();
+    uint length;
+    char data[length] <comment="BZZ encoded data">;
+} NAVM_CHUNK;
+
+typedef struct 
+{
+    BigEndian();
+    ushort width;
+    ushort heigth;
+    byte   minorVersion;
+    byte   majorVersion;
+    LittleEndian();
+    ushort dpi;
+    byte gamma;
+    byte flags;
+} INFO_CHUNK_DATA;
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    INFO_CHUNK_DATA data;
+} INFO_CHUNK;
+
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char str[length] <comment="Shared component filename">; 
+} INCL_CHUNK;
+
+typedef struct 
+{   
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} Sjbz_CHUNK;
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} FG44_CHUNK;
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} BG44_CHUNK;
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} TXTz_CHUNK;
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} ANTz_CHUNK;
+
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} FGbz_CHUNK;
+
+// Color JB2 data
+typedef struct 
+{   
+    SetBackColor( cLtPurple );
+    ID     chunkID;
+    BigEndian();
+    uint length;    
+    char data[length]; 
+} Djbz_CHUNK;
+
+
+local ID tempID;
+
+
+typedef struct 
+{
+    ID     chunkID;
+    BigEndian();
+    uint length;
+    local uint m_pos = FTell();
+    ID     type;
+    while( FTell() - m_pos < length ){
+       if (ReadByte() == 0)
+          FSeek(FTell() + 1);
+        ReadBytes(tempID, FTell(), 4);
+        switch (tempID) {
+         case "NAVM": CHUNK subchunk <comment="Outline of the document (bookmarks)">; break;
+         case "TXTa": CHUNK subchunk <comment="Text data (plain text)">; break;
+         case "TXTz": TXTz_CHUNK subform <comment="Text data (BZZ compressed)">; break;
+         case "ANTa": CHUNK subchunk <comment="Annotation data (plain text)">; break;
+         case "ANTz": ANTz_CHUNK subform <comment="Annotation data (BZZ compressed)">; break;
+         case "CIDa": CHUNK subchunk <comment=chunkID>; break;
+         case "Djbz": Djbz_CHUNK subform <comment="Shared shape table. JB2 dictionary data">; break;
+         case "Sjbz": Sjbz_CHUNK subform <comment="Bitonal mask chunk">; break;
+         case "FG44": FG44_CHUNK subform <comment="Foreground wavelet chunk">; break;
+         case "BG44": BG44_CHUNK subform <comment="Background wavelet chunk">; break;
+         case "TH44": CHUNK subchunk <comment="Thumbnail wavelet chunk">; break;
+         case "WMRM": CHUNK subchunk <comment="JB2 data required to remove a watermark">; break;
+         case "FGbz": FGbz_CHUNK subform <comment="Foreground Color JB2 chunk">; break;
+         case "INFO": INFO_CHUNK subform <comment="Document info chunk">; break;
+         case "INCL": INCL_CHUNK subform <comment="Included component file ID">; break;
+         case "BGjp": CHUNK subchunk <comment="Background JPEG chunk">; break;
+         case "FGjp": CHUNK subchunk <comment="Foreground JPEG chunk">; break;
+         case "Smmr": CHUNK subchunk <comment="Foreground MMR chunk">; break;
+         default: 
+                CHUNK subchunk <comment=chunkID>;
+                Printf("Unknown chunk: %s\n", subchunk.chunkID);
+        }
+    }
+} FORM_CHUNK;
+
+
+typedef struct 
+{
+    ID     chunkID;
+    BigEndian();
+    uint length;
+    ID  type;
+    while( FTell() < length ){
+
+        if (ReadByte() == 0)
+                FSeek(FTell() + 1);
+
+        if (FTell() + 4 < length)
+            ReadBytes(tempID, FTell(), 4);
+        else
+            break;
+
+        switch(tempID){
+         case "FORM": FORM_CHUNK subform <comment=formChunkInfo>;
+                      break;
+         case "DIRM": DIRM_CHUNK subchunk <comment="Directory Chunk">;
+                      break;
+         case "NAVM": NAVM_CHUNK subchunk <comment="Document Outline Chunk">;
+                      break;
+
+         default: 
+                CHUNK subchunk <comment=chunkID>;
+                Printf("Unknown chunk: %s\n", subchunk.chunkID);
+
+        }
+    }
+} MAIN_FORM;
+
+
+
+// ------------------- Auxiliary functions
+
+string IDInfo( ID &id )
+{
+  local char buf[20];  
+  SPrintf(buf, "%s", id);
+  return buf;
+}
+
+string flagInfo( FLAG_VERSION &fv )
+{
+  local char buf[20];  
+  string flag = fv.flag?"bundled":"indirect"; 
+  SPrintf(buf, "%s file, version: %d", flag, fv.version);
+  return buf;
+}
+
+string formChunkInfo( FORM_CHUNK &chunk )
+{
+  local char buf[20];  
+  SPrintf(buf, "%s:%s", chunk.chunkID, chunk.type);
+  return buf;
+}     
+
+
+string chunkID( CHUNK &subchunk )
+{
+  local char buf[20];  
+  SPrintf(buf, "Chunk: %s", subchunk.chunkID);
+  return buf;
+}     
+
+string mainFormID( MAIN_FORM &form )
+{
+  local char buf[20];  
+  SPrintf(buf, "%s:%s", form.chunkID, form.type);
+  return buf;
+}     
+
+
+// -------------------- Define the header
+
+SetBackColor( cLtPurple );
+ID header<comment="DjVu-file header should be AT&T">;
+
+// Check for valid header
+if( header != "AT&T")
+{
+    Warning( "File is not a valid DjVu file. Template stopped." );
+    return -1;
+}
+
+
+// --------------------- Parse file
+MAIN_FORM form <comment=mainFormID>;

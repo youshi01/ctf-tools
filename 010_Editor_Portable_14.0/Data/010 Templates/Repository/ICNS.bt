@@ -1,0 +1,84 @@
+//------------------------------------------------
+//--- 010 Editor v12.0 Binary Template
+//
+//      File: ICNS.bt
+//   Authors: SweetScape Software
+//   Version: 1.0
+//   Purpose: Apple Icon Image format.
+//  Category: Image
+// File Mask: *.icns
+//  ID Bytes: 69 63 6E 73 //icns
+//   History: 
+//   1.0   2022-04-11 SweetScape: Initial release.
+//------------------------------------------------
+BigEndian();
+
+// Structs
+typedef struct {
+    char    magic[4];  //icns
+    int     length;
+} HEADER <bgcolor=cLtPurple>;
+
+typedef struct {
+    char    type[4]  <bgcolor=cRed>;
+    int     length   <bgcolor=cRed>;
+    if( length > 8 )
+        uchar   data[length-8];
+} ICON <read=ReadIcon>;
+
+// Read functions
+string ReadIcon( struct ICON &icn )
+{
+    string str;
+    switch( icn.type ) {
+        case "ICON" : str = "32x32, 1-bit mono icon, OS=1.0"; break;
+        case "ICN#" : str = "32x32, 1-bit mono icon with 1-bit mask, OS=6.0"; break;
+        case "icm#" : str = "16x12, 1 bit mono icon with 1-bit mask, OS=6.0"; break;
+        case "icm4" : str = "16x12, 4 bit icon, OS=7.0"; break;
+        case "icm8" : str = "16x12, 8 bit icon, OS=7.0"; break;
+        case "ics#" : str = "16x16, 1-bit mono icon with 1-bit mask, OS=6.0"; break;
+        case "ics4" : str = "16x16, 4-bit icon, OS=7.0"; break;
+        case "ics8" : str = "16x16, 8 bit icon, OS=7.0"; break;
+        case "is32" : str = "16x16, 24-bit RGB icon, OS=8.5"; break;
+        case "s8mk" : str = "16x16, 8-bit mask, OS=8.5"; break;
+        case "icl4" : str = "32x32, 4-bit icon, OS=7.0"; break;
+        case "icl8" : str = "32x32, 8-bit icon, OS=7.0"; break;
+        case "il32" : str = "32x32, 24-bit RGB icon, OS=8.5"; break;
+        case "l8mk" : str = "32x32, 8-bit mask, OS=8.5"; break;
+        case "ich#" : str = "48x48, 1-bit mono icon with 1-bit mask, OS=8.5"; break;
+        case "ich4" : str = "48x48, 4-bit icon, OS=8.5"; break;
+        case "ich8" : str = "48x48, 8-bit icon, OS=8.5"; break;
+        case "ih32" : str = "48x48, 24-bit RGB icon, OS=8.5"; break;
+        case "h8mk" : str = "48x48, 8-bit mask, OS=8.5"; break;
+        case "it32" : str = "128x128, 24-bit RGB icon, OS=10.0"; break;
+        case "t8mk" : str = "128x128, 8-bit mask, OS=10.0"; break;
+        case "icp4" : str = "16x16, JPG or PNG or 24-bit RGB icon, OS=10.7"; break;
+        case "icp5" : str = "32x32, JPG or PNG or 24-bit RGB icon, OS=10.7"; break;
+        case "icp6" : str = "48x48, JPG or PNG, OS=10.7"; break;
+        case "ic07" : str = "128x128, JPG or PNG, OS=10.7"; break;
+        case "ic08" : str = "256x256, JPG or PNG, OS=10.5"; break;
+        case "ic09" : str = "512x512, JPG or PNG, OS=10.5"; break;
+        case "ic10" : str = "1024x1024, JPG or PNG (512x512@2x retina in 10.8), OS=10.7"; break;
+        case "ic11" : str = "32x32, JPG or PNG (16x16@2x retina), OS=10.8"; break;
+        case "ic12" : str = "64x64, JPG or PNG (32x32@2x retina), OS=10.8"; break;
+        case "ic13" : str = "256x256, JPG or PNG (128x128@2x retina), OS=10.8"; break;
+        case "ic14" : str = "512x512, JPG or PNG (256x256@2x retina), OS=10.8"; break;
+        case "ic04" : str = "16x16, ARGB or JPG or PNG "; break;
+        case "ic05" : str = "32x32, ARGB or JPG or PNG (16x16@2x retina) "; break;
+        case "icsb" : str = "18x18, ARGB or JPG or PNG "; break;
+        case "icsB" : str = "36x36, JPG or PNG (18x18@2x retina) "; break;
+        case "sb24" : str = "24x24, JPG or PNG "; break;
+        case "SB24" : str = "48x48, JPG or PNG (24x24@2x retina) "; break;
+    }
+    if( Strlen( str ) > 0 )
+        return icn.type + " (" + str + ")";
+    else
+        return icn.type;
+}
+
+// Define the file
+HEADER header;
+while( !FEof() )
+    ICON icon;
+
+

@@ -1,0 +1,55 @@
+//------------------------------------------------
+//--- 010 Editor v9.0 Binary Template
+//
+//      File: MSPY_UDP.bt
+//   Authors: liuxilu@github
+//   Version: 1.0
+//   Purpose: For Windows 10 Microsoft PinYin User Defined Phrase Data Files
+//  Category: Archive
+// File Mask: *.dat
+//  ID Bytes: 6D73 636878 756470 //mschxudp
+//   History:
+//       1.0 2021-04-22 liuxilu: first submit
+//------------------------------------------------
+
+struct Head {
+    char proto[8];
+    int version[2];
+    int offsetStart        <format=hex>;
+    int dataStart          <format=hex>;
+    int fileLen            <format=hex>;
+    int itemCnt            <format=decimal>;
+    int64 time             <read=ReadTime>;
+    int64 empty[3];
+    FSeek(offsetStart);
+    int offsets[itemCnt]   <format=hex>;
+} head;
+string ReadTime(int64 &t) {
+    return Time64TToString((time_t)t, "yyyy/MM/dd hh:mm:ss");
+}
+typedef struct (int nextOffset) {
+    int recordHead <format=hex>;
+    int16 pyLen;
+    byte rank;
+    byte rankPad;
+    int unknown[2];
+    wchar_t py[(pyLen-18)/2];
+    FSkip(2);
+    wchar_t str[(nextOffset-FTell()-2)/2] <bgcolor = cGreen>;
+    FSkip(2);
+} Record <read=ReadRecord>;
+wstring ReadRecord( Record &r ) {
+    string s;
+    SPrintf(s, "%d ", r.rank[0]);
+    wstring ws = StringToWString(s);
+
+    WStrcat(ws, r.py);
+    WStrcat(ws, L" ");
+    WStrcat(ws, r.str);
+    return ws;
+};
+
+local int i;
+for (i = 0; i < head.itemCnt - 1; i++)
+    Record items(head.offsets[i+1]+head.dataStart);
+Record items(head.fileLen);

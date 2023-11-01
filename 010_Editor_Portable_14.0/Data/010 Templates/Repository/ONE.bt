@@ -1,0 +1,459 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: ONE.bt
+//   Authors: Harli Aquino
+//    E-mail: d34ddr34m3r@gmail.com
+//   Version: 0.2
+//   Purpose: OneNote File Format
+//  Category: Document
+// File Mask: *.one
+//  ID Bytes: E4 52 5C 7B 8C D8 A7 4D AE B1 53 78 D0 29 96 D3
+//   History:
+//   0.2   2023-04-10 SweetScape: Check if guidFileFormat is supported before proceeding.
+//   0.1   2023-01-30 Harli: Initial development, to parse the FileDataStoreListReference to be able to list embedded data such as PNG, executables and scripts.
+// References:
+//   https://learn.microsoft.com/en-us/openspecs/office_file_formats/ms-onestore/ae670cd2-4b38-4b24-82d1-87cfb2cc3725
+//   https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/trojanized-onenote-document-leads-to-formbook-malware/
+//------------------------------------------------
+
+typedef struct {
+    UINT    stp;
+    UINT    cb;
+} FileChunkReference32;
+
+typedef struct {
+    UINT64  stp;
+    UINT  cb;
+} FileChunkReference64x32;
+
+typedef struct {
+    UINT64  stp;
+    UINT64  cb;
+} FileChunkReference64;
+
+typedef struct {
+    GUID    guidFileType;
+    GUID    guidFile;
+    GUID    legacyFileVersion;
+    GUID    guidFileFormat;
+
+    // Only currently support one file format - could add other formats in the future
+    if( GUIDToString( guidFileFormat ) != "{109ADD3F-911B-49F5-A5D0-1791EDC8AED8}" )
+    {
+        Warning( "This file is in an unsupported format. Template stopped." );
+        Exit(-1);
+    }
+
+    DWORD   ffvLastCodeThatWroteToThisFile;
+    DWORD   ffvOldestCodeThatHasWrittenToThisFile;
+    DWORD   ffvNewestCodeThatHasWrittenToThisFile;
+    DWORD   ffvOldestCodeThatMayReadThisFile;
+    FileChunkReference32 fcrLegacyFreeChunkList;
+    FileChunkReference32 fcrLegacyTransactionLog;
+    UINT    cTransactionsInLog;
+    UINT    cbLegacyExpectedFileLength;
+    UINT64  rgbPlaceholder;
+    FileChunkReference32 fcrLegacyFileNodeListRoot;
+    UINT    cbLegacyFreeSpaceInFreeChunkList;
+    BYTE    fNeedsDefrag;
+    BYTE    fRepairedFile;
+    BYTE    fNeedsGarbageCollect;
+    BYTE    fHasNoEmbeddedFileObjects;
+    GUID    guidAncestor;
+    UINT    crcName;
+    FileChunkReference64x32 fcrHashedChunkList;
+    FileChunkReference64x32 fcrTransactionLog;
+    FileChunkReference64x32 fcrFileNodeListRoot;
+    FileChunkReference64x32 fcrFreeChunkList;
+    UINT64  cbExpectedFileLength;
+    UINT64  cbFreeSpaceInFreeChunkList;
+    GUID    guidFileVersion;
+    UINT64  nFileVersionGeneration;
+    GUID    guidDenyReadFileVersion;
+    UINT    grfDebugLogFlags;
+    FileChunkReference64x32 fcrDebugLog;
+    FileChunkReference64x32 fcrAllocVerificationFreeChunkList;
+    UINT    bnCreated;
+    UINT    bnLastWroteToThisFile;
+    UINT    bnOldestWritten;
+    UINT    bnNewestWritten;
+    BYTE    rgbReserved[0x2d8];
+} Header;
+
+typedef struct {
+    UINT    crc;
+    FileChunkReference64x32 fcrNextChunk;
+    FileChunkReference64 fcrFreeChunk;
+} FreeChunkListFragment;
+
+typedef enum <uint>{
+    InvalidFND = 0x00,
+    ObjectSpaceManifestRootFND = 0x004,
+    ObjectSpaceManifestListReferenceFND = 0x008,
+    ObjectSpaceManifestListStartFND = 0x00c,
+    RevisionManifestListReferenceFND = 0x10,
+    RevisionManifestListStartFND = 0x014,
+    RevisionManifestStart4FND = 0x01b,
+    RevisionManifestEndFND = 0x01c,
+    RevisionManifestStart6FND = 0x01e,
+    RevisionManifestStart7FND = 0x01f,
+    GlobalIdTableStartFNDX = 0x021,
+    GlobalIdTableStart2FND = 0x022,
+    GlobalIdTableEntryFNDX = 0x024,    GlobalIdTableEntry2FNDX = 0x025,    GlobalIdTableEntry3FNDX = 0x026,    GlobalIdTableEndFNDX = 0x028,    ObjectDeclarationWithRefCountFNDX = 0x02d,    ObjectDeclarationWithRefCount2FNDX = 0x02e,    ObjectRevisionWithRefCountFNDX = 0x041,    ObjectRevisionWithRefCount2FNDX = 0x042,    RootObjectReference2FNDX = 0x059,    RootObjectReference3FND = 0x05a,    RevisionRoleDeclarationFND = 0x05c,    RevisionRoleAndContextDeclarationFND = 0x05d,    ObjectDeclarationFileData3RefCountFND = 0x072,    ObjectDeclarationFileData3LargeRefCountFND = 0x073,    ObjectDataEncryptionKeyV2FNDX = 0x07c,    ObjectInfoDependencyOverridesFND = 0x084,    DataSignatureGroupDefinitionFND = 0x08c,    FileDataStoreListReferenceFND = 0x090,    FileDataStoreObjectReferenceFND = 0x094,    ObjectDeclaration2RefCountFND = 0x0a4,    ObjectDeclaration2LargeRefCountFND = 0x0a5,    ObjectGroupListReferenceFND = 0x0b0,    ObjectGroupStartFND = 0x0b4,    ObjectGroupEndFND = 0x0b8,    HashedChunkDescriptor2FND = 0x0c2,    ReadOnlyObjectDeclaration2RefCountFND = 0x0c4,    ReadOnlyObjectDeclaration2LargeRefCountFND = 0x0c5,
+    ChunkTerminatorFND = 0xff
+} FILE_NODE_ID;
+
+typedef struct {
+    UINT64  uintMagic;
+    UINT    FileNodeListID;
+    UINT    nFragmentSequence;
+} FileNodeListHeader;
+
+typedef struct (uint StpFormat, uint CbFormat) {
+    switch (StpFormat) {
+        case 0: UINT64  stp; break;
+        case 1: UINT    stp; break;
+        case 2: UINT16  stp; break;
+        case 3: UINT    stp; break;
+    }
+    switch (CbFormat) {
+        case 0: UINT    cb; break;
+        case 1: UINT64  cb; break;
+        case 2: UBYTE   cb; break;
+        case 3: UINT16  cb; break;
+    }
+} FileNodeChunkReference;
+
+typedef struct {
+    UINT   n : 8;
+    UINT    guidIndex : 24;
+} CompactID;
+
+typedef struct {
+    UINT16  index;
+    UINT    IsBinary : 1;
+    UINT    IsPropertySet : 1;
+    UINT    IsGraphNode : 1;
+    UINT    IsFileData : 1;
+    UINT    IsReadOnly : 1;
+    UINT    Reserved : 11;
+} JCID;
+
+typedef struct {
+    GUID    guid;
+    UINT    n;
+} ExtendedGUID;
+
+typedef struct {
+    CompactID oid;
+    JCID    jcid;
+    UINT    fHasOidReferences : 1;
+    UINT    fHasOsidReferences : 1;
+    UINT    fReserved2 : 6;
+} ObjectDeclaration2Body;
+
+typedef struct {
+    CompactID oid;
+    UBYTE   cRef;
+} ObjectInfoDependencyOverride8;
+
+typedef struct {
+    CompactID oid;
+    UINT    cRef;
+} ObjectInfoDependencyOverride32;
+
+typedef struct {
+    UINT    c8BitOverrides;
+    UINT    c32BitOverrides;
+    UINT    crc;
+    ObjectInfoDependencyOverride8 Overrides1;
+    ObjectInfoDependencyOverride32 Overrides2;
+} ObjectInfoDependencyOverrideData;
+
+typedef struct (FILE_NODE_ID FileNodeID, uint StpFormat, uint CbFormat) {
+    switch (FileNodeID) {
+        case DataSignatureGroupDefinitionFND:
+            ExtendedGUID DataSignatureGroup;
+            break;
+        case ObjectGroupStartFND:
+            ExtendedGUID oid;
+            break;
+        case RootObjectReference3FND:
+            ExtendedGUID oidRoot;
+            UINT    RootRole;
+            break;
+        case FileDataStoreObjectReferenceFND: 
+            FileNodeChunkReference ref(StpFormat, CbFormat);
+            GUID guidReference;
+            break;
+        case ObjectInfoDependencyOverridesFND:
+            FileNodeChunkReference ref(StpFormat, CbFormat);
+            ObjectInfoDependencyOverrideData data;
+            break;
+        case ObjectGroupListReferenceFND: 
+            FileNodeChunkReference ref(StpFormat, CbFormat);
+            ExtendedGUID ObjectGroupID;
+            break;
+        case RevisionManifestStart6FND: 
+            ExtendedGUID rid;
+            ExtendedGUID ridDepended;
+            UINT    RevisionRole;
+            UINT16  odcsDefault;
+            break;
+        case RevisionManifestListStartFND: 
+            ExtendedGUID gosid;
+            UINT    nInstance;
+            break;
+        case ObjectSpaceManifestListStartFND:
+        case ObjectSpaceManifestRootFND: 
+            ExtendedGUID gosid;
+            break;
+        case ObjectSpaceManifestListReferenceFND: 
+            FileNodeChunkReference ref(StpFormat, CbFormat);
+            ExtendedGUID gosid;
+            break;
+        case RevisionManifestListReferenceFND:
+        case FileDataStoreListReferenceFND: 
+            FileNodeChunkReference ref(StpFormat, CbFormat);
+            break;
+        case HashedChunkDescriptor2FND: 
+            FileNodeChunkReference BlobRef(StpFormat, CbFormat);
+            UBYTE guidHash[0x10];
+            break;
+        case ObjectDeclaration2RefCountFND:
+        case ReadOnlyObjectDeclaration2RefCountFND: 
+            FileNodeChunkReference BlobRef(StpFormat, CbFormat);
+            UBYTE   body[0x09];
+            UBYTE   cRef;
+            break;
+        default:
+            UBYTE Reserved;
+    }
+} _fnd;
+
+typedef struct (uint cb){
+    local uint64 dataPos <hidden=true> = FTell();    
+    GUID    guidHeader;
+    UINT64  cbLength;
+    UINT    unused;
+    UINT64  reserved;
+    if (cbLength < cb) { UBYTE   FileData[cbLength]; }
+    else { UBYTE FileData <comment="Invalid Length">; }
+    local uint64 nextPos <hidden=true> = dataPos + cb - sizeof(GUID);
+    FSeek(nextPos);
+    GUID    guidFooter;
+} FileDataStoreObject;
+
+typedef struct {
+    local uint64 curPos <hidden=true> = FTell();
+    local uint64 stpMultiplier <hidden=true>;
+    local uint64 cbMultiplier <hidden=true>;
+    FILE_NODE_ID FileNodeID : 10;
+    uint    Size : 13;
+    uint    StpFormat : 2;
+    uint    CbFormat : 2;
+    uint    BaseType : 4;
+    uint    Reserved : 1;
+    if (FileNodeID > 0x00 && FileNodeID != ChunkTerminatorFND) {
+        _fnd    fnd(FileNodeID, StpFormat, CbFormat);
+        FSeek(curPos + Size);
+        curPos = FTell();
+        if (FileNodeID == FileDataStoreObjectReferenceFND) {
+            stpMultiplier = 1;
+            cbMultiplier = 1;
+            if (StpFormat > 1) {stpMultiplier = 8;}
+            if (CbFormat > 1) {cbMultiplier = 8;}
+            FSeek(fnd.ref.stp * stpMultiplier);
+            FileDataStoreObject Data(fnd.ref.cb * cbMultiplier);
+        }
+        FSeek(curPos);
+    }
+    
+} FileNode  <read=ReadFileNode>;
+
+string ReadFileNode(FileNode &fileNode) {
+    return EnumToString(fileNode.FileNodeID);
+}
+
+typedef struct (uint &size){
+    while(true){
+        if (ReadInt(FTell()) == 0x00) {break;}
+        FileNode fileNode;
+        size += 1;
+        if (fileNode.FileNodeID == ChunkTerminatorFND) {break;}
+    }
+} _FileNodes;
+
+
+typedef struct (uint cb, uint &size){
+    local uint64 fragmentPos <hidden=true> = FTell();
+    FileNodeListHeader header;
+    _FileNodes   rgFileNodes(size);
+    local uint64 nextPos <hidden=true> = fragmentPos + cb - sizeof(FileChunkReference64x32) - sizeof(UINT64);
+    FSeek(nextPos);
+    FileChunkReference64x32 nextFragment;
+    UINT64  footer;
+} FileNodeListFragment;
+
+
+typedef struct {
+    UINT    srcID;
+    UINT    TransactionEntrySwitch;
+} TransactionEntry;
+
+typedef struct(FileNodeListFragment &Nodes, UINT NodeSize, UINT NodeID) {
+    local uint index <hidden=true> = 0;
+    local uint nodeSize <hidden=true> = 0;
+    local uint referenceSize <hidden=true> = 0;
+    local uint64 endPos <hidden=true>;
+    for (index=0; index < NodeSize; index++) {
+        if (Nodes.rgFileNodes.fileNode[index].FileNodeID == NodeID || NodeID == InvalidFND) {
+            referenceSize += 1;
+            objectStp = Nodes.rgFileNodes.fileNode[index].fnd.ref.stp;
+            objectCb = Nodes.rgFileNodes.fileNode[index].fnd.ref.cb;
+            if (Nodes.rgFileNodes.fileNode[index].StpFormat > 1) { objectStp = objectStp * 8; }
+            if (Nodes.rgFileNodes.fileNode[index].CbFormat > 1) { objectCb = objectCb * 8; }
+            endPos = FTell();
+            FSeek(objectStp);
+            FileNodeListFragment FileNodeReference(objectCb, nodeSize);
+        }
+    }
+    if (!referenceSize) {
+        UBYTE DUMMY;
+    }
+    FSeek(endPos);
+} _FileNodeReferences;
+
+typedef struct {
+    while (true) {
+        TransactionEntry transactionEntry;
+        if (transactionEntry.srcID == 0x00) {break;}
+    }
+} SizeTable;
+
+typedef struct {
+    SizeTable sizeTable;
+} _TransactionLog;
+
+typedef struct {
+    UINT    Count : 24;
+    UINT    Reserved: 6;
+    UINT    ExtendedStreamsPresent : 1;
+    UINT    OsidStreamNotPresent : 1;
+} ObjectSpaceObjectStreamHeader;
+
+typedef struct {
+    ObjectSpaceObjectStreamHeader header;
+    CompactID body[header.Count];
+} ObjectSpaceObjectStreamOfOIDs;
+
+typedef struct {
+    ObjectSpaceObjectStreamHeader header;
+    CompactID body[header.Count];
+} ObjectSpaceObjectStreamOfOSIDs;
+
+typedef struct {
+    ObjectSpaceObjectStreamHeader header;
+    CompactID body[header.Count];
+} ObjectSpaceObjectStreamOfContextIDs;
+
+typedef enum <UINT> {
+    NoData = 0x01,
+    Bool = 0x02,
+    OneByteOfData = 0x03,
+    TwoBytesOfData = 0x4,    FourBytesOfData = 0x5,    EightBytesOfData = 0x6,    FourBytesOfLengthFollowedByData = 0x7,    ObjectID = 0x8,    ArrayOfObjectIDs = 0x9,    ObjectSpaceID = 0xa,    ArrayOfObjectSpaceIDs = 0xb,    ContextID = 0xc,    ArrayOfContextIDs = 0xd,    ArrayOfPropertyValues = 0x10,    PropertySet = 0x11
+} PROPERTY_TYPE;
+
+typedef struct {
+    UINT    cb;
+    UINT    Data;
+} prtFourBytesOfLengthFollowedByData;
+
+typedef struct {
+    UINT    id : 26;
+    PROPERTY_TYPE type : 5;
+    UINT    boolValue : 1;
+} PropertyID;
+
+typedef struct {
+    UINT    cProperties;
+    PropertyID prid;
+    UBYTE   Data;
+} prtArrayOfPropertyValues;
+
+typedef struct {
+    UINT16  cProperties;
+    PropertyID rgPrids[cProperties];
+    local UINT16 cPropertyIdx <hidden=true> = 0;
+    for (cPropertyIdx=0; cPropertyIdx<cProperties; cPropertyIdx++) {
+        switch (rgPrids[cPropertyIdx].type) {
+            case NoData: break;
+            case Bool: UBYTE rgData; break;
+            case OneByteOfData: UBYTE rgData; break;
+            case TwoBytesOfData: UBYTE rgData[0x02]; break;
+            case FourBytesOfData: UBYTE rgData[0x04]; break;
+            case EightBytesOfData: UBYTE rgData[0x08]; break;
+            case FourBytesOfLengthFollowedByData: prtFourBytesOfLengthFollowedByData rgData; break;
+            case ObjectID: CompactID rgData; break;
+            case ArrayOfObjectIDs: CompactID rgData; break;
+            case ObjectSpaceID: CompactID rgData; break;
+            case ArrayOfObjectSpaceIDs: CompactID rgData; break;
+            case ContextID: CompactID rgData; break;
+            case ArrayOfContextIDs: CompactID rgData; break;
+            case ArrayOfPropertyValues: prtArrayOfPropertyValues rgData; break;
+            //case PropertySet: _PropertySet rgData; break;
+        }
+    }
+} _PropertySet;
+
+typedef struct (uint64 objectCb){
+    local uint64 curPos <hidden=true> = FTell();
+    ObjectSpaceObjectStreamOfOIDs OIDs;
+    ObjectSpaceObjectStreamOfOSIDs OSIDs;
+    ObjectSpaceObjectStreamOfContextIDs ContextIDs;
+    _PropertySet body;
+    BYTE    padding;
+    FSeek(curPos + objectCb);
+} ObjectSpaceObjectPropSet;
+
+typedef struct(FileNodeListFragment &Nodes, UINT NodeSize, UINT NodeID) {
+    local uint index <hidden=true> = 0;
+    local uint nodeSize <hidden=true> = 0;
+    local uint referenceSize <hidden=true> = 0;
+    local uint64 endPos <hidden=true>;
+    for (index=0; index < NodeSize; index++) {
+        if (Nodes.rgFileNodes.fileNode[index].FileNodeID == NodeID || NodeID == InvalidFND) {
+            referenceSize += 1;
+            objectStp = Nodes.rgFileNodes.fileNode[index].fnd.BlobRef.stp;
+            objectCb = Nodes.rgFileNodes.fileNode[index].fnd.BlobRef.cb;
+            Printf("Parsing Object at 0x%08x:0x%08x\n", objectStp, objectCb);
+            if (Nodes.rgFileNodes.fileNode[index].StpFormat > 0x01){ objectStp = objectStp * 8; }
+            if (Nodes.rgFileNodes.fileNode[index].CbFormat > 0x01){ objectCb = objectCb * 8; }
+            Printf("Parsing Adjusted Object at 0x%08x:0x%08x\n", objectStp, objectCb);
+            objectCb = Nodes.rgFileNodes.fileNode[index].fnd.BlobRef.cb * cbMultiplier;
+            endPos = FTell();
+            FSeek(objectStp);
+            ObjectSpaceObjectPropSet Data(objectCb);
+        }
+    }
+    if (!referenceSize) {
+        UBYTE DUMMY;
+    }
+    FSeek(endPos);
+} ObjectDeclarations;
+
+local uint hashedChunkListSize <hidden=true> = 0;
+local uint fileNodeListSize <hidden=true> = 0;
+local uint64 stpMultiplier <hidden=true>;
+local uint64 cbMultiplier <hidden=true>;
+local uint64 objectStp <hidden=true>;
+local uint64 objectCb <hidden=true>;
+local uint i <hidden=true> = 0;
+Header FileHeader;
+if (FileHeader.fcrFileNodeListRoot.cb > 0x00) {
+    local uint64 filePos <hidden=true> = FTell();
+    FSeek(FileHeader.fcrFileNodeListRoot.stp);
+    FileNodeListFragment FileNodes(FileHeader.fcrFileNodeListRoot.cb, fileNodeListSize);
+    _FileNodeReferences FileDataStoreListReferences(FileNodes, fileNodeListSize, FileDataStoreListReferenceFND);
+}

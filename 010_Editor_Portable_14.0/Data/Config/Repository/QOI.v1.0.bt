@@ -1,0 +1,53 @@
+//------------------------------------------------
+//--- 010 Editor v2.0 Binary Template
+//
+//      File: QOI.bt
+//    Author: xiaozhuai
+//   Version: 1.0
+//   Purpose: Parse QOI image files.
+//  Category: Image
+// File Mask: *.qoi
+//  ID Bytes: 71 6F 69 66 //qoif
+//   History:  
+//   1.0 2022-06-24 xiaozhuai: Initial release.
+//
+// More information available at
+//  https://qoiformat.org/qoi-specification.pdf
+//------------------------------------------------
+
+typedef struct {
+    char    magic[4];
+    uint32  width;
+    uint32  height;
+    byte    channels;
+    byte    colorspace;
+} QOI_HEADER <read=ReadHeader>;
+
+typedef struct {
+    byte end[8];
+} QOI_END;
+
+typedef struct {
+    byte data[FileSize() - sizeof(QOI_HEADER) - sizeof(QOI_END)];
+} QOI_ENCODED_DATA;
+
+string ReadHeader( QOI_HEADER &a )
+{
+    string s;
+    SPrintf( 
+        s, 
+        "width: %u, height: %u, channels: %d (%s), colorspace: %d (%s)", 
+        a.width, a.height, 
+        a.channels, a.channels == 4 ? "RGBA" : (a.channels == 3 ? "RGB" : "unknown"),
+        a.colorspace, a.colorspace == 0 ? "sRGB with linear alpha" : (a.channels == 1 ? "all channels linear" : "unknown")
+    );
+    return s;
+}
+
+
+//---------------------------------------------
+
+BigEndian();
+QOI_HEADER header;
+QOI_ENCODED_DATA data;
+QOI_END end;

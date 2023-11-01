@@ -1,0 +1,62 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: DOL.bt
+//   Authors: M.W.
+//   Version: 0.2
+//   Purpose: Template for parsing dol Files from the Wii and Gamecube. 
+//  Category: Executable
+// File Mask: *.dol
+//  ID Bytes: 
+//   History: 
+//   0.2   2021-03-22 M.W.: Only sections 0-6 are code sections. This was wrong in the previous version. 
+//   0.1   2021-03-22 M.W.: Initial support for parsing dol-header and sections. 
+//------------------------------------------------
+
+
+//This is based on the information from: http://wiki.tockdom.com/wiki/DOL_(File_Format)
+
+
+//dol files use big-endian byte order. 
+BigEndian();
+
+struct Header{
+    uint32 SectionFileOffsets[18]<comment="The offsets to the section relative to the start of the header">;
+    uint32 SectionRelocAdr[18]<comment="The address that indicates where to copy the section to in memory, when loading the dol file.">;
+    uint32 SectionLenghts[18]<comment="The size of the section.">;
+    uint32 bssSecAdr<comment="Start of the bss section">;
+    uint32 bssSecLen<comment="Length of the bss section">;
+    uint32 EntryPoint<comment="Entry point for the application">;
+    byte padding[0x1c];
+} s_header<comment="The Header">;
+  
+struct Sections{
+    local int i;
+    for(i = 0; i<18; i++){
+        if(s_header.SectionFileOffsets[i] == 0)
+            continue;
+        FSeek(s_header.SectionFileOffsets[i]);
+        struct Section{
+            byte data[s_header.SectionLenghts[i]];
+            local uint32 sectionID = i;
+        } s_section<comment=addCommentToSection>; 
+    }
+} s_sections<comment="The Data and Code-Sections">; 
+
+
+string addCommentToSection(Section& section){
+    local string ret;
+    local uint32 secID = section.sectionID;
+    local uint32 reloc = s_header.SectionRelocAdr[secID];
+    local uint32 secLen = s_header.SectionLenghts[secID];     
+
+    if(secID >= 7){
+        SPrintf(ret, "Type: data");
+    }else if((s_header.EntryPoint >= reloc) && (s_header.EntryPoint < (reloc + secLen))){
+        SPrintf(ret, "Type: code");
+    }else{
+        SPrintf(ret, "Type: likely code");
+    }
+    SPrintf(ret, "%s;\t\t Relocate to: 0x%x ;\t\t Section Number: %i",ret, reloc, secID);    
+    return ret;
+} 

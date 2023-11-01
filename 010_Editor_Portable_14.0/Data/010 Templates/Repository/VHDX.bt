@@ -1,0 +1,614 @@
+//------------------------------------------------
+//--- 010 Editor v5.0 Binary Template
+//
+//      File: VHDX.bt
+//   Authors: Konstantin Germanov
+//    E-mail: kgermanov@axcient.com
+//   Version: 1.0
+//   Purpose: Microsoft VHDX virtual disk format parser. 
+//  Category: Drives
+// File Mask: *.vhdx
+//  ID Bytes: [+0] 76 68 64 78 66 69 6C 65
+//   History: 
+//   1.0   2018-12-07  Konstantin Germanov: Initial release. Microsoft VHDX specification.
+//------------------------------------------------
+
+LittleEndian();
+
+//---------------  help types
+string Uint32ToStr(UINT32 v)
+{
+    local string s;
+    SPrintf( s, "%u", v );
+    return s;
+}
+
+string Uint64ToStr(UINT64 v)
+{
+    local string s;
+    SPrintf( s, "%Lu", v );
+    return s;
+}
+
+string Uint64ToHexStr(UINT64 v)
+{
+    local string s;
+    SPrintf( s, "0x%Lxh", v );
+    return s;
+}
+
+uint64 CeilBig(uint64 d, uint64 v) ///NOTE: for big values - over 2TB Ceil failed
+{
+    local uint64 res = d/v;
+    if(d % v != 0)
+        res += 1;
+
+    return res;
+}
+
+uint32 FromBytesToUint32(ubyte bytes[])
+{
+    return (((uint32)bytes[0])<<24) + 
+           (((uint32)bytes[1]) << 16) + 
+           (((uint32)bytes[2]) << 8) + 
+           ((uint32)bytes[3]);
+}
+
+void CheckCRC32C(string msg, uint64 start, uint64 size, uint64 off_checkum, uint32 checksum)
+{
+    local uint64 pos=FTell();
+
+    local ubyte buffer[size];
+    ReadBytes( buffer, start, size );
+
+    local ubyte null_buffer[sizeof(uint32)];
+    Memset( null_buffer, 0, sizeof(null_buffer));
+    Memcpy(buffer, null_buffer, sizeof(uint32), off_checkum, 0);
+    
+    //NOTE: CRC32C(init=0xFFFFFFFF, polynom=0x82F63B78)
+    local ubyte crc[sizeof(uint32)];
+    local int res = ChecksumAlgArrayBytes(CHECKSUM_CRC32, crc, buffer, size, "", 0x82F63B78, 0xFFFFFFFF);
+    if(0 < res) {
+        local uint32 crc32 = FromBytesToUint32(crc);
+        Printf("\t[VERIFY] Calced CRC32 for %s:%Xh\n", msg, crc32);
+        if(checksum != crc32) {
+            Warning("Error check crc on %s (0x%x != 0x%x)", msg, checksum, crc32);
+            Printf("\t[ERROR] check crc on %s (0x%x != 0x%x)\n", msg, checksum, crc32);
+        }
+    } else
+        Warning("Cannot calc CRC32");
+
+    FSeek(pos);
+}
+
+int CheckSignature(string msg, BYTE sign[], string val)
+{
+    if(sign != val) {
+        Warning("Mismatch signature at %s", msg);
+        Printf("Mismatch signature at %s (%s != %s)\n", msg, sign, val);
+        return 0;
+    }
+
+    return 0;
+}
+
+// GUID - Global Unique Identifier
+typedef UBYTE GUID[16] <read=ReadGUID, format=hex>;
+string ReadGUID( GUID &g )
+{
+    local string s;
+    SPrintf( s, "{%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
+        g[3],g[2],g[1],g[0],g[5],g[4],g[7],g[6],g[8],g[9],g[10],g[11],g[12],g[13],g[14],g[15] );
+    return s;
+}
+//----------------- VHDX types
+//--- identificator
+typedef struct _VHDX_FILE_IDENTIFIER {
+    BYTE 	Signature[8]   <comment="='vhdxfile'">;
+    wchar_t Creator[256];
+} VHDX_FILE_IDENTIFIER <size=0x10000>;
+
+//---- header
+typedef struct _VHDX_HEADER{
+    BYTE 	Signature[4]   <comment="='head'">;
+    UINT32 	Checksum       <comment="CRC32 4K header with Checksum=0">;
+    uint64 	SequenceNumber;
+    GUID 	FileWriteGuid;
+    GUID 	DataWriteGuid;
+    GUID 	LogGuid        <comment="{00000000-0000-0000-0000-000000000000} - there is no logs">;
+    UINT16 	LogVersion     <comment="=0">;
+    UINT16 	Version        <comment="=1">;
+    UINT32 	LogLength;
+    uint64 	LogOffset;
+    BYTE	Reserved[4016];
+ 
+    CheckSignature("VHDX_HEADER", Signature, "head");
+    CheckCRC32C("VHDX_HEADER", startof(Signature), 0x1000, startof(Checksum) - startof(Signature), Checksum);
+} VHDX_HEADER  <size=0x10000>;
+
+//--- Region
+typedef struct _VHDX_REGION_TABLE_HEADER {
+    BYTE 	Signature[4]   <comment="='regi'">;
+    UINT32 	Checksum       <comment="CRC32 64K header with Checksum=0">;
+    UINT32 	EntryCount     <comment="<=2047">;
+    UINT32 	Reserved;
+
+    CheckSignature("VHDX_REGION_TABLE_HEADER", Signature, "regi");
+    CheckCRC32C("VHDX_REGION_TABLE_HEADER", startof(Signature), 0x10000, startof(Checksum) - startof(Signature), Checksum);
+} VHDX_REGION_TABLE_HEADER;
+
+typedef struct _VHDX_REGION_TABLE_ENTRY {
+    GUID 	Guid;
+    uint64 	FileOffset;
+    UINT32 	Length;
+    UINT32 	Required:1;
+    UINT32 	Reserved:31;
+} VHDX_REGION_TABLE_ENTRY <read=ViewRegionInfo>;
+
+typedef enum <uchar>
+{
+    TR_BAT  = 0,
+    TR_METADATA,
+    TR_UNDEF
+} TypeRegion;
+ 
+string ViewRegionInfo( VHDX_REGION_TABLE_ENTRY & e )
+{
+    local string strGuid = ReadGUID( e.Guid );
+    if(strGuid == "{2dc27766-f623-4200-9d64-115e9bfd4a08}")
+        return  EnumToString(TR_BAT);
+
+    if(strGuid == "{8b7ca206-4790-4b9a-b8fe-575f050f886e}")
+        return  EnumToString(TR_METADATA);
+
+    return  EnumToString(TR_UNDEF);
+}
+
+typedef struct _VHDX_REGION {
+    VHDX_REGION_TABLE_HEADER header;
+    /// NOTE: as VHDX_REGION_TABLE_ENTRY region_etries[header.EntryCount]; but for opened by default
+    local uint e;
+    for(e = 0; e < header.EntryCount; ++e)
+        VHDX_REGION_TABLE_ENTRY region_etries;
+
+ } VHDX_REGION <size=0x10000, open=true, optimize=false>;
+
+//--- Log
+typedef struct _VHDX_LOG_ENTRY_HEADER {
+    BYTE 	Signature[4]        <comment="='loge'">;
+    UINT32 	Checksum            <comment="CRC32C EntryLength with Checksum=0">;
+    UINT32 	EntryLength;
+    UINT32 	Tail;
+    uint64 	SequenceNumber;
+    UINT32 	DescriptorCount;
+    UINT32 	Reserved;
+    GUID 	LogGuid;
+    uint64 	FlushedFileOffset;
+    uint64 	LastFileOffset;
+
+    CheckSignature("VHDX_LOG_ENTRY_HEADER", Signature, "loge");
+    CheckCRC32C("VHDX_LOG_ENTRY_HEADER", startof(Signature), EntryLength, startof(Checksum) - startof(Signature), Checksum);
+} VHDX_LOG_ENTRY_HEADER;
+
+typedef struct _VHDX_LOG_ZERO_DESCRIPTOR {
+    BYTE 	ZeroSignature[4]     <comment="='zero'">;
+    UINT32 	Reserved;
+    uint64 	ZeroLength;
+    uint64 	FileOffset;
+    uint64 	SequenceNumber       <comment="=header.SequenceNumber">;
+
+    CheckSignature("VHDX_LOG_ZERO_DESCRIPTOR", ZeroSignature, "zero");
+} VHDX_LOG_ZERO_DESCRIPTOR;
+
+typedef struct _VHDX_LOG_DATA_DESCRIPTOR {
+    BYTE 	DataSignature[4]     <comment="='desc'">;
+    UINT32 	TrailingBytes;
+    uint64 	LeadingBytes;
+    uint64 	FileOffset;
+    uint64 	SequenceNumber       <comment="=header.SequenceNumber">;
+
+    CheckSignature("VHDX_LOG_DATA_DESCRIPTOR", DataSignature, "desc");
+} VHDX_LOG_DATA_DESCRIPTOR;
+
+typedef struct _VHDX_LOG_DATA_SECTOR {
+    BYTE 	DataSignature[4]     <comment="='data'">;
+    UINT32 	SequenceHigh         <comment="=header.SequenceNumber.high">;
+    BYTE 	Data[4084];
+    UINT32 	SequenceLow          <comment="=header.SequenceNumber.low">;
+
+    CheckSignature("VHDX_LOG_DATA_SECTOR", DataSignature, "data");
+} VHDX_LOG_DATA_SECTOR;
+
+typedef struct _VHDX_LOG_HEAD {
+    VHDX_LOG_ENTRY_HEADER header;
+
+    local int countWithData = 0;
+    local int i;
+    for(i = 0; i < header.DescriptorCount; ++i) {
+        if( ReadString( FTell(), 4 ) == "zero" ) {
+            VHDX_LOG_ZERO_DESCRIPTOR zero;
+        } else {
+            VHDX_LOG_DATA_SECTOR desc;
+            ++countWithData;
+        }
+    }
+} VHDX_LOG_HEAD <size=0x1000>;
+
+typedef struct _VHDX_LOG {
+    VHDX_LOG_HEAD head;
+    if( 0 < head.countWithData) {
+        VHDX_LOG_DATA_SECTOR data[head.countWithData];
+    } else {
+        Printf("Empty logs\n");
+    }
+} VHDX_LOG;
+
+//--- BAT
+typedef enum <uint64>
+{
+    PAYLOAD_BLOCK_NOT_PRESENT       = 0,
+    PAYLOAD_BLOCK_UNDEFINED         = 1,
+    PAYLOAD_BLOCK_ZERO              = 2,
+    PAYLOAD_BLOCK_UNMAPPED          = 3,
+    PAYLOAD_BLOCK_FULLY_PRESENT     = 6,
+    PAYLOAD_BLOCK_PARTIALLY_PRESENT = 7
+} PayloadStates;
+
+typedef enum <uint64>
+{
+    SB_BLOCK_NOT_PRESENT  = 0,
+    SB_BLOCK_PRESENT      = 6
+} BitmapStates;
+
+typedef enum <uint64>
+{
+    BLOCK_NOT_PRESENT        = 0,
+    BLOCK_UNDEFINED          = 1,
+    BLOCK_ZERO               = 2,
+    BLOCK_UNMAPPED           = 3,
+    BLOCK_PRESENT            = 6,
+    BLOCK_PARTIALLY_PRESENT  = 7
+} BlockStates;
+
+typedef struct _VHDX_BAT_ENTRY_PB {
+    BlockStates 	State:3;
+    uint64 	        Reserved:17;
+    uint64 	        FileOffsetMB:44;
+} VHDX_BAT_ENTRY_PB <read=ViewBlockPB>;
+string ViewBlockPB( VHDX_BAT_ENTRY_PB & b ) { return "PB: " + EnumToString(b.State) + " : " + Uint64ToHexStr(b.FileOffsetMB*1024*1024); }
+
+typedef struct _VHDX_BAT_ENTRY_SB  {
+    BlockStates 	State:3;
+    uint64 	        Reserved:17;
+    uint64 	        FileOffsetMB:44;
+} VHDX_BAT_ENTRY_SB <read=ViewBlockSB>;
+string ViewBlockSB( VHDX_BAT_ENTRY_SB & b ) { return "SB: " + EnumToString(b.State) + " : " + Uint64ToHexStr(b.FileOffsetMB*1024*1024); }
+
+//--- Metadata
+typedef struct _VHDX_METADATA_TABLE_HEADER {
+    BYTE 	Signature[8]   <comment="='metadata'">;
+    UINT16 	Reserved;
+    UINT16 	EntryCount;
+    UINT32 	Reserved2[5];
+
+    CheckSignature("VHDX_METADATA_TABLE_HEADER", Signature, "metadata");
+} VHDX_METADATA_TABLE_HEADER;
+
+//{caa16737-fa36-4d43-b3b6-33f0aa44e76b}
+typedef struct _VHDX_FILE_PARAMETERS {
+    UINT32 	BlockSize;
+    UINT32 	LeaveBlocksAllocated:1;
+    UINT32 	HasParent:1;
+    UINT32 	Reserved:30;
+} VHDX_FILE_PARAMETERS <read=ViewFileParameters>;
+string ViewFileParameters( VHDX_FILE_PARAMETERS & v ) {return "Blocksize: " + Uint64ToHexStr(v.BlockSize);}
+
+//{beca12ab-b2e6-4523-93ef-c309e000c746}
+typedef struct _VHDX_VIRTUAL_DISK_SIZE {
+    uint64 	VirtualDiskSize <comment="most 64Tb">;
+} VHDX_VIRTUAL_DISK_SIZE <read=ViewVitrDiskSize>;
+string ViewVitrDiskSize( VHDX_VIRTUAL_DISK_SIZE & v ) {return Uint64ToHexStr(v.VirtualDiskSize);}
+
+//{beca12ab-b2e6-4523-93ef-c309e000c746}
+typedef struct _VHDX_PAGE83_DATA {
+    GUID 		Page83Data <comment="SCSI guid">;
+} VHDX_PAGE83_DATA <read=ViewPageData>;
+string ViewPageData( VHDX_PAGE83_DATA & v ) {return ReadGUID(v.Page83Data);}
+
+//{8141bf1d-a96f-4709-ba47-f233a8faab5f}
+typedef struct _VHDX_VIRTUAL_DISK_LOGICAL_SECTOR_SIZE {
+    UINT32 	LogicalSectorSize   <comment="512 or 4096">;
+} VHDX_VIRTUAL_DISK_LOGICAL_SECTOR_SIZE <read=ViewLogicalSectorSize>;
+string ViewLogicalSectorSize( VHDX_VIRTUAL_DISK_LOGICAL_SECTOR_SIZE & v ) {return Uint32ToStr(v.LogicalSectorSize);}
+
+//{cda348c7-445d-4471-9cc9-e9885251c556}
+typedef struct _VHDX_VIRTUAL_DISK_PHYSICAL_SECTOR_SIZE {
+    UINT32 	PhysicalSectorSize   <comment="512 or 4096">;
+} VHDX_VIRTUAL_DISK_PHYSICAL_SECTOR_SIZE <read=ViewDiskPhysSectorSize>;
+string ViewDiskPhysSectorSize( VHDX_VIRTUAL_DISK_PHYSICAL_SECTOR_SIZE & v ) {return Uint32ToStr(v.PhysicalSectorSize);}
+
+//{a8d35f2d-b30b-454d-abf7-d3d84834ab0c}
+//KVP:
+//parent_linkage	   GUID	{83ed0ec3-24c8-49a6-a959-5e4bf1288bfb}
+//parent_linkage2	   GUID	{83ed0ec3-24c8-49a6-a959-5e4bf1288bfb}
+//relative_path	       Path	..\..\path2\sub3\parent.vhdx
+//volume_path	       Path	\\?\Volume{26A21BDA-A627-11D7-9931-806E6F6E6963}\path2\sub3\parent.vhdx
+//absolute_win32_path  Path	\\?\d:\path2\sub3\parent.vhdx
+
+typedef struct _VHDX_PARENT_LOCATOR_HEADER {
+    GUID 	LocatorType;
+    UINT16 	Reserved;
+    UINT16 	KeyValueCount;
+} VHDX_PARENT_LOCATOR_HEADER<read=ViewLocatorHeader>;
+string ViewLocatorHeader(VHDX_PARENT_LOCATOR_HEADER & h) {return ReadGUID(h.LocatorType);}
+
+typedef struct _VHDX_PARENT_LOCATOR_ENTRY {
+    UINT32 	KeyOffset;
+    UINT32 	ValueOffset;
+    UINT16 	KeyLength;
+    UINT16 	ValueLength;
+} VHDX_PARENT_LOCATOR_ENTRY;
+
+typedef struct _UNICODE_STR(uint64 size) {
+    wchar_t val[size/sizeof(wchar_t)];
+} UNICODE_STR <read=ViewUnicodeStr>;
+string ViewUnicodeStr(UNICODE_STR & s) {return s.val;}
+
+typedef struct _VHDX_PARENT_LOCATOR {
+    local uint64 pos_metadata_item = FTell();
+
+    VHDX_PARENT_LOCATOR_HEADER 	header;
+    VHDX_PARENT_LOCATOR_ENTRY entries[header.KeyValueCount];
+
+    local int i;
+    for(i = 0; i < header.KeyValueCount; ++i) {
+        FSeek( pos_metadata_item + entries[i].KeyOffset );
+        UNICODE_STR key(entries[i].KeyLength);
+
+        FSeek( pos_metadata_item + entries[i].ValueOffset );
+        UNICODE_STR value(entries[i].ValueLength);
+    }
+} VHDX_PARENT_LOCATOR <open=true>;
+
+typedef struct _VHDX_METADATA_TABLE_ENTRY {
+    GUID	ItemId;
+    UINT32 	Offset;
+    UINT32 	Length;
+    UINT32 	IsUser:1;
+    UINT32 	IsVirtualDisk:1;
+    UINT32 	IsRequired:1;
+    UINT32 	Reserved:29;
+    UINT32 	Reserved2;
+} VHDX_METADATA_TABLE_ENTRY;
+
+typedef struct _METADATA {
+    VHDX_METADATA_TABLE_HEADER header;
+    VHDX_METADATA_TABLE_ENTRY metadata_entries[header.EntryCount];
+} METADATA <size=0x10000>;
+
+typedef struct _PARSED_METADATA(METADATA& metadata) {
+    local uint64 pos_metadata = FTell();
+
+    local string guidItem;
+    local int i;
+    for(i = 0; i < metadata.header.EntryCount; ++i) {
+        FSeek( pos_metadata + metadata.metadata_entries[i].Offset );
+        guidItem = ReadGUID(metadata.metadata_entries[i].ItemId);
+
+        if( guidItem == "{caa16737-fa36-4d43-b3b6-33f0aa44e76b}" ) {
+            VHDX_FILE_PARAMETERS file_parameters;
+        } else if( guidItem == "{2fa54224-cd1b-4876-b211-5dbed83bf4b8}" ) {
+            VHDX_VIRTUAL_DISK_SIZE virtual_disk_size;
+        } else if( guidItem == "{beca12ab-b2e6-4523-93ef-c309e000c746}" ) {
+            VHDX_PAGE83_DATA page83_data;
+        } else if( guidItem == "{8141bf1d-a96f-4709-ba47-f233a8faab5f}" ) {
+            VHDX_VIRTUAL_DISK_LOGICAL_SECTOR_SIZE virt_disk_logical_size;
+        } else if( guidItem == "{cda348c7-445d-4471-9cc9-e9885251c556}" ) {
+            VHDX_VIRTUAL_DISK_PHYSICAL_SECTOR_SIZE disk_phys_sector_size;
+        } else if( guidItem == "{a8d35f2d-b30b-454d-abf7-d3d84834ab0c}" ) {
+            VHDX_PARENT_LOCATOR parent;
+        } else {
+            Printf("Unsupported guid metadata %s\n", guidItem);
+        }
+    }
+} PARSED_METADATA <open=true>;
+
+//---------------------- start parse
+
+int FindAndParseMetadataRegion(VHDX_REGION & region, uint64& virtualDiskSize, uint64& blockSize, uint64& logicalSectorSize, int &isDiff, uint64& chunk_ratio, uint64& total_bat_entries)
+{
+    local int r;
+    for(r = 0; r < region.header.EntryCount; ++r)
+        if(ViewRegionInfo(region[0].region_etries[r]) == EnumToString(TR_METADATA)) {
+            FSeek(region.region_etries[r].FileOffset);
+            METADATA metadata;
+
+            FSeek(region.region_etries[r].FileOffset);
+            PARSED_METADATA parsed_metadata(metadata);
+
+            if(parsed_metadata.file_parameters.LeaveBlocksAllocated == 1)
+                Printf("It is static\n");
+            else
+                Printf("It is dynamic\n");
+
+            blockSize         = parsed_metadata.file_parameters.BlockSize;
+            virtualDiskSize   = parsed_metadata.virtual_disk_size.VirtualDiskSize;
+            Printf("BlockSize: %Lu DiskSize: %Lu\n", blockSize, virtualDiskSize);
+
+            logicalSectorSize = parsed_metadata.virt_disk_logical_size.LogicalSectorSize;
+            local uint64 physicalSectorSize = parsed_metadata.disk_phys_sector_size.PhysicalSectorSize;
+            Printf("Logical sector size: %u Physical sector size: %u\n", logicalSectorSize, physicalSectorSize);
+
+            chunk_ratio                      = (1<<23) * logicalSectorSize / blockSize;
+            local uint64 data_blocks_count   = CeilBig( virtualDiskSize,  blockSize);
+            local uint64 sector_bitmap_count = CeilBig( data_blocks_count, chunk_ratio);
+            Printf("Chunk ratio: %Lu\n", chunk_ratio);
+            Printf("Data blocks count(PB): %Lu\n", data_blocks_count);
+            Printf("Sectors bitmap block count(SB): %Lu\n", sector_bitmap_count);
+
+            isDiff = parsed_metadata.file_parameters.HasParent;
+            if(isDiff == 1) {
+                Printf("It is differencing, ");
+                total_bat_entries = sector_bitmap_count*(chunk_ratio + 1);
+                Printf("size BAT:%Lu\n", total_bat_entries);
+            } else {
+                Printf("It is non differencing, ");
+                total_bat_entries = data_blocks_count +  ( (data_blocks_count-1)/chunk_ratio );
+                Printf("size BAT:%Lu\n", total_bat_entries);
+            }
+
+            return 0;
+        }
+
+    Warning("Cannot find metadata region");
+    return 1;
+}
+
+int IsBitmapBATBlock(uint b, uint64 chunk_ratio)
+{
+    if(((b + 1) % (chunk_ratio + 1)) ==0)
+        return 1;
+
+    return 0;
+}
+
+typedef struct _FILTERED_BAT(uint64 chunk_ratio, uint64 total_bat_entries) {
+   local uint64 d;
+   local uint b;
+   for(b = 0; b < total_bat_entries; ++b)
+    {
+        d = ReadUInt64();
+        if(d != 0) {/// != BLOCK_NOT_PRESENT
+            if(IsBitmapBATBlock(b, chunk_ratio))
+                VHDX_BAT_ENTRY_SB BAT;
+            else
+                VHDX_BAT_ENTRY_PB BAT;
+        } else
+            FSkip( sizeof(uint64) );
+    }
+} FILTERED_BAT<open=true>;
+
+
+typedef struct _CHUNK(uint64 sz) {
+    BYTE chunk[sz];
+} CHUNK;
+
+typedef struct _ORIG_DATA(uint64 blockSize, uint64 chunk_ratio, uint64 total_bat_entries) {
+    local uint64 off_BAT = FTell();    
+    local uint64 d;
+    local uint64 FileOffsetMB;
+    local int State;
+    local int b;
+    for(b = 0; b < total_bat_entries; ++b) {
+        FSeek(off_BAT + b*sizeof(uint64));
+        d = ReadUInt64(); ///VHDX_BAT_ENTRY_PB
+
+        if(d != 0) {/// != BLOCK_NOT_PRESENT
+            FileOffsetMB = (d >> (17+3));    /// VHDX_BAT_ENTRY_PB.FileOffsetMB
+            FSeek(FileOffsetMB * 1024*1024);
+
+            State = (d & 7); /// VHDX_BAT_ENTRY_PB.State
+            //Printf("Offset:0x%Lxh state:0x%Lxh, orig:0x%Lxh\n", FileOffsetMB, State, d);
+            if( IsBitmapBATBlock(b, chunk_ratio)  ) { /// Bitmap bat entry
+                if(State == SB_BLOCK_PRESENT)
+                    CHUNK chunk_bitmap(blockSize);
+            } else {
+                switch(State) {
+                    case PAYLOAD_BLOCK_NOT_PRESENT       : break;
+                    case PAYLOAD_BLOCK_UNDEFINED         : break;
+                    case PAYLOAD_BLOCK_ZERO              : break;
+                    case PAYLOAD_BLOCK_UNMAPPED          : break;
+                    case PAYLOAD_BLOCK_FULLY_PRESENT     : CHUNK chunk(blockSize); break;
+                    case PAYLOAD_BLOCK_PARTIALLY_PRESENT : CHUNK chunk(blockSize); break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+} ORIG_DATA<open=true>;
+
+typedef struct _BAT(uint64 chunk_ratio, uint64 total_bat_entries) {
+   local uint b;
+   for(b = 0; b < total_bat_entries; ++b)
+        if(IsBitmapBATBlock(b, chunk_ratio))
+            VHDX_BAT_ENTRY_SB BAT;
+        else
+            VHDX_BAT_ENTRY_PB BAT;
+} BAT;
+
+void ParseBAT(uint64 raw_length, uint64 blockSize, uint64 chunk_ratio, uint64 total_bat_entries)
+{
+   local uint64 off_BAT = FTell();
+   local int maxSizeBat = raw_length / sizeof(VHDX_BAT_ENTRY_PB);
+   if(maxSizeBat < total_bat_entries)
+        Warning("Total more then possibility(%Lu < %Lu)", maxSizeBat, total_bat_entries);
+     
+   FSeek(off_BAT);
+   BAT bat(chunk_ratio, total_bat_entries);
+
+   FSeek(off_BAT);
+   FILTERED_BAT filtered_bat(chunk_ratio, total_bat_entries);
+
+   FSeek(off_BAT);
+   ORIG_DATA orig_data(blockSize, chunk_ratio, total_bat_entries);
+}
+
+int FindAndParseBATRegion(VHDX_REGION & region, uint64 blockSize, uint64 chunk_ratio, uint64 total_bat_entries)
+{
+    local int r;
+    for(r = 0; r < region.header.EntryCount; ++r)
+        if(ViewRegionInfo(region[0].region_etries[r]) == EnumToString(TR_BAT)) {
+            FSeek(region.region_etries[r].FileOffset);
+            ParseBAT(region.region_etries[r].Length, blockSize, chunk_ratio, total_bat_entries);
+            return 0;
+        }
+
+    Warning("Cannot find BAT region");
+    return 1;
+}
+
+typedef struct _HEADER_SECTION {
+    VHDX_FILE_IDENTIFIER identificator;
+
+    VHDX_HEADER header;
+    VHDX_HEADER header;
+
+    VHDX_REGION region;
+    VHDX_REGION region;
+
+} HEADER_SECTION <open=true, size=0x100000>;
+
+int main()
+{
+    HEADER_SECTION header_section;
+    if (header_section.identificator.Signature != "vhdxfile") {
+        Warning( "File/Disk is not a valid VHDX. Template stopped." );
+        return 1;
+    }
+
+    local int currHead = 0;
+    if(header_section.header[1].SequenceNumber < header_section.header[0].SequenceNumber) {
+        currHead = 0;
+    } else {
+        currHead = 1;
+    }
+    Printf("Current header is %i\n", currHead);
+ 
+    FSeek(header_section.header[currHead].LogOffset);
+    VHDX_LOG logs;
+    
+    local uint64 virtualDiskSize = 0;
+    local uint64 blockSize = 0;
+    local uint64 logicalSectorSize = 0;
+    local int isDiff = 0;
+    local uint64 chunk_ratio = 0;
+    local uint64 total_bat_entries = 0;
+    if(0 != FindAndParseMetadataRegion(header_section.region[0], virtualDiskSize, blockSize, logicalSectorSize, isDiff, chunk_ratio, total_bat_entries))
+        return 1;
+    
+    return FindAndParseBATRegion(header_section.region[0], blockSize, chunk_ratio, total_bat_entries);
+}
+
+return main();

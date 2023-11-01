@@ -1,0 +1,412 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: BoltDB.bt
+//   Authors: Simon N. Thornton
+//   Contact: datarecovery@eazimail.com
+//   Version: 0.8
+//   Purpose: Display DB files based on the Golang BOLTDB (https://github.com/boltdb/)
+//  Category: Database
+// File Mask: *.db
+//  ID Bytes: [+16] ED DA 0C ED
+//
+//   History: 
+//   0.8   2021-01-08 Simon N. Thornton: Official release
+//   0.1   2020-04-05 Simon N. Thornton: Initial version
+//------------------------------------------------
+
+/**************************
+	This was designed to read DB files created by GO Apps (GOLANG) that use the BOLT DB code.
+	
+	Magic Bytes:	ED DA 0C ED at offset 0x10
+	Lang:		GO
+	DB:		BOLTDB
+	Src:		https://github.com/boltdb/
+	Synopsis:	Bolt is a pure Go key/value store inspired by [Howard Chu's][hyc_symas]
+			[LMDB project][lmdb]. The goal of the project is to provide a simple,
+			fast, and reliable database for projects that don't require a full database
+			server such as Postgres or MySQL.
+	Used by:	HAK5 C2 Cloud server (and many others) - see the README.md on the github page for more
+
+	The majority of key/value data is held in the leaf blocks in the form of an array which contains
+	key size and a pointer to the key/value in the current block. The decoder collects the array info and the data
+	into a single entry _leafPageElement.
+
+	Todo:		Branch pages not decoded
+			Output printable key/value pairs in the output window
+			Carving capability to extract the key/value pairs to a new file in key|value form (maybe B64 encoded if non-ascii)
+			Improve performance (its slow)
+			Optional decoding of blocks that are marked free (its not done currently as it causes issues)
+			Tidy up the global variable names to make them more distinguishable
+
+	Tweaks:
+			in the typedef _BLOCK struct you can replace this section:
+
+				if ( !iIsFree ) {	// Block is in use (not on free list)
+					_BLOCKDECODE	block <optimize=false, comment="Decoded block">;
+					UBYTE		pad[BLKSIZE-(FTell() % BLKSIZE)] <comment="Block padding">;
+				} else {		// free/unallocated block
+					if (DEBUGFREE) {
+						UBYTE	pad[BLKSIZE] <comment="Free/Unused block">;	// Allocate a block (slow)
+					} else {
+						FSkip(BLKSIZE);						// Skip the space (faster)
+					}
+				}
+
+			With this:
+				_BLOCKDECODE	block <optimize=false, comment="Decoded block">;
+				UBYTE		pad[BLKSIZE-(FTell() % BLKSIZE)] <comment="Block padding">;
+
+			This removes the check if a block is listed as free and decodes it. Caveat: It works if the data is contained
+			within the current block. However as an element can be larger than one block then it becomes unpredictable
+			as you don't know if the next block is still valid or not (it could have been overwritten). A possible strategy
+			would be to limit how far it follows leaf arrays for a block that has been free'd, YMMV.
+
+			An alternative to the above is to replace all the code in the function fIsFree with "return 0"
+			all blocks are reported as allocated.
+
+	Bugs:		enumerated or calculated comments only appear when the template completes or is aborted (Shift-ESC)
+			Decoding of DB structures in free blocks is disabled (see comment in the todo section)
+			Occasionally crashes the editor if the input file is large :-(
+
+	Performance:	Can be slow depending on where the data is stored and speed of the machine
+
+	If you improve this code or resolve the outstanding issues please let me know.
+
+**************************/
+
+#define DEBUG		1		// Set to 1 to print extra info
+#define DEBUGFREE	1		// Set to 1 to Create a block structure for free pages (or it just allocates a marker)
+#define MAGIC		3977042669	// 0xEDDAOCED signature of BOLT DB at offset 0x10
+
+// page.go
+//#define _PGID	uint64;
+typedef uint64	_PGID;
+// tx.go
+typedef uint64	_TXID;
+
+// page type flag
+typedef enum <uint16> {
+	unused		= 0x00,
+	branchPageFlag	= 0x01,
+	leafPageFlag	= 0x02,
+	metaPageFlag	= 0x04,
+	freeListPageFlag= 0x10
+} _PAGETYPE <read=read_PAGETYPE>;
+
+string read_PAGETYPE (local _PAGETYPE &af) {
+	local string s = "";
+ 
+	SPrintf (s, "0x%02X: %s", af, EnumToString(af) );
+	return s;
+}
+
+// page.go
+typedef struct {
+	_PGID		id;
+        _PAGETYPE	flags;
+        uint16		count;
+        uint32		overflow;
+        uint32		ptr;
+} _PAGE <comment="Page Header">;
+
+
+// branchPageElement represents a node on a branch page.
+typedef struct {
+	local uint64 iPos;
+
+	uint32	pos;
+	uint32	ksize;
+	_PGID	pgid;
+
+/*
+	iPos=FTell();
+	FSeek(pgid*BLKSIZE);
+	uchar branch[ksize*BLKSIZE];
+	FSeek(iPos);
+*/
+} _branchPageElement <comment="Branch element">;
+
+
+// leafPageElement represents a node on a leaf page.
+typedef struct {
+//	local uint64 iPos <format=hex>;
+//	local uint64 iPos1 <format=hex>;
+
+        uint32	flags <format=hex>;
+        uint32	pos <format=hex>;
+        uint32	ksize;
+        uint32	vsize;
+	iPos=FTell();				// Get current posiiton
+	if (DEBUG) Printf("LEAF:\t%08d/%08d, flags=%08x, Offset=%08x, Key size=%08x, value size=%08x, highwater=%08X",iCntBlks,iCntElements,flags,iPos+pos,ksize,vsize,iHighWatermark);
+
+	if (ksize>0 && vsize>0) {
+		FSkip(pos-sizeof(uint32)*4);			// Jump forward to the key/value pair
+		iPos1=FTell();
+		uchar	key[ksize];
+		uchar	value[vsize];
+		if (FTell() >iHighWatermark) {			// As we parse data structures remember how far we get
+			iHighWatermark=FTell();
+		}
+		if (DEBUG) Printf("\ITEM:\tOffset=%08x, highwater=%08x",iPos1,FTell());
+		FSeek(iPos);
+	}
+	Printf("\n");
+	iCntElements++;
+} _leafPageElement <comment="Element entry in a leaf page">;
+
+
+
+// Todo: this is not used at the moment
+typedef struct {
+	_PGID		root;			// page id of the bucket's root-level page
+	uint64		sequence;		// monotonically incrementing, used by NextSequence()
+} _BUCKET <comment="buckets">;
+
+
+/* freelist.go
+	163:	func (f *freelist) read(p *page)
+	191:	func (f *freelist) write(p *page) error
+*/
+
+// Decode a freelist and set globals:
+// iFreelistNum		Number of entries in the freelist
+// iFreeOff		Offset to start of freelist
+typedef struct {
+	local uint64	iCnt=0;
+	local uint64	iFreelist;	// How many items in the free list
+	local uint64	iIsFree;
+
+	if (!iFreelistNum) {			// Only run this once
+		_PGID		pgid;
+		_PAGETYPE	iType;
+		uint16		iEntries;	// Number of catalog entries
+		uint32		overflow;	// Number of extra blocks that this entity need (if bigger than 1 block)
+
+		switch (iType) {
+			case 16:
+				iFreelist=iEntries;				// if iEntries >0 and <0xFFFF, where 0xFFFF means size is in first uint64 element of array
+				if (iEntries==0xFFFF) {				// Num of entries >FFFF so stored in first element
+					uint64 iFreelistEntries;
+					iFreelistNum=iFreelistEntries;
+				}
+
+				if (!iFreelistNum) iFreelistNum=iFreelist;	// Global, only take the first instance
+
+				if (FTell()==iFreeOff) {
+					if (DEBUG) Printf("Bookmark add=freelist\tArray Size=0x%08x\tOffset=0x%08x\n",iFreelistNum*sizeof(_PGID),FTell());
+					AddBookmark(FTell(),"freelist","_PGID",iFreelistNum,cRed,cBlack,false);
+				}
+
+				iFreeOff=FTell();			// Offset to Freelist
+//				_PGID		free[iFreelistNum];	// This is redundant, quicker to read array directly
+				break;
+		}
+	}
+} _FREELISTBLK <comment="List of free blocks">;
+
+typedef struct {
+	local uint64 iPos;
+
+	uint32	magic <format=hex>;		// ED DA OC ED = DEADCODE
+	uint32	version;
+	uint32	pageSize;
+	uint32	flags;
+	_BUCKET root;
+	_PGID	freelist;
+	_PGID	pgid;
+	_TXID	txid;
+	uint64	checksum;
+//	BYTE	pad[pageSize-FTell()];
+	BLKSIZE=pageSize;				// Global
+	// Global; Offset to freelist page + block header	
+	if (freelist >0 && !iFreeOff) { 
+		iPos=FTell();
+		FSeek(freelist*BLKSIZE);
+		_FREELISTBLK freelistblk;
+		if (DEBUG) Printf("_META Freelist offset=%08x\n",iFreeOff);
+		FSeek(iPos);
+	}
+} _META <comment="Meta block">;
+
+
+typedef struct {
+	local uint64	iCnt=0;
+	local uint64	iFreelist;	// How many items in the free list
+
+//	if (DEBUG) Printf("Block %08d/%08d %08x Free: %d\n",iCntBlks,FTell()/BLKSIZE,FTell(),iIsFree);
+	_PGID		pgid;
+	_PAGETYPE	iType;
+	uint16		iEntries;	// Number of catalog entries
+	uint32		overflow;	// Number of extra blocks that this entity need (if bigger than 1 block)
+
+//	iPos1=FTell();
+//	iPos=FTell();
+	switch (iType) {
+		case 1:
+			iCntElements=0;
+			_branchPageElement	aEntries[iEntries] <optimize=false>;
+			break;
+		case 2:
+			_leafPageElement	aEntries[iEntries] <optimize=false>;
+			FSeek(iHighWatermark);
+			break;
+		case 4:
+			_META		meta;
+			break;
+		case 16:
+			iFreelist=iEntries;				// if iEntries >0 and <0xFFFF, where 0xFFFF means size is in first uint64 element of array
+			if (iEntries==0xFFFF) {
+				uint64 iFreelistEntries;
+				iFreelistNum=iFreelistEntries;
+			}
+
+			if (!iFreelistNum) iFreelistNum=iFreelist;	// Global, only take the first instance
+
+			_PGID		free[iFreelistNum];
+			break;
+	}
+} _BLOCKDECODE <comment="decoded block">;
+
+
+typedef struct {
+	local uint64	iIsFree=fIsFree(FTell()/BLKSIZE);
+
+	if (FTell()<FileSize()-BLKSIZE) {
+		if (DEBUG) Printf("Block %08d/%08d %08x Free: %d",iCntBlks,FTell()/BLKSIZE,FTell(),iIsFree);
+
+		if ( !iIsFree ) {	// Block is in use (not on free list)
+			_BLOCKDECODE	block <optimize=false, comment="Decoded block">;
+			UBYTE		pad[BLKSIZE-(FTell() % BLKSIZE)] <comment="Block padding">;
+		} else {		// free/unallocated block
+			if (DEBUGFREE) {
+				UBYTE	pad[BLKSIZE] <comment="Free/Unused block">;	// Allocate a block (slow)
+			} else {
+				FSkip(BLKSIZE);						// Skip the space (faster)
+			}
+		}
+		if (DEBUG) Printf("\n");
+
+		iCntBlks++;
+	}
+} _BLOCK <read=read_BLOCKSTATUS>;
+
+string read_BLOCKSTATUS (local _BLOCK &af) {
+	local string s = "";
+ 
+	if (af.iIsFree==0) {
+		SPrintf (s, "Block Used");
+	} else {
+		SPrintf (s, "Block Free");
+	}
+	return s;
+}
+
+
+/****************************************************
+	Function:	Checks if a block is listed in the freelist
+	Param:		iBlk		Block number to check (multiple of BLKSIZE), must be >0
+	Returns:	0		free (not on free list)
+			1		Block is on the freelist
+	Globals:	iFreeOff	Offset to the freelist
+			iFreelistNum	Number of elements in the freelist
+*/
+int16 fIsFree ( uint64 iBlk ) {
+	local uint64 iCnt=0;
+	local int64 iRes=0;					// Indicates block is free
+	local uint64 iVal;
+
+	if (iFreeOff && iFreelistNum && iBlk>1) {
+		for (iCnt=0;iCnt<iFreelistNum;iCnt++) {
+			iVal=ReadUInt64(iFreeOff+iCnt*sizeof(_PGID));
+			if (iVal==iBlk) {
+				iRes=1;
+				break;
+			} else {
+				if (iVal>iBlk) {			// Stop searching when next block is higher than we asked for
+//					if (DEBUG) Printf("%0d ",iCnt);
+					break;
+				}
+			}
+		}
+	}
+    return iRes;
+};
+
+/****************************************************
+	Function:	Find a block number
+	Param:		iStart	Start from this offset
+			pgid	PageID to find
+	Returns:	Offset to block or 0
+*/
+uint64 fFindBlock (uint64 iStart, _PGID pgid) {
+	local uint64 iStart;				// Start searching from here
+	local uint64 iRes=0;				// 0 = not found
+	local uint64 iBlk;
+
+	iStart=(iStart/BLKSIZE)*BLKSIZE;		// Round offset to nearest BLKSIZE
+	iBlk=iStart/BLKSIZE;
+	iOffset=iStart;
+
+	while (iOffset<FEof() ) {
+		if (ReadUInt64(iOffSet)==pgid) {
+			iRes=iOffset;
+			break;
+		}
+		iOffset=iOffset+BLKSIZE;
+		iBlk++;
+	}
+	return iRes;
+}
+
+/****************************************************
+	Function:	Return number of bookmarks
+	Params:		none
+	Returns:	Number of bookmarks and prints them out if DEBUG>0  
+*/
+uint32 fBookmarks () {
+	local uint32 iNumBM;
+	local uint64 iCnt;
+
+	iNumBM=GetNumBookmarks();
+	for (iCnt=0;iCnt<iNumBM;iCnt++) {
+		if (DEBUG) Printf("Bookmark name=%s\tArray Size=0x%08x\tType=%s\tOffset=0x%08x",GetBookmarkName(iCnt),GetBookmarkArraySize(iCnt),GetBookmarkType(iCnt),GetBookmarkPos(iCnt));
+//		if (GetBookmarkName(iCnt)=="freelist") {
+//			if (DEBUG) Printf("\tI'm free!");
+//		}
+		if (DEBUG) Printf("\n");
+	}
+	return iNumBM;
+}
+
+
+// ***************************************************
+// Main
+LittleEndian();
+
+local uint64 iHighWatermark;							// Used to track how far an element is followed
+local uint64 iCntElements;							// Used for number of array elements
+local uint64 iCntBlks;
+local uint64 iFreelistNum=0;							// How many items in the free list
+local uint64 iFreeOff <format=hex,comment="Location of Freelist">;		// Location of Freelist (in blocks), taken from _META structure
+
+local uint64 BLKSIZE=4096;			// Default block size, overriden in the _META block
+local uint64 iPos,iPos1;			// Current File position markers
+local uint32 iCntRecs=0;
+
+// Check for BOLT signature
+if ( ReadUInt(16) != MAGIC ) {	// 0xEDDAOCED
+	Printf("\nError: This does not look like a BOLT DB, 0xEDDAOCED signature missing at offset 0x10\n");
+} else {
+	// Get _META block and freelist	
+	_BLOCK		meta <optimize=false>;
+	fBookmarks();
+
+	// Enumerate blocks
+	while(FTell()<FileSize()-BLKSIZE) {
+		_BLOCK	block;
+		if(FTell()>FileSize()-BLKSIZE) break;
+	}
+}
+
+if (DEBUG) Printf("\n");

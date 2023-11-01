@@ -1,0 +1,236 @@
+//------------------------------------------------
+//--- 010 Editor v2.0 Binary Template
+//
+//   File: ADTS.bt
+//   Author: zhoubo
+//   Version: 0.1
+//   Purpose: Parse AAC's ADTS(Audio Data Transport Stream) audio files.
+//   Category: Audio
+//   File Mask: *.aac
+//   ID Bytes: FF //ADTS Header, 7 or 9 bytes
+//   History:
+//   0.1     2022-06-13 zhoubo: Init release. only ADTS, not support ADIF,LATM.
+//
+//------------------------------------------------
+
+// More information available at:
+//  https://en.wikipedia.org/wiki/AAC
+//  https://juejin.cn/post/7032170229732442148
+
+BigEndian();
+
+// Forward declarations:
+
+struct ADTS_HEADER;
+struct ADTS_FRAME;
+
+// Constants:
+
+local int hasCRC = false;   // Remember whether has CRC
+local int64 last_frame_length = 0;
+
+// Enums:
+
+// Funtions:
+
+string GetMPEGVersionComment(USHORT &id)
+{
+    local string comment = "";
+    switch (id)
+    {
+    case 0:        comment = "MPEG-4"; break;
+    case 1:        comment = "MPEG-2"; break;
+    }
+    return comment;
+}
+
+string GetProtectionAbsentComment(USHORT &protection_absent)
+{
+    local string comment = "";
+    switch (protection_absent)
+    {
+    case 0:        comment = "ADTS has 9 bytes with CRC"; break;
+    case 1:        comment = "ADTS has 7 bytes without CRC"; break;
+    }
+    return comment;
+}
+
+string GetProfileComment(INT64 &profile)
+{
+    local string comment = "";
+    switch (profile)
+    {
+    case 0x00:        comment = "AAC Main"; break;
+    case 0x01:        comment = "AAC LC(Low Complexity)"; break;
+    case 0x10:        comment = "AAC SSR(Scalable Sample Rate)"; break;
+    case 0x11:        comment = "AAC LTP(Long Term Prediction)"; break;
+    }
+    return comment;
+}
+
+string GetSamplingFrequencyIndexComment(INT64 &sampling_frequency_index)
+{
+    local string comment = "";
+    switch (sampling_frequency_index)
+    {
+    case 0x0:        comment = "SampleRate 96000"; break;
+    case 0x1:        comment = "SampleRate 88200"; break;
+    case 0x2:        comment = "SampleRate 64000"; break;
+    case 0x3:        comment = "SampleRate 48000"; break;
+    case 0x4:        comment = "SampleRate 44100"; break;
+    case 0x5:        comment = "SampleRate 32000"; break;
+    case 0x6:        comment = "SampleRate 24000"; break;
+    case 0x7:        comment = "SampleRate 22050"; break;
+    case 0x8:        comment = "SampleRate 16000"; break;
+    case 0x9:        comment = "SampleRate 12000"; break;
+    case 0xa:        comment = "SampleRate 11025"; break;
+    case 0xb:        comment = "SampleRate 8000"; break;
+    case 0xc:        comment = "SampleRate 7350"; break;
+    case 0xd:        comment = "SampleRate reserved"; break;
+    case 0xe:        comment = "SampleRate reserved"; break;
+    case 0xf:        comment = "SampleRate escape value"; break;
+    }
+    return comment;
+}
+
+string GetChannelComment(INT64 &channel_configuration)
+{
+    // 0: Defined in AOT Specifc Config
+    // 1: 1 channel:  front-center
+    // 2: 2 channels: front-left,   front-right
+    // 3: 3 channels: front-center, front-left, front-right
+    // 4: 4 channels: front-center, front-left, front-right, back-center
+    // 5: 5 channels: front-center, front-left, front-right, back-left, back-right
+    // 6: 6 channels: front-center, front-left, front-right, back-left, back-right, LFE-channel
+    // 7: 8 channels: front-center, front-left, front-right, side-left, side-right, back-left, back-right, LFE-channel
+    local string comment = "";
+    switch (channel_configuration)
+    {
+    case 0:        comment = "Channel escape value"; break;
+    case 1:        comment = "Channel 1"; break;
+    case 2:        comment = "Channel 2"; break;
+    case 3:        comment = "Channel 3"; break;
+    case 4:        comment = "Channel 4"; break;
+    case 5:        comment = "Channel 5"; break;
+    case 6:        comment = "Channel 5.1"; break;
+    case 7:        comment = "Channel 7.1"; break;
+    }
+    return comment;
+}
+
+string GetBitrateComment(INT64 &adts_buffer_fullness)
+{
+    local string comment = "";
+    switch (adts_buffer_fullness)
+    {
+    case 0x7FF:        comment = "VBR"; break;
+    default:        comment = "rate..??"; break;
+    }
+    return comment;
+}
+
+string GetRawDataBlockComment(INT64 &number_of_raw_data_blocks_in_frame)
+{
+    local string comment = "";
+    switch (number_of_raw_data_blocks_in_frame)
+    {
+    case 0x0:       comment = "has 1 AAC data block"; break;
+    default:        comment = "data block number + 1"; break;
+    }
+    return comment;
+}
+
+
+//-----------------------------------
+// Define structures used in AAC files
+//
+// [1.adts_fixed_header information]
+// syncword:                 12bits, sync header, always 0xFFF。
+// ID:                       1bit,   0 means MPGE-4, 1 means MPGE-2
+// layer:                    2bits,  alwayas ”00”
+// protection_absent:        1bit,   0 means ADTS Header 9 bytes; 1 means ADTS Header 7 bytes
+// profile:                  2bit,   AAC level : Main、LC、SSR
+// sampling_frequency_index: 4bits,  Sampling Frequencies
+// private_bit:              1bit
+// channel_configuration:    3bits,  channel number...
+// original_copy:            1bit
+// home:                     1bit
+//
+// [2.adts_variable_header information]
+// copyright_identification_bit:       1bit
+// copyright_identification_start:     1bit
+// aac_frame_length:                   13bits, ADTS frame length : ADTS Header(7 or 9 bytes) + sizeof(AAC Frame)
+// adts_buffer_fullness:               11bits, 0x7FF means VBR
+// number_of_raw_data_blocks_in_frame: 2bits,  ADTS Frame numbers : number_of_raw_data_blocks_In_frame + 1
+//
+// [3.CRC information]
+// crc_check:                16bits, when protection_absent=0
+
+typedef struct 
+{
+    // ADTS_FIXED_HEADER
+    USHORT syncword : 12;
+    USHORT id : 1                           <comment = GetMPEGVersionComment>;
+    USHORT layer : 2;
+    USHORT protection_absent : 1            <comment = GetProtectionAbsentComment>;
+
+    INT64 profile : 2                       <comment = GetProfileComment>;
+    INT64 sampling_frequency_index : 4      <comment = GetSamplingFrequencyIndexComment>;
+    INT64 private_bit : 1;
+    INT64 channel_configuration : 3         <comment = GetChannelComment>;
+    INT64 original_copy : 1;
+    INT64 home : 1;
+
+    // ADTS_VARIABLE_HEADER
+    INT64 copyright_identification_bit : 1;
+    INT64 copyright_identification_start : 1;
+    INT64 aac_frame_length : 13;
+    INT64 adts_buffer_fullness : 11               <comment = GetBitrateComment>;
+    INT64 number_of_raw_data_blocks_in_frame : 2  <comment = GetRawDataBlockComment>;
+
+    // ADTS_CRC_HEADER
+    if (protection_absent == 0) // CRC if protection_absent = 0
+    {
+        //Printf( "Header with CRC.\n" );
+        hasCRC = true;
+        INT64 crc : 16;
+        //INT64 data0 : 8;
+    } else {
+        //Printf( "Header without CRC.\n" );
+        //INT64 data0 : 8;
+        //INT64 data1 : 8;
+        //INT64 data2 : 8;
+    }
+}ADTS_HEADER;
+
+
+typedef struct 
+{
+    SetBackColor( cLtBlue );
+    ADTS_HEADER header;
+    if (true != hasCRC)
+    {
+        FSeek(last_frame_length + 7);
+        SetBackColor( cLtPurple );
+        byte data[header.aac_frame_length - 7];
+    } else {
+        FSeek(last_frame_length + 9);
+        SetBackColor( cLtPurple );
+        byte data[header.aac_frame_length - 9];
+    }
+}ADTS_FRAME;
+
+//---------------------------------------------
+
+
+while (!FEof())
+{
+    ADTS_FRAME adtsFrame <name = "ADTS Frame">;
+    if(adtsFrame.header.syncword != 0xFFF)
+    {
+        Warning( "File is not a valid ADTS AAC file. stop!!!" );
+        return -1;
+    }
+    last_frame_length = last_frame_length + adtsFrame.header.aac_frame_length;
+    FSeek(last_frame_length);
+}
