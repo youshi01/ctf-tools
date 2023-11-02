@@ -1,0 +1,3 @@
+[submodule "cryptii"]
+	path = cryptii
+	url = git@github.com:cryptii/cryptii.git
