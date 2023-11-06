@@ -1,3 +1,24 @@
 [submodule "cryptii"]
 	path = cryptii
 	url = git@github.com:cryptii/cryptii.git
+[submodule "hackingtool"]
+	path = hackingtool
+	url = git@github.com:Z4nzu/hackingtool.git
+[submodule "stego-toolkit"]
+	path = stego-toolkit
+	url = git@github.com:DominicBreuker/stego-toolkit.git
+[submodule "PayloadsAllTheThings"]
+	path = PayloadsAllTheThings
+	url = git@github.com:swisskyrepo/PayloadsAllTheThings.git
+[submodule "linux-kernel-exploits"]
+	path = linux-kernel-exploits
+	url = git@github.com:SecWiki/linux-kernel-exploits.git
+[submodule "Vulmap"]
+	path = Vulmap
+	url = git@github.com:vulmon/Vulmap.git
+[submodule "linux-exploit-suggester-2"]
+	path = linux-exploit-suggester-2
+	url = git@github.com:jondonas/linux-exploit-suggester-2.git
+[submodule "linux-exploit-suggester"]
+	path = linux-exploit-suggester
+	url = git@github.com:The-Z-Labs/linux-exploit-suggester.git
